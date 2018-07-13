@@ -1,24 +1,15 @@
-#ifndef DRAW_H
-#define DRAW_H
-
 #include <stdlib.h> // calloc
 #include <stdio.h>  // printf
 
+#ifdef __APPLE__
 #include <OpenGL/gl.h>
+#endif // __apple__
 
-#ifndef uint
-typedef unsigned int uint;
-#endif // uint
+#ifdef __linux__
+#include <GL/gl.h>
+#endif // __linux__
 
-struct Point2f {
-    float x;
-    float y;
-};
-
-struct Path2f {
-    uint length;
-    struct Point2f * points;
-};
+#include "draw.h"
 
 struct Point2f pts[] = {
     {0, 0}, {100, 200}, {30, 400}
@@ -71,4 +62,3 @@ void uRender2D() {
     uPolyline2D(&path1);
 }
 
-#endif // DRAW_H

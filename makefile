@@ -1,20 +1,43 @@
-LFLAGS = -lGL -lglfw
-MFLAGS = -framework OpenGL -lglfw
+##############################################################################
+# PRECOMPILATION DEFINITIONS
+##############################################################################
+
+# compilation / linking flags
+LFLAGS = $(LIBGL) $(LIBGLU) -lm
 CFLAGS = -Wall
+LIBGLU = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
 
-linux: obj/one.o obj/draw.o
-	gcc -o bin/one obj/* $(LFLAGS)
+# directories
+BIN = bin
+OBJ = obj
+SRC = src
 
-macos: obj/one.o obj/draw.o
-	gcc -o bin/one obj/* $(MFLAGS)
+# test for correct OpenGL flag
+ifeq ($(shell uname -s), Darwin)
+    LIBGL = -framework OpenGL
+else
+    LIBGL = -lGL
+endif
 
-obj/one.o: src/one.c
-	gcc -c -o obj/one.o src/one.c $(CFLAGS)
+##############################################################################
+# COMPILATION RULES
+##############################################################################
 
-obj/draw.o: src/draw.c src/draw.h
-	gcc -c -o obj/draw.o src/draw.c $(CFLAGS)
+$(BIN)/one: $(BIN)/one.exec $(OBJ)/draw.o
+	mv $(BIN)/one.exec $(BIN)/one
+
+$(BIN)/%.exec: $(OBJ)/%.o
+	if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
+	$(CC) -o $@ $? $(LFLAGS)
+
+$(OBJ)/%.o: $(SRC)/%.c
+	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
+	$(CC) -c -o $@ $? $(CFLAGS)
+
+##############################################################################
+# CLEANUP RULES
+##############################################################################
 
 clean:
-	rm bin/*
-	rm obj/*
-
+	rm $(BIN)/*
+	rm $(OBJ)/*

@@ -23,21 +23,23 @@ endif
 # COMPILATION RULES
 ##############################################################################
 
-$(BIN)/one: $(BIN)/one.exec $(OBJ)/draw.o
-	mv $(BIN)/one.exec $(BIN)/one
-
-$(BIN)/%.exec: $(OBJ)/%.o
+dirs:
+	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
 	if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
+
+one: $(OBJ)/one.o $(OBJ)/init.oh $(OBJ)/draw.oh
 	$(CC) -o $@ $? $(LFLAGS)
 
 $(OBJ)/%.o: $(SRC)/%.c
-	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
-	$(CC) -c -o $@ $? $(CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(OBJ)/%.oh: $(SRC)/%.c $(SRC)/%.h
+	$(CC) -c -o $@ $< $(CFLAGS)
 
 ##############################################################################
 # CLEANUP RULES
 ##############################################################################
 
 clean:
-	rm $(BIN)/*
-	rm $(OBJ)/*
+	rm -f $(BIN)/*
+	rm -f $(OBJ)/*

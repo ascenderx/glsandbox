@@ -25,14 +25,7 @@ endif
 # COMPILATION RULES
 ##############################################################################
 
-dirs:
-	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
-	if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
-
 INCLUDES = $(OBJ)/init.oh $(OBJ)/input.oh $(OBJ)/draw.oh
-
-one: $(OBJ)/one.o $(INCLUDES)
-	$(CC) -o $@ $? $(LFLAGS)
 
 $(OBJ)/%.o: $(SRC)/%.c
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -41,8 +34,19 @@ $(OBJ)/%.oh: $(SRC)/%.c $(SRC)/%.h
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 ##############################################################################
-# CLEANUP RULES
+# CUSTOM BINARY RULES
 ##############################################################################
+
+one: $(OBJ)/one.o $(INCLUDES)
+	$(CC) -o $@ $? $(LFLAGS)
+
+##############################################################################
+# DIRECTORY RULES
+##############################################################################
+
+dirs:
+	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
+	if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
 
 clean:
 	rm -f $(BIN)/*

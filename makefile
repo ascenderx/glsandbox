@@ -13,8 +13,10 @@ OBJ = obj
 SRC = src
 
 # test for correct OpenGL flag
+# is it macOS?
 ifeq ($(shell uname -s), Darwin)
     LIBGL = -framework OpenGL
+# otherwise, it's Linux, Unix, etc.
 else
     LIBGL = -lGL
 endif
@@ -27,7 +29,9 @@ dirs:
 	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
 	if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
 
-one: $(OBJ)/one.o $(OBJ)/init.oh $(OBJ)/draw.oh
+INCLUDES = $(OBJ)/init.oh $(OBJ)/input.oh $(OBJ)/draw.oh
+
+one: $(OBJ)/one.o $(INCLUDES)
 	$(CC) -o $@ $? $(LFLAGS)
 
 $(OBJ)/%.o: $(SRC)/%.c
@@ -43,3 +47,7 @@ $(OBJ)/%.oh: $(SRC)/%.c $(SRC)/%.h
 clean:
 	rm -f $(BIN)/*
 	rm -f $(OBJ)/*
+
+rmdirs:
+	rm -r -f $(BIN)
+	rm -r -f $(OBJ)

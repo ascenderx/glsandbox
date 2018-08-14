@@ -3,15 +3,25 @@
 ##############################################################################
 
 # directories
-BIN = bin
-OBJ = obj
-SRC = src
+BIN    = bin
+OBJ    = obj
+SRC    = src
+CEXT   = c
+HEXT   = h
+C++EXT = cc # or c++, cpp, C, cxx, etc.
+H++EXT = hh # or h++, hpp, H, hxx, h, etc.
 
-$(OBJ)/%.o: $(SRC)/%.c
+$(OBJ)/%.o: $(SRC)/%.$(CEXT)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(OBJ)/%.oh: $(SRC)/%.c $(SRC)/%.h
+$(OBJ)/%.oh: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT)
 	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(OBJ)/%.oo: $(SRC)/%.$(C++EXT)
+	$(C++) -c -o $@ $< $(CFLAGS)
+
+$(OBJ)/%.ooh: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT)
+	$(C++) -c -o $@ $< $(CFLAGS)
 
 ##############################################################################
 # DIRECTORY RULES

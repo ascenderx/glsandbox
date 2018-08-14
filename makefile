@@ -1,10 +1,12 @@
 LFLAGS = -lGL -lglfw
+MFLAGS = -framework OpenGL -lglfw
 CFLAGS = -Wall
 
-all: bin/one
-
-bin/one: obj/one.o obj/draw.o
+linux: obj/one.o obj/draw.o
 	gcc -o bin/one obj/* $(LFLAGS)
+
+macos: obj/one.o obj/draw.o
+	gcc -o bin/one obj/* $(MFLAGS)
 
 obj/one.o: src/one.c
 	gcc -c -o obj/one.o src/one.c $(CFLAGS)

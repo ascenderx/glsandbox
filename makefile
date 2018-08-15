@@ -43,11 +43,6 @@ rmdirs:
 # LIBRARY DEFINITIONS
 ##############################################################################
 
-# compilation / linking flags
-LFLAGS = $(LIBGL) $(LIBGLU) -lm
-CFLAGS = -Wall
-LIBGLU = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
-
 # test for correct OpenGL flag
 # is it macOS?
 ifeq ($(shell uname -s), Darwin)
@@ -57,11 +52,17 @@ else
     LIBGL = -lGL
 endif
 
+# compilation / linking flags
+LIBGLU  = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
+LIBMATH = -lm
+LFLAGS  = $(LIBGL) $(LIBGLU) $(LIBMATH)
+CFLAGS  = -Wall
+
 ##############################################################################
 # INCLUDE FILES
 ##############################################################################
 
-INCLUDES = $(OBJ)/init.oh $(OBJ)/input.oh $(OBJ)/draw.oh
+INCLUDES = $(OBJ)/utiltypes.oh $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh
 
 ##############################################################################
 # BINARY RULES

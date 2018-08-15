@@ -69,5 +69,6 @@ HEADERS = $(SRC)/utiltypes.h
 # BINARY RULES
 ##############################################################################
 
-one: $(OBJ)/one.o $(OBJECTS) $(HEADERS)
-	$(CC) -o $(BIN)/$@ $< $(OBJECTS) $(LFLAGS)
+OBJECTS1 = 
+one: $(OBJ)/one.o $(OBJECTS) $(HEADERS) $(OBJECTS1)
+	$(CC) -o $(BIN)/$@ $< $(OBJECTS) $(OBJECTS1) $(LFLAGS)

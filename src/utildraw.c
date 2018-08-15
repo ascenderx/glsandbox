@@ -1,16 +1,23 @@
+/****************************************************************************
+ * 
+ ****************************************************************************/
 #ifdef __APPLE__
 #define LIBGL <OpenGL/gl.h>
 #endif // __apple__
-
 #ifdef __linux__
 #define LIBGL <GL/gl.h>
 #endif // __linux__
-
 #include LIBGL
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
 #include "utiltypes.h"
 #include "utildraw.h"
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
 void utilInit2DRenderer(struct UtilitySettings * stgs) {
     // this sets the canvas coordinates
     // args: left, right, bottom, top, near, far
@@ -21,6 +28,9 @@ void utilInit2DRenderer(struct UtilitySettings * stgs) {
     glClearColor(rgb.r, rgb.g, rgb.b, 0);
 }
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
 struct ColorRGB utilParseColor(uint color) {
     struct ColorRGB rgb;
 
@@ -31,16 +41,25 @@ struct ColorRGB utilParseColor(uint color) {
     return rgb;
 }
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
 void utilSetColor(uint color) {
     struct ColorRGB rgb = utilParseColor(color);
 
     glColor3f(rgb.r, rgb.g, rgb.b);
 }
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
 void utilClearScreen() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
 void utilPolyline2D(const struct Path2f * path) {
     glBegin(GL_LINE_STRIP); {
         for (uint p = 0; p < path->length; p++) {

@@ -62,7 +62,7 @@ CFLAGS  = -Wall
 # INCLUDE FILES
 ##############################################################################
 
-INCLUDES = $(OBJ)/utiltypes.oh $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh
+INCLUDES = $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh
 
 ##############################################################################
 # BINARY RULES

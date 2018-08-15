@@ -11,16 +11,16 @@ HEXT   = h
 C++EXT = cc # or c++, cpp, C, cxx, etc.
 H++EXT = hh # or h++, hpp, H, hxx, h, etc.
 
-$(OBJ)/%.o: $(SRC)/%.$(CEXT) $(HEADERS)
+$(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(OBJ)/%.oh: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(HEADERS)
+$(OBJ)/%.oh: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(OBJ)/%.oo: $(SRC)/%.$(C++EXT) $(HEADERS)
+$(OBJ)/%.oo: $(SRC)/%.$(C++EXT) $(UHEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS)
 
-$(OBJ)/%.ooh: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT) $(HEADERS)
+$(OBJ)/%.ooh: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT) $(UHEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS)
 
 ##############################################################################
@@ -62,13 +62,13 @@ CFLAGS  = -Wall
 # INCLUDE FILES
 ##############################################################################
 
-OBJECTS = $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh
-HEADERS = $(SRC)/utiltypes.h
+UOBJECTS = $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh
+UHEADERS = $(SRC)/utiltypes.h
 
 ##############################################################################
 # BINARY RULES
 ##############################################################################
 
-OBJECTS1 = 
-one: $(OBJ)/one.o $(OBJECTS) $(HEADERS) $(OBJECTS1)
-	$(CC) -o $(BIN)/$@ $< $(OBJECTS) $(OBJECTS1) $(LFLAGS)
+OBJECTS1 = # currently empty
+one: $(OBJ)/one.o $(UOBJECTS) $(UHEADERS) $(OBJECTS1)
+	$(CC) -o $(BIN)/$@ $< $(UOBJECTS) $(OBJECTS1) $(LFLAGS)

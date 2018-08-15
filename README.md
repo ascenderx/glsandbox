@@ -9,10 +9,10 @@ For example, to compile a binary named `test` with dependencies `something.c` an
 - Include the target in the **BINARY RULES** section at the bottom of the makefile:
 ```
 TESTOBJECTS = $(OBJ)/something.oh
-test: $(OBJ)/test.o $(OBJECTS) $(HEADERS) $(TESTOBJECTS)
-[\t] $(CC) -o $(BIN)/$@ $< $(OBJECTS) $(TESTOBJECTS) $(LFLAGS)
+test: $(OBJ)/test.o $(UOBJECTS) $(UHEADERS) $(TESTOBJECTS)
+[\t] $(CC) -o $(BIN)/$@ $< $(UOBJECTS) $(TESTOBJECTS) $(LFLAGS)
 ```
-  - Be sure to include any extra includes after the `$(OBJECTS)` directive in the rule and the compilation lines, using the `$(OBJ)/*.oh` (C) or `$(OBJ)/*.ooh` (C++) formats.
+  - Be sure to include any extra includes after the `$(UOBJECTS)` directive in the rule and the compilation lines, using the `$(OBJ)/*.oh` (C) or `$(OBJ)/*.ooh` (C++) formats.
 - Navigate to the folder in a Unix/Unix-like terminal and type `make test`.
 
 To reset `bin` and `obj` for recompliation, run `make clean`.

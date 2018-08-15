@@ -11,16 +11,16 @@ HEXT   = h
 C++EXT = cc # or c++, cpp, C, cxx, etc.
 H++EXT = hh # or h++, hpp, H, hxx, h, etc.
 
-$(OBJ)/%.o: $(SRC)/%.$(CEXT)
+$(OBJ)/%.o: $(SRC)/%.$(CEXT) $(HEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(OBJ)/%.oh: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT)
+$(OBJ)/%.oh: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(HEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(OBJ)/%.oo: $(SRC)/%.$(C++EXT)
+$(OBJ)/%.oo: $(SRC)/%.$(C++EXT) $(HEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS)
 
-$(OBJ)/%.ooh: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT)
+$(OBJ)/%.ooh: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT) $(HEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS)
 
 ##############################################################################
@@ -62,11 +62,12 @@ CFLAGS  = -Wall
 # INCLUDE FILES
 ##############################################################################
 
-INCLUDES = $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh
+OBJECTS = $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh
+HEADERS = $(SRC)/utiltypes.h
 
 ##############################################################################
 # BINARY RULES
 ##############################################################################
 
-one: $(OBJ)/one.o $(INCLUDES)
-	$(CC) -o $(BIN)/$@ $? $(LFLAGS)
+one: $(OBJ)/one.o $(OBJECTS) $(HEADERS)
+	$(CC) -o $(BIN)/$@ $< $(OBJECTS) $(LFLAGS)

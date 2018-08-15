@@ -69,4 +69,4 @@ INCLUDES = $(OBJ)/utiltypes.oh $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/uti
 ##############################################################################
 
 one: $(OBJ)/one.o $(INCLUDES)
-	$(CC) -o $@ $? $(LFLAGS)
+	$(CC) -o $(BIN)/$@ $? $(LFLAGS)

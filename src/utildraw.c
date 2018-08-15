@@ -1,10 +1,12 @@
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
+#define LIBGL <OpenGL/gl.h>
 #endif // __apple__
 
 #ifdef __linux__
-#include <GL/gl.h>
+#define LIBGL <GL/gl.h>
 #endif // __linux__
+
+#include LIBGL
 
 #include "utiltypes.h"
 #include "utildraw.h"

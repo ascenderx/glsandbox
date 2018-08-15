@@ -24,6 +24,10 @@ int main(int argc, char ** argv) {
     stgs.input     = input;
     stgs.update    = update;
     stgs.render    = render;
+    
+    utilInitEngine(&stgs);
+    utilInit2DRenderer(&stgs);
+    utilMainLoop(&stgs);
 
     return EXIT_SUCCESS;
 }
@@ -41,5 +45,5 @@ void update(void) {
 }
 
 void render(void) {
-    
+
 }

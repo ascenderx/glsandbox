@@ -29,21 +29,16 @@ typedef bool boolean;
 /****************************************************************************
  * 
  ****************************************************************************/
-#define STRING_MAX_LENGTH 256
-
-/****************************************************************************
- * 
- ****************************************************************************/
 struct UtilitySettings {
-    uint  winWidth;
-    uint  winHeight;
-    char  winTitle[STRING_MAX_LENGTH];
-    uint  framerate;
-    uint  bgColor;
-    void (* init)(void);
-    void (* input)(void);
-    void (* update)(void);
-    void (* render)(void);
+    uint   winWidth;
+    uint   winHeight;
+    char * winTitle;
+    uint   framerate;
+    uint   bgColor;
+    void (* init)   (void);
+    void (* input)  (void);
+    void (* update) (void);
+    void (* render) (void);
     GLFWwindow * window;
 };
 

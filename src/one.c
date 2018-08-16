@@ -32,7 +32,7 @@ int main(int argc, char ** argv) {
     struct UtilitySettings stgs;
     stgs.winWidth  = 400;
     stgs.winHeight = 400;
-    strncpy(stgs.winTitle, "GLSandbox #1", STRING_MAX_LENGTH);
+    stgs.winTitle  = "GLSandbox #1";
     stgs.framerate = 30;
     stgs.bgColor   = 0x000000;
     stgs.init      = init;

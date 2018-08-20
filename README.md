@@ -1,5 +1,5 @@
 # GLSandbox
-Sandbox/playground for OpenGL projects
+Sandbox/playground for OpenGL and WebGL projects
 
 ## Compilation
 To compile a binary, use GNU/LLVM Make.

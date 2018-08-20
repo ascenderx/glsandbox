@@ -1,7 +1,8 @@
 # GLSandbox
 Sandbox/playground for OpenGL and WebGL projects
 
-## Compilation
+## Desktop OpenGL
+### Compilation
 To compile a binary, use GNU/LLVM Make.
 Make sure the folders `obj` and `bin` exist by first running `make dirs`.
 
@@ -18,7 +19,10 @@ test: $(OBJ)/test.o $(UOBJECTS) $(UHEADERS) $(TESTOBJECTS)
 To reset `bin` and `obj` for recompliation, run `make clean`.
 To remove `bin` and `obj` for code distribution, run `make rmdirs`.
 
-## Execution
+### Execution
 To run your compiled binary, navigate to the repository's root directory in a Unix/Unix-like terminal and run the program there.
 
 For example, to run `test`, navigate to the root directory and run `bin/test` or change to the `bin` subdirectory and run `./test`.
+
+## Browser WebGL
+### Execution

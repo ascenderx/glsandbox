@@ -10,7 +10,7 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-void init(void);
+boolean init(void);
 void input(void * dummy);
 void update(void * dummy);
 void render(void * dummy);
@@ -27,13 +27,10 @@ struct Path2f polygon = { 4, pts1 };
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 int main(int argc, char ** argv) {
-    init();
-    
-    if (!utilInitialized) {
+    boolean initialized = init();
+    if (!initialized) {
         return EXIT_FAILURE;
     }
-
-    utilInit2DRenderer();
 
     boolean success = utilMainLoop();
     return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
@@ -42,7 +39,7 @@ int main(int argc, char ** argv) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void init(void) {
+boolean init(void) {
     uint winWidth   = 400;
     uint winHeight  = 400;
     char * winTitle = "GLSandbox #1";
@@ -50,11 +47,16 @@ void init(void) {
     utilBGColor     = 0x000000;
 
     utilInitEngine(winWidth, winHeight, winTitle);
+    if (utilInitialized) {
+        utilInit2DRenderer();
 
-    utilUserInput   = input;
-    utilUserUpdate  = update;
-    utilUserRender  = render;
-    utilUserCleanUp = cleanUp;
+        utilUserInput   = input;
+        utilUserUpdate  = update;
+        utilUserRender  = render;
+        utilUserCleanUp = cleanUp;
+    }
+
+    return utilInitialized;
 }
 
 /****************************************************************************

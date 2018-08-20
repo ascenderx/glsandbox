@@ -15,11 +15,12 @@
 #include "utiltypes.h"
 #include "utildraw.h"
 #include "utilinit.h"
+#include "utildebug.h"
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilInit2DRenderer() {
+void utilInit2DRenderer(void) {
     // this sets the canvas coordinates
     // args: left, right, bottom, top, near, far
 	glOrtho(0, utilWinWidth, utilWinHeight, 0, 0, 1);
@@ -54,7 +55,7 @@ void utilSetColor(uint color) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilClearScreen() {
+void utilClearScreen(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

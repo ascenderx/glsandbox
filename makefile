@@ -62,7 +62,7 @@ CFLAGS  = -Wall
 # INCLUDE FILES
 ##############################################################################
 
-UOBJECTS = $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh
+UOBJECTS = $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh $(OBJ)/utildebug.oh
 UHEADERS = $(SRC)/utiltypes.h
 
 ##############################################################################

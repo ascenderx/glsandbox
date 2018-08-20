@@ -1,24 +1,20 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-#include <stdlib.h> // calloc, free
-
-/****************************************************************************
- * 
- ****************************************************************************/
 #include "utiltypes.h"
 #include "utilinit.h"
 #include "utildraw.h"
 #include "utilinput.h"
+#include "utildebug.h"
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void init    (void *);
-void input   (void *);
-void update  (void *);
-void render  (void *);
-void cleanUp (void *);
+void init(void);
+void input(void * dummy);
+void update(void * dummy);
+void render(void * dummy);
+void cleanUp(void * dummy);
 
 struct Point2f pts1[] = {
     {0, 0}, {100, 100}, {50, 75}, {0, 0}
@@ -31,30 +27,34 @@ struct Path2f polygon = { 4, pts1 };
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 int main(int argc, char ** argv) {
-    utilWinWidth    = 400;
-    utilWinHeight   = 400;
-    utilWinTitle    = "GLSandbox #1";
-    utilFramerate   = 30;
-    utilBGColor     = 0x000000;
-    utilUserInit    = init;
-    utilUserInput   = input;
-    utilUserUpdate  = update;
-    utilUserRender  = render;
-    utilUserCleanUp = cleanUp;
-    utilUserData    = NULL;
+    init();
+    
+    if (!utilInitialized) {
+        return EXIT_FAILURE;
+    }
 
-    utilInitEngine();
     utilInit2DRenderer();
-    utilMainLoop();
 
-    return EXIT_SUCCESS;
+    boolean success = utilMainLoop();
+    return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void init(void * dummy) {
+void init(void) {
+    uint winWidth   = 400;
+    uint winHeight  = 400;
+    char * winTitle = "GLSandbox #1";
+    utilFramerate   = 30;
+    utilBGColor     = 0x000000;
 
+    utilInitEngine(winWidth, winHeight, winTitle);
+
+    utilUserInput   = input;
+    utilUserUpdate  = update;
+    utilUserRender  = render;
+    utilUserCleanUp = cleanUp;
 }
 
 /****************************************************************************

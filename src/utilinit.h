@@ -22,16 +22,15 @@ uint         utilBGColor;
 void *       utilUserData;
 boolean      utilInitialized;
 GLFWwindow * utilWindow;
-void (* utilUserInit)    (void *);
-void (* utilUserInput)   (void *);
-void (* utilUserUpdate)  (void *);
-void (* utilUserRender)  (void *);
-void (* utilUserCleanUp) (void *);
+void (* utilUserInput)(void *);
+void (* utilUserUpdate)(void *);
+void (* utilUserRender)(void *);
+void (* utilUserCleanUp)(void *);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilInitEngine();
-boolean utilMainLoop();
+boolean utilInitEngine(uint winWidth, uint winHeight, char * winTitle);
+boolean utilMainLoop(void);
 
 #endif // UTIL_INIT_H

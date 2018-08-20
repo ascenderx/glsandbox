@@ -12,17 +12,29 @@
  * 
  ****************************************************************************/
 #include "utilinit.h"
+#include "utiltypes.h"
 
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilInitEngine() {
+boolean utilInitEngine(uint winWidth, uint winHeight, char * winTitle) {
     utilInitialized = FALSE;
 
-    if (!glfwInit()) {
-        return FALSE;
+    if (glfwInit()) {
+        // initialize defaults
+        utilWinWidth    = winWidth;
+        utilWinHeight   = winHeight;
+        utilWinTitle    = winTitle;
+        utilFramerate   = 60;
+        utilBGColor     = 0x000000;
+        utilUserData    = NULL;
+        utilUserInput   = NULL;
+        utilUserUpdate  = NULL;
+        utilUserRender  = NULL;
+        utilUserCleanUp = NULL;
+        utilInitialized = TRUE;
     }
-    
+
     utilWindow = glfwCreateWindow(utilWinWidth, utilWinHeight, utilWinTitle, NULL, NULL);
     if (!utilWindow) {
         glfwTerminate();
@@ -31,20 +43,13 @@ boolean utilInitEngine() {
 
     glfwMakeContextCurrent(utilWindow);
 
-    // init user data
-    if (utilUserInit) {
-        utilUserInit(utilUserData);
-    }
-
-    utilInitialized = TRUE;
-
-    return TRUE;
+    return utilInitialized;
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilMainLoop() {
+boolean utilMainLoop(void) {
     if (!utilUserInput || !utilUserUpdate || !utilUserRender) {
         return FALSE;
     }

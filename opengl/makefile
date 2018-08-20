@@ -6,20 +6,29 @@
 BIN    = bin
 OBJ    = obj
 SRC    = src
+INC    = include
 CEXT   = c
 HEXT   = h
 C++EXT = cc # or c++, cpp, C, cxx, etc.
 H++EXT = hh # or h++, hpp, H, hxx, h, etc.
 
+# User objects
 $(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+# User objects with user headers
 $(OBJ)/%.oh: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+# Included / builtin objects with headers
+$(OBJ)/%.oih: $(INC)/%.$(CEXT) $(INC)/%.$(HEXT) $(UHEADERS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+# User objects (C++)
 $(OBJ)/%.oo: $(SRC)/%.$(C++EXT) $(UHEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS)
 
+# User objects with user headers (C++)
 $(OBJ)/%.ooh: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT) $(UHEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS)
 
@@ -62,8 +71,8 @@ CFLAGS  = -Wall
 # INCLUDE FILES
 ##############################################################################
 
-UOBJECTS = $(OBJ)/utilinit.oh $(OBJ)/utilinput.oh $(OBJ)/utildraw.oh $(OBJ)/utildebug.oh
-UHEADERS = $(SRC)/utiltypes.h
+UOBJECTS = $(OBJ)/utilinit.oih $(OBJ)/utilinput.oih $(OBJ)/utildraw.oih $(OBJ)/utildebug.oih
+UHEADERS = $(INC)/utiltypes.h
 
 ##############################################################################
 # BINARY RULES

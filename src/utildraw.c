@@ -14,17 +14,18 @@
  ****************************************************************************/
 #include "utiltypes.h"
 #include "utildraw.h"
+#include "utilinit.h"
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilInit2DRenderer(struct UtilitySettings * stgs) {
+void utilInit2DRenderer() {
     // this sets the canvas coordinates
     // args: left, right, bottom, top, near, far
-	glOrtho(0, stgs->winWidth, stgs->winHeight, 0, 0, 1);
+	glOrtho(0, utilWinWidth, utilWinHeight, 0, 0, 1);
 
     // set clear color
-    struct ColorRGB rgb = utilParseColor(stgs->bgColor);
+    struct ColorRGB rgb = utilParseColor(utilBGColor);
     glClearColor(rgb.r, rgb.g, rgb.b, 0);
 }
 

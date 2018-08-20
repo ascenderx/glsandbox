@@ -16,23 +16,27 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilInitEngine(struct UtilitySettings * stgs) {
+boolean utilInitEngine() {
+    utilInitialized = FALSE;
+
     if (!glfwInit()) {
         return FALSE;
     }
     
-    stgs->window = glfwCreateWindow(stgs->winWidth, stgs->winHeight, stgs->winTitle, NULL, NULL);
-    if (!stgs->window) {
+    utilWindow = glfwCreateWindow(utilWinWidth, utilWinHeight, utilWinTitle, NULL, NULL);
+    if (!utilWindow) {
         glfwTerminate();
         return FALSE;
     }
 
-    glfwMakeContextCurrent(stgs->window);
+    glfwMakeContextCurrent(utilWindow);
 
     // init user data
-    if (stgs->init) {
-        stgs->init();
+    if (utilUserInit) {
+        utilUserInit(utilUserData);
     }
+
+    utilInitialized = TRUE;
 
     return TRUE;
 }
@@ -40,25 +44,29 @@ boolean utilInitEngine(struct UtilitySettings * stgs) {
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilMainLoop(struct UtilitySettings * stgs) {
-    if (!stgs->input || !stgs->update || !stgs->render) {
+boolean utilMainLoop() {
+    if (!utilUserInput || !utilUserUpdate || !utilUserRender) {
         return FALSE;
     }
 
-    while (!glfwWindowShouldClose(stgs->window)) {
+    while (!glfwWindowShouldClose(utilWindow)) {
         glfwPollEvents();
 
         // run user functions
-        stgs->input();
-        stgs->update();
-        stgs->render();
+        utilUserInput(utilUserData);
+        utilUserUpdate(utilUserData);
+        utilUserRender(utilUserData);
 
-        glfwSwapBuffers(stgs->window);
+        glfwSwapBuffers(utilWindow);
 
-        usleep(1000000 / stgs->framerate);
+        usleep(1000000 / utilFramerate);
     }
 
     glfwTerminate();
+
+    if (utilUserCleanUp) {
+        utilUserCleanUp(utilUserData);
+    }
 
     return TRUE;
 }

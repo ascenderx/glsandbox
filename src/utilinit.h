@@ -14,7 +14,24 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilInitEngine(struct UtilitySettings * stgs);
-boolean utilMainLoop(struct UtilitySettings * stgs);
+uint         utilWinWidth;
+uint         utilWinHeight;
+char *       utilWinTitle;
+uint         utilFramerate;
+uint         utilBGColor;
+void *       utilUserData;
+boolean      utilInitialized;
+GLFWwindow * utilWindow;
+void (* utilUserInit)    (void *);
+void (* utilUserInput)   (void *);
+void (* utilUserUpdate)  (void *);
+void (* utilUserRender)  (void *);
+void (* utilUserCleanUp) (void *);
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilInitEngine();
+boolean utilMainLoop();
 
 #endif // UTIL_INIT_H

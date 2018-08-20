@@ -1,7 +1,7 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-#include <string.h>
+#include <stdlib.h> // calloc, free
 
 /****************************************************************************
  * 
@@ -14,35 +14,38 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-void init(void);
-void input(void);
-void update(void);
-void render(void);
+void init    (void *);
+void input   (void *);
+void update  (void *);
+void render  (void *);
+void cleanUp (void *);
+
+struct Point2f pts1[] = {
+    {0, 0}, {100, 100}, {50, 75}, {0, 0}
+};
+struct Path2f polygon = { 4, pts1 };
 
 /****************************************************************************
  * 
  ****************************************************************************/
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
-
-/****************************************************************************
- * 
- ****************************************************************************/
 int main(int argc, char ** argv) {
-    struct UtilitySettings stgs;
-    stgs.winWidth  = 400;
-    stgs.winHeight = 400;
-    stgs.winTitle  = "GLSandbox #1";
-    stgs.framerate = 30;
-    stgs.bgColor   = 0x000000;
-    stgs.init      = init;
-    stgs.input     = input;
-    stgs.update    = update;
-    stgs.render    = render;
+    utilWinWidth    = 400;
+    utilWinHeight   = 400;
+    utilWinTitle    = "GLSandbox #1";
+    utilFramerate   = 30;
+    utilBGColor     = 0x000000;
+    utilUserInit    = init;
+    utilUserInput   = input;
+    utilUserUpdate  = update;
+    utilUserRender  = render;
+    utilUserCleanUp = cleanUp;
+    utilUserData    = NULL;
 
-    utilInitEngine(&stgs);
-    utilInit2DRenderer(&stgs);
-    utilMainLoop(&stgs);
+    utilInitEngine();
+    utilInit2DRenderer();
+    utilMainLoop();
 
     return EXIT_SUCCESS;
 }
@@ -50,27 +53,36 @@ int main(int argc, char ** argv) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void init(void) {
+void init(void * dummy) {
 
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void input(void) {
-
+void input(void * dummy) {
+    
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void update(void) {
-
+void update(void * dummy) {
+    
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void render(void) {
+void render(void * dummy) {
     utilClearScreen();
+    utilSetColor(0x00ff00);
+    utilPolyline2D(&polygon);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void cleanUp(void * dummy) {
+
 }

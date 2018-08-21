@@ -13,18 +13,19 @@
  ****************************************************************************/
 #include "utilinit.h"
 #include "utiltypes.h"
+#include "utildraw.h"
 
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilInitEngine(uint winWidth, uint winHeight, char * winTitle) {
+boolean utilInitEngine() {
     utilInitialized = FALSE;
 
     if (glfwInit()) {
         // initialize defaults
-        utilWinWidth    = winWidth;
-        utilWinHeight   = winHeight;
-        utilWinTitle    = winTitle;
+        utilWinWidth    = 640;
+        utilWinHeight   = 480;
+        utilWinTitle    = "GLSandbox";
         utilFramerate   = 60;
         utilBGColor     = 0x000000;
         utilUserData    = NULL;
@@ -34,14 +35,6 @@ boolean utilInitEngine(uint winWidth, uint winHeight, char * winTitle) {
         utilUserCleanUp = NULL;
         utilInitialized = TRUE;
     }
-
-    utilWindow = glfwCreateWindow(utilWinWidth, utilWinHeight, utilWinTitle, NULL, NULL);
-    if (!utilWindow) {
-        glfwTerminate();
-        return FALSE;
-    }
-
-    glfwMakeContextCurrent(utilWindow);
 
     return utilInitialized;
 }
@@ -53,6 +46,16 @@ boolean utilMainLoop(void) {
     if (!utilUserInput || !utilUserUpdate || !utilUserRender) {
         return FALSE;
     }
+
+    utilWindow = glfwCreateWindow(utilWinWidth, utilWinHeight, utilWinTitle, NULL, NULL);
+    if (!utilWindow) {
+        glfwTerminate();
+        return FALSE;
+    }
+
+    glfwMakeContextCurrent(utilWindow);
+
+    utilInit2DRenderer();
 
     while (!glfwWindowShouldClose(utilWindow)) {
         glfwPollEvents();

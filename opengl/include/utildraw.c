@@ -62,11 +62,36 @@ void utilClearScreen(void) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilPolyline2D(const struct Path2f * path) {
+void __utilIterateVertices__(const struct Path2f * path) {
+    for (uint p = 0; p < path->length; p++) {
+        struct Point2f pt = path->points[p];
+        glVertex2f(pt.x, pt.y);
+    }
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilStrokePolyline2D(const struct Path2f * path) {
     glBegin(GL_LINE_STRIP); {
-        for (uint p = 0; p < path->length; p++) {
-            struct Point2f pt = path->points[p];
-            glVertex2f(pt.x, pt.y);
-        }
+        __utilIterateVertices__(path);
+    } glEnd();
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilStrokePolygon2D(const struct Path2f * path) {
+    glBegin(GL_LINE_LOOP); {
+        __utilIterateVertices__(path);
+    } glEnd();
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilFillPolygon2D(const struct Path2f * path) {
+    glBegin(GL_POLYGON); {
+        __utilIterateVertices__(path);
     } glEnd();
 }

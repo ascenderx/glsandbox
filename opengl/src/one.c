@@ -10,16 +10,16 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean init(void);
-void input(void * dummy);
-void update(void * dummy);
-void render(void * dummy);
-void cleanUp(void * dummy);
+boolean init    (void);
+void    input   (void * dummy);
+void    update  (void * dummy);
+void    render  (void * dummy);
+void    cleanUp (void * dummy);
 
-struct Point2f pts1[] = {
-    {0, 0}, {100, 100}, {50, 75}, {0, 0}
+struct Point2f gPts1[] = {
+    {0, 0}, {100, 100}, {50, 75}
 };
-struct Path2f polygon = { 4, pts1 };
+struct Path2f gPolygon1 = {3, gPts1};
 
 /****************************************************************************
  * 
@@ -40,23 +40,21 @@ int main(int argc, char ** argv) {
  * 
  ****************************************************************************/
 boolean init(void) {
-    uint winWidth   = 400;
-    uint winHeight  = 400;
-    char * winTitle = "GLSandbox #1";
-    utilFramerate   = 30;
-    utilBGColor     = 0x000000;
-
-    utilInitEngine(winWidth, winHeight, winTitle);
-    if (utilInitialized) {
-        utilInit2DRenderer();
-
-        utilUserInput   = input;
-        utilUserUpdate  = update;
-        utilUserRender  = render;
-        utilUserCleanUp = cleanUp;
+    if (!utilInitEngine()) {
+        return FALSE;
     }
 
-    return utilInitialized;
+    utilWinWidth    = 400;
+    utilWinHeight   = 400;
+    utilWinTitle    = "GLSandbox #1";
+    utilFramerate   = 30;
+    utilBGColor     = 0x000000;
+    utilUserInput   = input;
+    utilUserUpdate  = update;
+    utilUserRender  = render;
+    utilUserCleanUp = cleanUp;
+
+    return TRUE;
 }
 
 /****************************************************************************
@@ -79,7 +77,7 @@ void update(void * dummy) {
 void render(void * dummy) {
     utilClearScreen();
     utilSetColor(0x00ff00);
-    utilPolyline2D(&polygon);
+    utilStrokePolygon2D(&gPolygon1);
 }
 
 /****************************************************************************

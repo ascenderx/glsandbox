@@ -30,7 +30,7 @@ void (* utilUserCleanUp)(void *);
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilInitEngine(uint winWidth, uint winHeight, char * winTitle);
+boolean utilInitEngine();
 boolean utilMainLoop(void);
 
 #endif // UTIL_INIT_H

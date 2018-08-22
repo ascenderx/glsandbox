@@ -10,12 +10,12 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-void    tick    (void * dummy);
-boolean init    (void);
-void    input   (void);
-void    update  (void);
-void    render  (void);
-void    cleanUp (void);
+void    tick(void * dummy);
+boolean init(void);
+void    input(void);
+void    update(void);
+void    render(void);
+void    cleanUp(void);
 void    movePolygon(struct Path2f * polygon, float dx, float dy);
 
 /****************************************************************************
@@ -33,7 +33,14 @@ void    movePolygon(struct Path2f * polygon, float dx, float dy);
 struct Point2f gPts1[] = {
     {0, -10}, {-20, 20}, {20, 20}
 };
-struct Path2f gPolygon1 = {3, {WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0}, gPts1};
+struct Path2f gPolygon1 = {
+    // # of points to draw
+    3,
+    // center
+    {WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0},
+    // points to draw
+    gPts1
+};
 
 /****************************************************************************
  * 

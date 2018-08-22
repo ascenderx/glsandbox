@@ -21,10 +21,19 @@ void    movePolygon(struct Path2f * polygon, float dx, float dy);
 /****************************************************************************
  * 
  ****************************************************************************/
+#define WIN_WIDTH     400
+#define WIN_HEIGHT    400
+#define WIN_TITLE     "GLSandbox #1"
+#define WIN_FRAMERATE 30
+#define WIN_BG_COLOR  0x000000
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
 struct Point2f gPts1[] = {
     {0, 0}, {100, 100}, {50, 75}
 };
-struct Path2f gPolygon1 = {3, gPts1};
+struct Path2f gPolygon1 = {3, {WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0}, gPts1};
 
 /****************************************************************************
  * 
@@ -59,10 +68,10 @@ boolean init(void) {
         return FALSE;
     }
 
-    utilSetWinDims(400, 400);
-    utilSetWinTitle("GLSandbox #1");
-    utilSetFramerate(30);
-    utilSetBGColor(0x000000);
+    utilSetWinDims(WIN_WIDTH, WIN_HEIGHT);
+    utilSetWinTitle(WIN_TITLE);
+    utilSetFramerate(WIN_FRAMERATE);
+    utilSetBGColor(WIN_BG_COLOR);
     utilSetTickFunc(tick);
 
     return TRUE;
@@ -71,18 +80,37 @@ boolean init(void) {
 /****************************************************************************
  * 
  ****************************************************************************/
-#define WASD_SPEED 5
+#define WASD_SPEED   5.0
+#define ROTATE_SPEED 5.0
 void input(void) {
+    float dx = 0.0;
+    float dy = 0.0;
+    float dr = 0.0;
+
     if (utilIsKeyDown(GLFW_KEY_LEFT)) {
-        movePolygon(&gPolygon1, -WASD_SPEED, 0);
+        dx = -WASD_SPEED;
     } else if (utilIsKeyDown(GLFW_KEY_RIGHT)) {
-        movePolygon(&gPolygon1, +WASD_SPEED, 0);
+        dx = +WASD_SPEED;
     }
 
     if (utilIsKeyDown(GLFW_KEY_UP)) {
-        movePolygon(&gPolygon1, 0, -WASD_SPEED);
+        dy = -WASD_SPEED;
     } else if (utilIsKeyDown(GLFW_KEY_DOWN)) {
-        movePolygon(&gPolygon1, 0, +WASD_SPEED);
+        dy = +WASD_SPEED;
+    }
+
+    if (utilIsKeyDown(GLFW_KEY_A)) {
+        dr = -ROTATE_SPEED;
+    } else if (utilIsKeyDown(GLFW_KEY_D)) {
+        dr = +ROTATE_SPEED;
+    }
+
+    if (dx || dy) {
+        utilTranslatePolygon(&gPolygon1, dx, dy);
+    }
+    
+    if (dr) {
+        utilRotatePolygonAboutCenter(&gPolygon1, dr);
     }
 }
 
@@ -99,7 +127,7 @@ void update(void) {
 void render(void) {
     utilClearScreen();
     utilSetColor(0x00ff00);
-    utilStrokePolygon2D(&gPolygon1);
+    utilStrokePolygon(&gPolygon1);
 }
 
 /****************************************************************************
@@ -107,14 +135,4 @@ void render(void) {
  ****************************************************************************/
 void cleanUp(void) {
 
-}
-
-/****************************************************************************
- * 
- ****************************************************************************/
-void movePolygon(struct Path2f * polygon, float dx, float dy) {
-    for (uint p = 0; p < polygon->length; p++) {
-        polygon->points[p].x += dx;
-        polygon->points[p].y += dy;
-    }
 }

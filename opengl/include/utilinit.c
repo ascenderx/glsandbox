@@ -98,7 +98,7 @@ boolean utilMainLoop(void) {
 
     // initialize local utilities
     utilInitInputHandlers();
-    utilInit2DRenderer(__utilWinWidth__, __utilWinHeight__, __utilBGColor__);
+    utilInitRenderer(__utilWinWidth__, __utilWinHeight__, __utilBGColor__);
 
     while (!glfwWindowShouldClose(__utilWindow__)) {
         glfwPollEvents();

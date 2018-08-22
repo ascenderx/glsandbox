@@ -17,11 +17,11 @@ $(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # User objects with user headers
-$(OBJ)/%.oh: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
+$(OBJ)/%.ho: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # Included / builtin objects with headers
-$(OBJ)/%.oih: $(INC)/%.$(CEXT) $(INC)/%.$(HEXT) $(UHEADERS)
+$(OBJ)/%.hio: $(INC)/%.$(CEXT) $(INC)/%.$(HEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # User objects (C++)
@@ -29,7 +29,7 @@ $(OBJ)/%.oo: $(SRC)/%.$(C++EXT) $(UHEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS)
 
 # User objects with user headers (C++)
-$(OBJ)/%.ooh: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT) $(UHEADERS)
+$(OBJ)/%.hoo: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT) $(UHEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS)
 
 ##############################################################################
@@ -71,7 +71,7 @@ CFLAGS  = -Wall
 # INCLUDE FILES
 ##############################################################################
 
-UOBJECTS = $(OBJ)/utilinit.oih $(OBJ)/utilinput.oih $(OBJ)/utildraw.oih $(OBJ)/utildebug.oih
+UOBJECTS = $(OBJ)/utilinit.hio $(OBJ)/utilinput.hio $(OBJ)/utildraw.hio $(OBJ)/utildebug.hio
 UHEADERS = $(INC)/utiltypes.h
 
 ##############################################################################

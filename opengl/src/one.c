@@ -16,6 +16,7 @@ void    input   (void);
 void    update  (void);
 void    render  (void);
 void    cleanUp (void);
+void    movePolygon(struct Path2f * polygon, float dx, float dy);
 
 /****************************************************************************
  * 
@@ -70,8 +71,19 @@ boolean init(void) {
 /****************************************************************************
  * 
  ****************************************************************************/
+#define WASD_SPEED 5
 void input(void) {
-    
+    if (utilIsKeyDown(GLFW_KEY_LEFT)) {
+        movePolygon(&gPolygon1, -WASD_SPEED, 0);
+    } else if (utilIsKeyDown(GLFW_KEY_RIGHT)) {
+        movePolygon(&gPolygon1, +WASD_SPEED, 0);
+    }
+
+    if (utilIsKeyDown(GLFW_KEY_UP)) {
+        movePolygon(&gPolygon1, 0, -WASD_SPEED);
+    } else if (utilIsKeyDown(GLFW_KEY_DOWN)) {
+        movePolygon(&gPolygon1, 0, +WASD_SPEED);
+    }
 }
 
 /****************************************************************************
@@ -95,4 +107,14 @@ void render(void) {
  ****************************************************************************/
 void cleanUp(void) {
 
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void movePolygon(struct Path2f * polygon, float dx, float dy) {
+    for (uint p = 0; p < polygon->length; p++) {
+        polygon->points[p].x += dx;
+        polygon->points[p].y += dy;
+    }
 }

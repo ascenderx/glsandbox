@@ -13,6 +13,7 @@
  ****************************************************************************/
 #include "utilinit.h"
 #include "utiltypes.h"
+#include "utilinput.h"
 #include "utildraw.h"
 
 /****************************************************************************
@@ -95,6 +96,8 @@ boolean utilMainLoop(void) {
 
     glfwMakeContextCurrent(__utilWindow__);
 
+    // initialize local utilities
+    utilInitInputHandlers();
     utilInit2DRenderer(__utilWinWidth__, __utilWinHeight__, __utilBGColor__);
 
     while (!glfwWindowShouldClose(__utilWindow__)) {

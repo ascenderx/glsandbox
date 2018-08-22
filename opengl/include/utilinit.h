@@ -14,20 +14,26 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-uint         utilWinWidth;
-uint         utilWinHeight;
-char *       utilWinTitle;
-uint         utilFramerate;
-uint         utilBGColor;
-void *       utilUserData;
-boolean      utilInitialized;
-GLFWwindow * utilWindow;
-void (* utilTickFunc)(void *);
+uint         __utilWinWidth__;
+uint         __utilWinHeight__;
+char *       __utilWinTitle__;
+uint         __utilFramerate__;
+uint         __utilBGColor__;
+void *       __utilUserData__;
+boolean      __utilInitialized__;
+GLFWwindow * __utilWindow__;
+void (* __utilTickFunc__)(void *);
 
 /****************************************************************************
  * 
  ****************************************************************************/
 boolean utilInitEngine();
+void    utilSetWinDims(const uint width, const uint height);
+void    utilSetWinTitle(char * title);
+void    utilSetFramerate(const uint framerate);
+void    utilSetBGColor(const uint color);
+void    utilSetUserData(void * pointer);
+void    utilSetTickFunc(void (func(void *)));
 boolean utilMainLoop(void);
 
 #endif // UTIL_INIT_H

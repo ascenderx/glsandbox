@@ -58,12 +58,11 @@ boolean init(void) {
         return FALSE;
     }
 
-    utilWinWidth  = 400;
-    utilWinHeight = 400;
-    utilWinTitle  = "GLSandbox #1";
-    utilFramerate = 30;
-    utilBGColor   = 0x000000;
-    utilTickFunc  = tick;
+    utilSetWinDims(400, 400);
+    utilSetWinTitle("GLSandbox #1");
+    utilSetFramerate(30);
+    utilSetBGColor(0x000000);
+    utilSetTickFunc(tick);
 
     return TRUE;
 }

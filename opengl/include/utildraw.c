@@ -20,13 +20,13 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilInit2DRenderer(void) {
+void utilInit2DRenderer(uint width, uint height, uint color) {
     // this sets the canvas coordinates
     // args: left, right, bottom, top, near, far
-	glOrtho(0, utilWinWidth, utilWinHeight, 0, 0, 1);
+	glOrtho(0, width, height, 0, 0, 1);
 
     // set clear color
-    struct ColorRGB rgb = utilParseColor(utilBGColor);
+    struct ColorRGB rgb = utilParseColor(color);
     glClearColor(rgb.r, rgb.g, rgb.b, 0);
 }
 

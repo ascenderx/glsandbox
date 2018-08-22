@@ -28,11 +28,7 @@ boolean utilInitEngine() {
         utilWinTitle    = "GLSandbox";
         utilFramerate   = 60;
         utilBGColor     = 0x000000;
-        utilUserData    = NULL;
-        utilUserInput   = NULL;
-        utilUserUpdate  = NULL;
-        utilUserRender  = NULL;
-        utilUserCleanUp = NULL;
+        utilTickFunc    = NULL;
         utilInitialized = TRUE;
     }
 
@@ -43,10 +39,6 @@ boolean utilInitEngine() {
  * 
  ****************************************************************************/
 boolean utilMainLoop(void) {
-    if (!utilUserInput || !utilUserUpdate || !utilUserRender) {
-        return FALSE;
-    }
-
     utilWindow = glfwCreateWindow(utilWinWidth, utilWinHeight, utilWinTitle, NULL, NULL);
     if (!utilWindow) {
         glfwTerminate();
@@ -60,10 +52,10 @@ boolean utilMainLoop(void) {
     while (!glfwWindowShouldClose(utilWindow)) {
         glfwPollEvents();
 
-        // run user functions
-        utilUserInput(utilUserData);
-        utilUserUpdate(utilUserData);
-        utilUserRender(utilUserData);
+        // run user function
+        if (utilTickFunc) {
+            utilTickFunc(utilUserData);
+        }
 
         glfwSwapBuffers(utilWindow);
 
@@ -71,10 +63,6 @@ boolean utilMainLoop(void) {
     }
 
     glfwTerminate();
-
-    if (utilUserCleanUp) {
-        utilUserCleanUp(utilUserData);
-    }
 
     return TRUE;
 }

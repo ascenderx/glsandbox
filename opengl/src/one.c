@@ -10,12 +10,16 @@
 /****************************************************************************
  * 
  ****************************************************************************/
+void    tick    (void * dummy);
 boolean init    (void);
-void    input   (void * dummy);
-void    update  (void * dummy);
-void    render  (void * dummy);
-void    cleanUp (void * dummy);
+void    input   (void);
+void    update  (void);
+void    render  (void);
+void    cleanUp (void);
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
 struct Point2f gPts1[] = {
     {0, 0}, {100, 100}, {50, 75}
 };
@@ -33,7 +37,17 @@ int main(int argc, char ** argv) {
     }
 
     boolean success = utilMainLoop();
+    cleanUp();
     return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void tick(void * dummy) {
+    input();
+    update();
+    render();
 }
 
 /****************************************************************************
@@ -44,15 +58,12 @@ boolean init(void) {
         return FALSE;
     }
 
-    utilWinWidth    = 400;
-    utilWinHeight   = 400;
-    utilWinTitle    = "GLSandbox #1";
-    utilFramerate   = 30;
-    utilBGColor     = 0x000000;
-    utilUserInput   = input;
-    utilUserUpdate  = update;
-    utilUserRender  = render;
-    utilUserCleanUp = cleanUp;
+    utilWinWidth  = 400;
+    utilWinHeight = 400;
+    utilWinTitle  = "GLSandbox #1";
+    utilFramerate = 30;
+    utilBGColor   = 0x000000;
+    utilTickFunc  = tick;
 
     return TRUE;
 }
@@ -60,21 +71,21 @@ boolean init(void) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void input(void * dummy) {
+void input(void) {
     
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void update(void * dummy) {
+void update(void) {
     
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void render(void * dummy) {
+void render(void) {
     utilClearScreen();
     utilSetColor(0x00ff00);
     utilStrokePolygon2D(&gPolygon1);
@@ -83,6 +94,6 @@ void render(void * dummy) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void cleanUp(void * dummy) {
+void cleanUp(void) {
 
 }

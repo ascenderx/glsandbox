@@ -22,10 +22,7 @@ uint         utilBGColor;
 void *       utilUserData;
 boolean      utilInitialized;
 GLFWwindow * utilWindow;
-void (* utilUserInput)(void *);
-void (* utilUserUpdate)(void *);
-void (* utilUserRender)(void *);
-void (* utilUserCleanUp)(void *);
+void (* utilTickFunc)(void *);
 
 /****************************************************************************
  * 

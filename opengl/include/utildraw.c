@@ -102,6 +102,25 @@ void utilFillPolygon(const struct Path2f * path) {
 /****************************************************************************
  * 
  ****************************************************************************/
+#define POINT_RADIUS 2
+void utilFillPoint(const struct Point2f * point) {
+    float x1 = point->x - POINT_RADIUS;
+    float y1 = point->y - POINT_RADIUS;
+    float x2 = point->x + POINT_RADIUS;
+    float y2 = point->y + POINT_RADIUS;
+
+    // draw a rectangle
+    glBegin(GL_POLYGON); {
+        glVertex2f(x1, y1);
+        glVertex2f(x1, y2);
+        glVertex2f(x2, y2);
+        glVertex2f(x2, y1);
+    } glEnd();
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
 float __utilDegToRad__(float degrees) {
     return (degrees * PI) / 180.0;
 }
@@ -116,18 +135,16 @@ float __utilRadToDeg__(float radians) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilRotatePoint(struct Point2f * point, const struct Point2f * center, float degrees) {
+void utilRotatePoint(struct Point2f * point, float degrees) {
     float xp = point->x;
     float yp = point->y;
-    float xc = center->x;
-    float yc = center->y;
 
     float rad  = __utilDegToRad__(degrees);
     float cosA = cos(rad);
     float sinA = sin(rad);
 
-    point->x = xp * cosA - yp * sinA + xc;
-    point->y = xp * sinA + yp * cosA + yc;
+    point->x = xp * cosA - yp * sinA;
+    point->y = xp * sinA + yp * cosA;
 }
 
 /****************************************************************************
@@ -143,6 +160,6 @@ void utilTranslatePolygon(struct Path2f * polygon, float dx, float dy) {
  ****************************************************************************/
 void utilRotatePolygonAboutCenter(struct Path2f * polygon, float degrees) {
     for (uint p = 0; p < polygon->length; p++) {
-        utilRotatePoint(&polygon->points[p], &polygon->center, degrees);
+        utilRotatePoint(&polygon->points[p], degrees);
     }
 }

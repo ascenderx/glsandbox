@@ -31,7 +31,7 @@ void    movePolygon(struct Path2f * polygon, float dx, float dy);
  * 
  ****************************************************************************/
 struct Point2f gPts1[] = {
-    {0, 0}, {100, 100}, {50, 75}
+    {0, -10}, {-20, 20}, {20, 20}
 };
 struct Path2f gPolygon1 = {3, {WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0}, gPts1};
 
@@ -126,8 +126,12 @@ void update(void) {
  ****************************************************************************/
 void render(void) {
     utilClearScreen();
+
     utilSetColor(0x00ff00);
     utilStrokePolygon(&gPolygon1);
+
+    utilSetColor(0xff0000);
+    utilFillPoint(&gPolygon1.center);
 }
 
 /****************************************************************************

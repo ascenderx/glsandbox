@@ -13,7 +13,7 @@ TESTOBJECTS = $(OBJ)/something.oh
 test: $(OBJ)/test.o $(UOBJECTS) $(UHEADERS) $(TESTOBJECTS)
 [\t] $(CC) -o $(BIN)/$@ $< $(UOBJECTS) $(TESTOBJECTS) $(LFLAGS)
 ```
-  - Be sure to include any extra includes after the `$(UOBJECTS)` directive in the rule and the compilation lines, using the `$(OBJ)/*.oh` (C) or `$(OBJ)/*.ooh` (C++) formats.
+  - Be sure to include any extra includes after the `$(UOBJECTS)` directive in the rule and the compilation lines, using the `$(OBJ)/*.ho` (C) or `$(OBJ)/*.hoo` (C++) formats.
 - Navigate to the folder in a Unix/Unix-like terminal and type `make test`.
 
 To reset `bin` and `obj` for recompliation, run `make clean`.

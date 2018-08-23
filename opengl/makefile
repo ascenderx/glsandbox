@@ -79,6 +79,6 @@ UHEADERS = $(INC)/utiltypes.h
 # BINARY RULES
 ##############################################################################
 
-OBJECTS1 = # currently empty
+OBJECTS1 = $(OBJ)/player.ho
 one: $(OBJ)/one.o $(UOBJECTS) $(UHEADERS) $(OBJECTS1)
 	$(CC) -o $(BIN)/$@ $< $(UOBJECTS) $(OBJECTS1) $(LFLAGS)

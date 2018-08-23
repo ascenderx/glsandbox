@@ -15,13 +15,12 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-void   tick(void * ptr);
 void * init(void);
 void   input(void * ptr);
 void   update(void * ptr);
 void   render(void * ptr);
+void   tick(void * ptr);
 void   cleanUp(void * ptr);
-void   movePolygon(struct Path2f * polygon, float dx, float dy);
 
 /****************************************************************************
  * 
@@ -71,11 +70,13 @@ int main(int argc, char ** argv) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void tick(void * ptr) {
-    input(ptr);
-    update(ptr);
-    render(ptr);
-}
+struct Point2f gPlayerPosition = {WIN_WIDTH / 2.0, WIN_HEIGHT / 2.0};
+struct Point2f gPlayerVertices[] = {{0, -10}, {-20, 20}, {20, 20}};
+struct Path2f gPlayerImage = {3, &gPlayerPosition, gPlayerVertices};
+struct Velocity2f gPlayerVelocity = {0.0, 0.0};
+float gPlayerRotation = 0.0;
+float gPlayerDirection = 0.0;
+float gPlayerDA = 0.0;
 
 /****************************************************************************
  * 
@@ -86,31 +87,13 @@ void * init() {
     }
 
     // init user data
-    const uint numVertices = 3;
-    struct Point2f pts[numVertices] = {{0, -10}, {-20, 20}, {20, 20}};
-
     struct Player * player = (struct Player *) malloc(sizeof(struct Player));
-
-    player->image = (struct Path2f *) malloc(sizeof(struct Path2f));
-    player->image->length = numVertices;
-    player->image->center = (struct Point2f *) malloc(sizeof(struct Point2f));
-    player->image->vertices = (struct Point2f *) calloc(numVertices, sizeof(struct Point2f));
-    for (uint v = 0; v < numVertices; v++) {
-        player->image->vertices[v].x = pts[v].x;
-        player->image->vertices[v].y = pts[v].y;
-    }
-
-    player->position = player->image->center;
-    player->position->x = WIN_WIDTH  / 2.0;
-    player->position->y = WIN_HEIGHT / 2.0;
-
-    player->velocity = (struct Velocity2f *) malloc(sizeof(struct Velocity2f));
-    player->velocity->dx = 0.0;
-    player->velocity->dy = 0.0;
-
-    player->rotation = 0.0;
-    player->direction = 0.0;
-    player->degreesToRotateImage = 0.0;
+    player->image = &gPlayerImage;
+    player->position = &gPlayerPosition;
+    player->velocity = &gPlayerVelocity;
+    player->rotation = gPlayerRotation;
+    player->direction = gPlayerDirection;
+    player->degreesToRotateImage = gPlayerDA;
 
     utilSetWinDims(WIN_WIDTH, WIN_HEIGHT);
     utilSetWinTitle(WIN_TITLE);
@@ -189,6 +172,15 @@ void render(void * ptr) {
 
     utilSetColor(0xff0000);
     utilFillPoint(player->position);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void tick(void * ptr) {
+    input(ptr);
+    update(ptr);
+    render(ptr);
 }
 
 /****************************************************************************

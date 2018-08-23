@@ -6,11 +6,11 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-#include "../include/utiltypes.h"
-#include "../include/utilinit.h"
-#include "../include/utildraw.h"
-#include "../include/utilinput.h"
-#include "../include/utildebug.h"
+#include <utiltypes.h>
+#include <utilinit.h>
+#include <utildraw.h>
+#include <utilinput.h>
+#include <utildebug.h>
 
 /****************************************************************************
  * 

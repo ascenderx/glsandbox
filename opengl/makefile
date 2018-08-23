@@ -3,22 +3,23 @@
 ##############################################################################
 
 # directories
-BIN    = bin
-OBJ    = obj
-SRC    = src
-INC    = include
-CEXT   = c
-HEXT   = h
-C++EXT = cc # or c++, cpp, C, cxx, etc.
-H++EXT = hh # or h++, hpp, H, hxx, h, etc.
+BIN      = bin
+OBJ      = obj
+SRC      = src
+INC      = include
+CEXT     = c
+HEXT     = h
+C++EXT   = cc # or c++, cpp, C, cxx, etc.
+H++EXT   = hh # or h++, hpp, H, hxx, h, etc.
+INCLUDES = -I$(INC) 
 
 # User objects
 $(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(INCLUDES)
 
 # User objects with user headers
 $(OBJ)/%.ho: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(INCLUDES)
 
 # Included / builtin objects with headers
 $(OBJ)/%.hio: $(INC)/%.$(CEXT) $(INC)/%.$(HEXT) $(UHEADERS)
@@ -26,11 +27,11 @@ $(OBJ)/%.hio: $(INC)/%.$(CEXT) $(INC)/%.$(HEXT) $(UHEADERS)
 
 # User objects (C++)
 $(OBJ)/%.oo: $(SRC)/%.$(C++EXT) $(UHEADERS)
-	$(C++) -c -o $@ $< $(CFLAGS)
+	$(C++) -c -o $@ $< $(CFLAGS) $(INCLUDES)
 
 # User objects with user headers (C++)
 $(OBJ)/%.hoo: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT) $(UHEADERS)
-	$(C++) -c -o $@ $< $(CFLAGS)
+	$(C++) -c -o $@ $< $(CFLAGS) $(INCLUDES)
 
 ##############################################################################
 # DIRECTORY RULES

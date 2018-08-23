@@ -19,8 +19,8 @@ struct Point2f {
  ****************************************************************************/
 struct Path2f {
    uint length;
-   struct Point2f   center;
-   struct Point2f * points;
+   struct Point2f * center;
+   struct Point2f * vertices;
 };
 
 /****************************************************************************

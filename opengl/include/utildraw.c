@@ -66,9 +66,9 @@ void utilClearScreen(void) {
  ****************************************************************************/
 void __utilIterateVertices__(const struct Path2f * path) {
     for (uint p = 0; p < path->length; p++) {
-        struct Point2f pt  = path->points[p];
-        struct Point2f ctr = path->center;
-        glVertex2f(pt.x + ctr.x, pt.y + ctr.y);
+        struct Point2f * pt  = path->vertices + p;
+        struct Point2f * ctr = path->center;
+        glVertex2f(pt->x + ctr->x, pt->y + ctr->y);
     }
 }
 
@@ -151,8 +151,8 @@ void utilRotatePoint(struct Point2f * point, float degrees) {
  * 
  ****************************************************************************/
 void utilTranslatePolygon(struct Path2f * polygon, float dx, float dy) {
-    polygon->center.x += dx;
-    polygon->center.y += dy;
+    polygon->center->x += dx;
+    polygon->center->y += dy;
 }
 
 /****************************************************************************
@@ -160,6 +160,6 @@ void utilTranslatePolygon(struct Path2f * polygon, float dx, float dy) {
  ****************************************************************************/
 void utilRotatePolygonAboutCenter(struct Path2f * polygon, float degrees) {
     for (uint p = 0; p < polygon->length; p++) {
-        utilRotatePoint(&polygon->points[p], degrees);
+        utilRotatePoint(polygon->vertices + p, degrees);
     }
 }

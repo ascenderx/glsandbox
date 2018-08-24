@@ -65,8 +65,13 @@ void * init() {
 /****************************************************************************
  * 
  ****************************************************************************/
-#define WASD_SPEED   10.0
-#define ROTATE_SPEED  5.0
+#define WASD_SPEED      10.0
+#define ROTATE_SPEED    5.0
+#define JOYSTICK        GLFW_JOYSTICK_1
+#define JOY_AXIS_L      0
+#define JOY_AXIS_R      1
+#define JOY_DEAD_ZONE_L 0.10
+#define JOY_DEAD_ZONE_R 0.10
 void input(void * ptr) {
     struct Player * player = (struct Player *) ptr;
 
@@ -75,17 +80,23 @@ void input(void * ptr) {
     float dy = 0.0;
     float da = 0.0;
 
-    //uint dirs = utilGetJoystickDirections(GLFW_JOYSTICK_1);
+    if (utilJoysticks[JOYSTICK]) {
+        float axisX = utilGetAxisX(JOYSTICK, JOY_AXIS_L);
+        float axisY = utilGetAxisY(JOYSTICK, JOY_AXIS_L);
+        float axisA = utilGetAxisX(JOYSTICK, JOY_AXIS_R);
 
-    if (utilJoysticks[GLFW_JOYSTICK_1]) {
-        float axisX = utilGetAxisX(GLFW_JOYSTICK_1, 0);
-        float axisY = utilGetAxisY(GLFW_JOYSTICK_1, 0);
-
-        dx = WASD_SPEED * axisX;
-        dy = WASD_SPEED * axisY;
-
-        float axisA = utilGetAxisX(GLFW_JOYSTICK_1, 1);
-        da = ROTATE_SPEED * axisA;
+        // move left/right (left x-axis)
+        if (axisX < -JOY_DEAD_ZONE_L || axisX > JOY_DEAD_ZONE_L) {
+            dx = WASD_SPEED * axisX;
+        }
+        // move up/down (left y-axis)
+        if (axisY < -JOY_DEAD_ZONE_L || axisY > JOY_DEAD_ZONE_L) {
+            dy = WASD_SPEED * axisY;
+        }
+        // rotate (right x-axis)
+        if (axisA < -JOY_DEAD_ZONE_R || axisA > JOY_DEAD_ZONE_R) {
+            da = ROTATE_SPEED * axisA;
+        }
     } else {
         if (utilIsKeyDown(GLFW_KEY_LEFT)) {
             dx = -WASD_SPEED;

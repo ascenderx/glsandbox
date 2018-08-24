@@ -132,6 +132,9 @@ void update(void * ptr) {
 /****************************************************************************
  * 
  ****************************************************************************/
+#define GLYPH_MARGIN_X 1
+#define GLYPH_MARGIN_Y 1
+#define GLYPH_SCALING  4
 void render(void * ptr) {
     struct Player * player = (struct Player *) ptr;
 
@@ -141,6 +144,11 @@ void render(void * ptr) {
     // draw a point on the player's center
     utilSetColor(0xff0000);
     utilFillPoint(player->position);
+
+    struct Point2f textTopLeft = {0, 300};
+    utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING);
+    utilSetColor(0xffaa00);
+    utilDrawText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", &textTopLeft);
 }
 
 /****************************************************************************

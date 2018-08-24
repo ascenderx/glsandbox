@@ -23,6 +23,6 @@ typedef const char * AnsiColor;
 /****************************************************************************
  * 
  ****************************************************************************/
-void debug(const char * message, AnsiColor color);
+void utilDebug(const char * message, AnsiColor color);
 
 #endif // UTIL_DEBUG_H

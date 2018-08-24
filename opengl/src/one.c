@@ -29,7 +29,7 @@ void   cleanUp(void * ptr);
 #define EXIT_FAILURE 1
 int main(int argc, char ** argv) {
     struct Player * player = init();
-    
+
     if (!player) {
         return EXIT_FAILURE;
     }
@@ -65,8 +65,8 @@ void * init() {
 /****************************************************************************
  * 
  ****************************************************************************/
-#define WASD_SPEED   5.0
-#define ROTATE_SPEED 5.0
+#define WASD_SPEED   10.0
+#define ROTATE_SPEED  5.0
 void input(void * ptr) {
     struct Player * player = (struct Player *) ptr;
 
@@ -75,22 +75,35 @@ void input(void * ptr) {
     float dy = 0.0;
     float da = 0.0;
 
-    if (utilIsKeyDown(GLFW_KEY_LEFT)) {
-        dx = -WASD_SPEED;
-    } else if (utilIsKeyDown(GLFW_KEY_RIGHT)) {
-        dx = +WASD_SPEED;
-    }
+    //uint dirs = utilGetJoystickDirections(GLFW_JOYSTICK_1);
 
-    if (utilIsKeyDown(GLFW_KEY_UP)) {
-        dy = -WASD_SPEED;
-    } else if (utilIsKeyDown(GLFW_KEY_DOWN)) {
-        dy = +WASD_SPEED;
-    }
+    if (utilJoysticks[GLFW_JOYSTICK_1]) {
+        float axisX = utilGetAxisX(GLFW_JOYSTICK_1, 0);
+        float axisY = utilGetAxisY(GLFW_JOYSTICK_1, 0);
 
-    if (utilIsKeyDown(GLFW_KEY_A)) {
-        da = -ROTATE_SPEED;
-    } else if (utilIsKeyDown(GLFW_KEY_D)) {
-        da = +ROTATE_SPEED;
+        dx = WASD_SPEED * axisX;
+        dy = WASD_SPEED * axisY;
+
+        float axisA = utilGetAxisX(GLFW_JOYSTICK_1, 1);
+        da = ROTATE_SPEED * axisA;
+    } else {
+        if (utilIsKeyDown(GLFW_KEY_LEFT)) {
+            dx = -WASD_SPEED;
+        } else if (utilIsKeyDown(GLFW_KEY_RIGHT)) {
+            dx = +WASD_SPEED;
+        }
+
+        if (utilIsKeyDown(GLFW_KEY_UP)) {
+            dy = -WASD_SPEED;
+        } else if (utilIsKeyDown(GLFW_KEY_DOWN)) {
+            dy = +WASD_SPEED;
+        }
+
+        if (utilIsKeyDown(GLFW_KEY_A)) {
+            da = -ROTATE_SPEED;
+        } else if (utilIsKeyDown(GLFW_KEY_D)) {
+            da = +ROTATE_SPEED;
+        }
     }
 
     player->velocity->dx = dx;

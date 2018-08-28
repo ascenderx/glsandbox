@@ -125,7 +125,7 @@ void utilSetGlyphDims(uint marginX, uint marginY, uint scaling);
 #define X 0
 #define Y 1
 #define __UTIL_GLYPH_WIDTH__  3
-#define __UTIL_GLYPH_HEIGHT__ 5
+#define __UTIL_GLYPH_HEIGHT__ 3
 void __utilDrawGlyph__(const uint ** glyph, uint numVertices, uint x, uint y);
 
 /****************************************************************************

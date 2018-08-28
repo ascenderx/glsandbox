@@ -22,6 +22,7 @@ uint         __utilBGColor__;
 void *       __utilUserData__;
 boolean      __utilInitialized__;
 GLFWwindow * __utilWindow__;
+boolean      __utilRunning__;
 void (* __utilTickFunc__)(void *);
 
 /****************************************************************************
@@ -35,5 +36,6 @@ void    utilSetBGColor(const uint color);
 void    utilSetUserData(void * pointer);
 void    utilSetTickFunc(void (func(void *)));
 boolean utilMainLoop(void);
+void    utilEnd(void);
 
 #endif // UTIL_INIT_H

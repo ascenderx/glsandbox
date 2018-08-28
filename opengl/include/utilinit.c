@@ -99,21 +99,34 @@ boolean utilMainLoop(void) {
     // initialize local utilities
     utilInitInputHandlers();
     utilInitRenderer(__utilWinWidth__, __utilWinHeight__, __utilBGColor__);
-
+    
+    __utilRunning__ = TRUE;
     while (!glfwWindowShouldClose(__utilWindow__)) {
-        glfwPollEvents();
-
         // run user function
         if (__utilTickFunc__) {
             __utilTickFunc__(__utilUserData__);
         }
+        
+        // check if still running
+        if (!__utilRunning__) {
+            glfwSetWindowShouldClose(__utilWindow__, TRUE);
+            break;
+        }
 
         glfwSwapBuffers(__utilWindow__);
-
+        glfwPollEvents();
+        
         usleep(1000000 / __utilFramerate__);
     }
 
     glfwTerminate();
 
     return TRUE;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilEnd(void) {
+    __utilRunning__ = FALSE;
 }

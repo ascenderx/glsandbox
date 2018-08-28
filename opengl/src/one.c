@@ -76,6 +76,12 @@ void * init() {
 #define JOY_DEAD_ZONE_R 0.10
 void input(void * ptr) {
     struct Player * player = (struct Player *) ptr;
+    
+    if (utilIsKeyDown(GLFW_KEY_LEFT_CONTROL)) {
+        if (utilIsKeyDown(GLFW_KEY_W) || utilIsKeyDown(GLFW_KEY_Q)) {
+            utilEnd();
+        }
+    }
 
     // defaults (in case not moving)
     float dx = 0.0;
@@ -147,10 +153,10 @@ void render(void * ptr) {
     utilSetColor(0xff0000);
     utilFillPoint(player->position);
 
-    struct Point2f textTopLeft = {0, 300};
+    struct Point2f textTopLeft = {1, 300};
     utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING);
     utilSetColor(0xffaa00);
-    utilDrawText("ABCDEFGHIJKLMNOPQRSTUVWXYZ", &textTopLeft);
+    utilDrawText("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", &textTopLeft);
 }
 
 /****************************************************************************

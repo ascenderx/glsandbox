@@ -31,6 +31,7 @@ int main(int argc, char ** argv) {
     struct Player * player = init();
 
     if (!player) {
+        utilDebug("Error constructing player", ANSI_RED);
         return EXIT_FAILURE;
     }
 
@@ -44,6 +45,7 @@ int main(int argc, char ** argv) {
  ****************************************************************************/
 void * init() {
     if (!utilInitEngine()) {
+        utilDebug("Error initializing engine", ANSI_YELLOW);
         return NULL;
     }
 

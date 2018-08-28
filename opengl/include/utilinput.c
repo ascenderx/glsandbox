@@ -104,5 +104,8 @@ void utilInitInputHandlers() {
     }
 
     glfwSetKeyCallback(__utilWindow__, __utilKeyFunc__);
+    
+#if GLFW_VERSION_MINOR >= 2
     glfwSetJoystickCallback(__utilJoyConnectFunc__);
+#endif // GLFW_VERSION_MINOR
 }

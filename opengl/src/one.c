@@ -140,9 +140,9 @@ void update(void * ptr) {
 /****************************************************************************
  * 
  ****************************************************************************/
-#define GLYPH_MARGIN_X 1
+#define GLYPH_MARGIN_X -10
 #define GLYPH_MARGIN_Y 1
-#define GLYPH_SCALING  4
+#define GLYPH_SCALING  20
 void render(void * ptr) {
     struct Player * player = (struct Player *) ptr;
 

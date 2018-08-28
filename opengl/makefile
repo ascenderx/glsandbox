@@ -9,8 +9,8 @@ SRC      = src
 INC      = include
 CEXT     = c
 HEXT     = h
-C++EXT   = cc # or c++, cpp, C, cxx, etc.
-H++EXT   = hh # or h++, hpp, H, hxx, h, etc.
+CPPEXT   = cc # or c++, cpp, C, cxx, etc.
+HPPEXT   = hh # or h++, hpp, H, hxx, h, etc.
 INCLUDES = -I$(INC) 
 
 # User objects
@@ -26,11 +26,11 @@ $(OBJ)/%.hio: $(INC)/%.$(CEXT) $(INC)/%.$(HEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # User objects (C++)
-$(OBJ)/%.oo: $(SRC)/%.$(C++EXT) $(UHEADERS)
+$(OBJ)/%.oo: $(SRC)/%.$(CPPEXT) $(UHEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS) $(INCLUDES)
 
 # User objects with user headers (C++)
-$(OBJ)/%.hoo: $(SRC)/%.$(C++EXT) $(SRC)/%.$(H++EXT) $(UHEADERS)
+$(OBJ)/%.hoo: $(SRC)/%.$(CPPEXT) $(SRC)/%.$(HPPEXT) $(UHEADERS)
 	$(C++) -c -o $@ $< $(CFLAGS) $(INCLUDES)
 
 ##############################################################################
@@ -66,7 +66,9 @@ endif
 LIBGLU  = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
 LIBMATH = -lm
 LFLAGS  = $(LIBGL) $(LIBGLU) $(LIBMATH)
-CFLAGS  = -Wall
+CSTD    = -std=gnu11
+WARNS   = -Wall
+CFLAGS  = $(WARNS) $(CSTD)
 
 ##############################################################################
 # INCLUDE FILES

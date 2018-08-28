@@ -217,37 +217,85 @@ const uint __UTIL_GLYPH_D__[][2] = {
     {1, 2}, {2, 1},
 };
 const uint __UTIL_GLYPH_E__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {1, 1},
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_F__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {1, 1},
 };
 const uint __UTIL_GLYPH_G__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 1}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {1, 1}, {2, 1},
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_H__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 2},
+    // horiz
+    {0, 1}, {2, 1},
 };
 const uint __UTIL_GLYPH_I__[][2] = {
-
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_J__[][2] = {
-
+    // vert
+    {0, 1}, {0, 2},
+    {2, 0}, {2, 2},
+    // horiz
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_K__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    // diag
+    {0, 1}, {2, 0},
+    {0, 1}, {2, 2},
 };
 const uint __UTIL_GLYPH_L__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    // horiz
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_M__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 2},
+    // diag
+    {0, 0}, {1, 2},
+    {1, 2}, {2, 0},
 };
 const uint __UTIL_GLYPH_N__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 2},
+    // diag
+    {0, 0}, {2, 2},
 };
 const uint __UTIL_GLYPH_O__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_P__[][2] = {
 
@@ -286,15 +334,18 @@ const uint __UTIL_GLYPH_Z__[][2] = {
 /****************************************************************************
  * 
  ****************************************************************************/
-void __utilDrawGlyph__(const uint ** glyph, uint numVertices, uint x, uint y) {
-    if (!glyph) {
+ 
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilDrawGlyph__(const uint ** glyph, uint numLines, uint x, uint y) {
+    if (!glyph || numLines == 0) {
         return;
     }
 
-    if (numVertices % 2 != 0) {
-        numVertices -= 1;
-    }
-    
+    uint numVertices = numLines * 2;
+        
     glBegin(GL_LINES); {
         for (uint v = 0; v < numVertices; v += 2) {
             uint * vertex1 = (uint *) &glyph[v];     // (uint *) glyph + (v * 2)
@@ -321,23 +372,27 @@ void utilDrawText(const char * text, struct Point2f * center) {
         switch (*c) {
             case 'A':
             case 'a':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_A__, 8, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_A__, 4, x, y);
                 break;
             
             case 'B':
             case 'b':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_B__, 16, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_B__, 8, x, y);
                 break;
 
             case 'C':
             case 'c':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_C__, 6, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_C__, 3, x, y);
                 break;
+            
+            case 'D':
+            case 'd':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_D__, 5, x, y);
             
             default:
                 continue;
         }
 
-        x += (__UTIL_GLYPH_WIDTH__ + __utilGlyphMarginX__) * __utilGlyphScaling__;
+        x += (__UTIL_GLYPH_WIDTH__) * __utilGlyphScaling__ + __utilGlyphMarginX__ - 1;
     }
 }

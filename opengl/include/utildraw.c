@@ -298,37 +298,88 @@ const uint __UTIL_GLYPH_O__[][2] = {
     {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_P__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 1},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
 };
 const uint __UTIL_GLYPH_Q__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 1},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 2}, {1, 2},
+    // diag
+    {1, 1}, {2, 2},
+    {1, 2}, {2, 1},
 };
 const uint __UTIL_GLYPH_R__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 1},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+    // diag
+    {1, 1}, {2, 2},
 };
 const uint __UTIL_GLYPH_S__[][2] = {
-
+    // vert
+    {0, 0}, {0, 1},
+    {2, 1}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_T__[][2] = {
-
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 0}, {2, 0},
 };
 const uint __UTIL_GLYPH_U__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 2},
+    // horiz
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_V__[][2] = {
-
+    // diag
+    {0, 0}, {1, 2},
+    {1, 2}, {2, 0},
 };
 const uint __UTIL_GLYPH_W__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 2},
+    // diag
+    {0, 2}, {1, 1},
+    {1, 1}, {2, 2},
 };
 const uint __UTIL_GLYPH_X__[][2] = {
-
+    // diag
+    {0, 0}, {2, 2},
+    {0, 2}, {2, 0},
 };
 const uint __UTIL_GLYPH_Y__[][2] = {
-
+    // vert
+    {1, 1}, {1, 2},
+    // diag
+    {0, 0}, {1, 1},
+    {1, 1}, {2, 0},
 };
 const uint __UTIL_GLYPH_Z__[][2] = {
-
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+    {0, 2}, {2, 2},
+    // diag
+    {0, 2}, {2, 0},
 };
 
 /****************************************************************************
@@ -388,11 +439,131 @@ void utilDrawText(const char * text, struct Point2f * center) {
             case 'D':
             case 'd':
                 __utilDrawGlyph__((const uint **) __UTIL_GLYPH_D__, 5, x, y);
+                break;
+                
+            case 'E':
+            case 'e':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_E__, 4, x, y);
+                break;
+                
+            case 'F':
+            case 'f':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_F__, 3, x, y);
+                break;
+            
+            case 'G':
+            case 'g':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_G__, 5, x, y);
+                break;
+            
+            case 'H':
+            case 'h':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_H__, 3, x, y);
+                break;
+            
+            case 'I':
+            case 'i':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_I__, 3, x, y);
+                break;
+            
+            case 'J':
+            case 'j':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_J__, 3, x, y);
+                break;
+            
+            case 'K':
+            case 'k':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_K__, 3, x, y);
+                break;
+            
+            case 'L':
+            case 'l':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_L__, 2, x, y);
+                break;
+            
+            case 'M':
+            case 'm':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_M__, 4, x, y);
+                break;
+            
+            case 'N':
+            case 'n':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_N__, 3, x, y);
+                break;
+            
+            case 'O':
+            case 'o':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_O__, 4, x, y);
+                break;
+            
+            case 'P':
+            case 'p':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_P__, 4, x, y);
+                break;
+            
+            case 'Q':
+            case 'q':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Q__, 6, x, y);
+                break;
+            
+            case 'R':
+            case 'r':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_R__, 5, x, y);
+                break;
+            
+            case 'S':
+            case 's':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_S__, 5, x, y);
+                break;
+            
+            case 'T':
+            case 't':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_T__, 2, x, y);
+                break;
+            
+            case 'U':
+            case 'u':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_U__, 3, x, y);
+                break;
+            
+            case 'V':
+            case 'v':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_V__, 2, x, y);
+                break;
+            
+            case 'W':
+            case 'w':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_W__, 4, x, y);
+                break;
+            
+            case 'X':
+            case 'x':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_X__, 2, x, y);
+                break;
+            
+            case 'Y':
+            case 'y':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Y__, 3, x, y);
+                break;
+            
+            case 'Z':
+            case 'z':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Z__, 4, x, y);
+                break;
+            
+            case '\n':
+                x = center->x;
+                y += (__UTIL_GLYPH_HEIGHT__ * __utilGlyphScaling__) + __utilGlyphMarginY__ - 1;
+                continue;
+            
+            case ' ':
+                /* do not continue; apply x-increment below */
+                break;
             
             default:
                 continue;
         }
 
-        x += (__UTIL_GLYPH_WIDTH__) * __utilGlyphScaling__ + __utilGlyphMarginX__ - 1;
+        x += (__UTIL_GLYPH_WIDTH__ * __utilGlyphScaling__) + __utilGlyphMarginX__ - 1;
     }
 }

@@ -140,9 +140,9 @@ void update(void * ptr) {
 /****************************************************************************
  * 
  ****************************************************************************/
-#define GLYPH_MARGIN_X -10
+#define GLYPH_MARGIN_X 0
 #define GLYPH_MARGIN_Y 1
-#define GLYPH_SCALING  20
+#define GLYPH_SCALING  6
 void render(void * ptr) {
     struct Player * player = (struct Player *) ptr;
 
@@ -153,10 +153,11 @@ void render(void * ptr) {
     utilSetColor(0xff0000);
     utilFillPoint(player->position);
 
-    struct Point2f textTopLeft = {1, 300};
+    struct Point2f textTopLeft = {1, 400};
     utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING);
     utilSetColor(0xffaa00);
-    utilDrawText("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", &textTopLeft);
+    const char text[] = "The quick brown fox jumped\nover the lazy dog";
+    utilDrawText(text, &textTopLeft);
 }
 
 /****************************************************************************

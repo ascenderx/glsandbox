@@ -156,7 +156,7 @@ void render(void * ptr) {
     struct Point2f textTopLeft = {1, 400};
     utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING);
     utilSetColor(0xffaa00);
-    const char text[] = "The quick brown fox jumped\nover the lazy dog";
+    const char text[] = "The quick brown fox jumps\nover the lazy dog";
     utilDrawText(text, &textTopLeft);
 }
 

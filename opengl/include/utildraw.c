@@ -29,6 +29,7 @@ void utilInitRenderer(uint width, uint height, uint color) {
 	glOrtho(0, width, height, 0, 0, 1);
 
     // set defaults for glyphs
+    utilSetGlyphCursorXY(0, 0);
     utilSetGlyphDims(1, 1, 1);
 
     // set clear color
@@ -385,17 +386,51 @@ const uint __UTIL_GLYPH_Z__[][2] = {
 /****************************************************************************
  * 
  ****************************************************************************/
- 
+void utilSetGlyphCursorXY(float x, float y) {
+    __utilGlyphCursorCurrent__.x = x;
+    __utilGlyphCursorCurrent__.y = y;
+    __utilGlyphCursorStart__.x   = x;
+    __utilGlyphCursorStart__.y   = y;
+}
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void __utilDrawGlyph__(const uint ** glyph, uint numLines, uint x, uint y) {
+void utilSetGlyphCursorPt(struct Point2f * pt) {
+    utilSetGlyphCursorXY(pt->x, pt->y);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilAdvanceGlyphCursorX__(int numChars) {
+    uint w = __UTIL_GLYPH_WIDTH__ * __utilGlyphScaling__;
+    uint m = __utilGlyphMarginX__ - 1;
+    __utilGlyphCursorCurrent__.x += (w + m) * numChars;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilAdvanceGlyphCursorY__(int numLines) {
+    __utilGlyphCursorCurrent__.x = __utilGlyphCursorStart__.x;
+    
+    uint h = __UTIL_GLYPH_HEIGHT__ * __utilGlyphScaling__;
+    uint m = __utilGlyphMarginY__ - 1;
+    __utilGlyphCursorCurrent__.y += (h + m) * numLines;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilDrawGlyph__(const uint ** glyph, uint numLines) {
     if (!glyph || numLines == 0) {
         return;
     }
 
     uint numVertices = numLines * 2;
+    float x = __utilGlyphCursorCurrent__.x;
+    float y = __utilGlyphCursorCurrent__.y;
         
     glBegin(GL_LINES); {
         for (uint v = 0; v < numVertices; v += 2) {
@@ -411,159 +446,156 @@ void __utilDrawGlyph__(const uint ** glyph, uint numLines, uint x, uint y) {
             glVertex2i(v2x + x, v2y + y);
         }
     } glEnd();
+    
+    __utilAdvanceGlyphCursorX__(1);
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilDrawText(const char * text, struct Point2f * center) {
-    uint x = center->x;
-    uint y = center->y;
+void utilDrawText(const char * text) {
     for (const char * c = text; *c; c++) {
         switch (*c) {
             case 'A':
             case 'a':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_A__, 4, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_A__, 4);
                 break;
             
             case 'B':
             case 'b':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_B__, 8, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_B__, 8);
                 break;
 
             case 'C':
             case 'c':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_C__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_C__, 3);
                 break;
             
             case 'D':
             case 'd':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_D__, 5, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_D__, 5);
                 break;
                 
             case 'E':
             case 'e':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_E__, 4, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_E__, 4);
                 break;
                 
             case 'F':
             case 'f':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_F__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_F__, 3);
                 break;
             
             case 'G':
             case 'g':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_G__, 5, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_G__, 5);
                 break;
             
             case 'H':
             case 'h':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_H__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_H__, 3);
                 break;
             
             case 'I':
             case 'i':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_I__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_I__, 3);
                 break;
             
             case 'J':
             case 'j':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_J__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_J__, 3);
                 break;
             
             case 'K':
             case 'k':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_K__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_K__, 3);
                 break;
             
             case 'L':
             case 'l':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_L__, 2, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_L__, 2);
                 break;
             
             case 'M':
             case 'm':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_M__, 4, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_M__, 4);
                 break;
             
             case 'N':
             case 'n':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_N__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_N__, 3);
                 break;
             
             case 'O':
             case 'o':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_O__, 4, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_O__, 4);
                 break;
             
             case 'P':
             case 'p':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_P__, 4, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_P__, 4);
                 break;
             
             case 'Q':
             case 'q':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Q__, 6, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Q__, 6);
                 break;
             
             case 'R':
             case 'r':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_R__, 5, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_R__, 5);
                 break;
             
             case 'S':
             case 's':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_S__, 5, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_S__, 5);
                 break;
             
             case 'T':
             case 't':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_T__, 2, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_T__, 2);
                 break;
             
             case 'U':
             case 'u':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_U__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_U__, 3);
                 break;
             
             case 'V':
             case 'v':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_V__, 2, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_V__, 2);
                 break;
             
             case 'W':
             case 'w':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_W__, 4, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_W__, 4);
                 break;
             
             case 'X':
             case 'x':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_X__, 2, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_X__, 2);
                 break;
             
             case 'Y':
             case 'y':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Y__, 3, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Y__, 3);
                 break;
             
             case 'Z':
             case 'z':
-                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Z__, 4, x, y);
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Z__, 4);
                 break;
             
             case '\n':
-                x = center->x;
-                y += (__UTIL_GLYPH_HEIGHT__ * __utilGlyphScaling__) + __utilGlyphMarginY__ - 1;
+                __utilAdvanceGlyphCursorY__(1);
                 continue;
             
             case ' ':
-                /* do not continue; apply x-increment below */
+                __utilAdvanceGlyphCursorX__(1);
                 break;
             
             default:
                 continue;
         }
-
-        x += (__UTIL_GLYPH_WIDTH__ * __utilGlyphScaling__) + __utilGlyphMarginX__ - 1;
     }
 }

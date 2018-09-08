@@ -153,11 +153,12 @@ void render(void * ptr) {
     utilSetColor(0xff0000);
     utilFillPoint(player->position);
 
-    struct Point2f textTopLeft = {1, 400};
+    struct Point2f textCursor = {1, 400};
+    utilSetGlyphCursorPt(&textCursor);
     utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING);
     utilSetColor(0xffaa00);
     const char text[] = "The quick brown fox jumps\nover the lazy dog";
-    utilDrawText(text, &textTopLeft);
+    utilDrawText(text);
 }
 
 /****************************************************************************

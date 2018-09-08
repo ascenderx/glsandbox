@@ -113,6 +113,8 @@ void utilRotatePolygonAboutCenter(struct Path2f * polygon, float degrees);
 uint __utilGlyphMarginX__;
 uint __utilGlyphMarginY__;
 uint __utilGlyphScaling__;
+struct Point2f __utilGlyphCursorCurrent__;
+struct Point2f __utilGlyphCursorStart__;
 
 /****************************************************************************
  * 
@@ -122,15 +124,35 @@ void utilSetGlyphDims(uint marginX, uint marginY, uint scaling);
 /****************************************************************************
  * 
  ****************************************************************************/
-#define X 0
-#define Y 1
-#define __UTIL_GLYPH_WIDTH__  3
-#define __UTIL_GLYPH_HEIGHT__ 3
-void __utilDrawGlyph__(const uint ** glyph, uint numVertices, uint x, uint y);
+void utilSetGlyphCursorXY(float x, float y);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilDrawText(const char * text, struct Point2f * center);
+void utilSetGlyphCursorPt(struct Point2f * pt);
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilAdvanceGlyphCursorX__(int numChars);
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilAdvanceGlyphCursorY__(int numLines);
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+#define X 0
+#define Y 1
+#define __UTIL_GLYPH_WIDTH__  3
+#define __UTIL_GLYPH_HEIGHT__ 3
+void __utilDrawGlyph__(const uint ** glyph, uint numVertices);
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilDrawText(const char * text);
 
 #endif // UTIL_DRAW_H

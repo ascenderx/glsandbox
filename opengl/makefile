@@ -74,7 +74,12 @@ CFLAGS  = $(WARNS) $(CSTD)
 # INCLUDE FILES
 ##############################################################################
 
-UOBJECTS = $(OBJ)/utilinit.hio $(OBJ)/utilinput.hio $(OBJ)/utildraw.hio $(OBJ)/utildebug.hio
+UOBJECTS = \
+	$(OBJ)/utilinit.hio  \
+	$(OBJ)/utilinput.hio \
+	$(OBJ)/utildraw.hio  \
+	$(OBJ)/utildebug.hio \
+	$(OBJ)/utiltext.hio
 UHEADERS = $(INC)/utiltypes.h
 
 ##############################################################################

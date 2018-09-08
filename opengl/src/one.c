@@ -6,6 +6,7 @@
 #include <utildraw.h>
 #include <utilinput.h>
 #include <utildebug.h>
+#include <utiltext.h>
 
 /****************************************************************************
  * 
@@ -21,6 +22,9 @@ void   update(void * ptr);
 void   render(void * ptr);
 void   tick(void * ptr);
 void   cleanUp(void * ptr);
+
+boolean gPaused;
+boolean gPausePressed;
 
 /****************************************************************************
  * 
@@ -59,6 +63,9 @@ void * init() {
         utilSetBGColor(WIN_BG_COLOR);
         utilSetTickFunc(tick);
         utilSetUserData(player);
+
+        gPaused = FALSE;
+        gPausePressed = FALSE;
     }
 
     return player;
@@ -81,6 +88,17 @@ void input(void * ptr) {
         if (utilIsKeyDown(GLFW_KEY_W) || utilIsKeyDown(GLFW_KEY_Q)) {
             utilEnd();
         }
+    }
+
+    if (utilIsKeyDown(GLFW_KEY_P) && !gPausePressed) {
+        gPaused = !gPaused;
+        gPausePressed = TRUE;
+    } else if (!utilIsKeyDown(GLFW_KEY_P)) {
+        gPausePressed = FALSE;
+    }
+
+    if (gPaused) {
+        return;
     }
 
     // defaults (in case not moving)
@@ -159,6 +177,13 @@ void render(void * ptr) {
     utilSetColor(0xffaa00);
     const char text[] = "The quick brown fox jumps\nover the lazy dog";
     utilDrawText(text);
+
+    if (gPaused) {
+        utilAdvanceGlyphCursorY(1);
+        utilSetColor(0xff0000);
+        const char text2[] = "PAUSED";
+        utilDrawText(text2);
+    }
 }
 
 /****************************************************************************

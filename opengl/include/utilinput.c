@@ -41,6 +41,34 @@ boolean utilIsKeyDown(uint key) {
 /****************************************************************************
  * 
  ****************************************************************************/
+void __utilMouseFunc__(GLFWwindow * window, double xpos, double ypos) {
+    utilMouse.x = (float) xpos;
+    utilMouse.y = (float) ypos;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilShowHideCursor__(boolean visible) {
+    if (!__utilWindow__) {
+        return;
+    }
+
+    int mode = (visible) ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN;
+    glfwSetInputMode(__utilWindow__, GLFW_CURSOR, mode);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetCursorVisible(boolean visible) {
+    __utilCursorVisible__ = visible;
+    __utilShowHideCursor__(visible);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
 void __utilJoyConnectFunc__(int joy, int event) {
     if (event == GLFW_CONNECTED) {
         utilJoysticks[joy] = TRUE;
@@ -104,6 +132,11 @@ void utilInitInputHandlers() {
     }
 
     glfwSetKeyCallback(__utilWindow__, __utilKeyFunc__);
+
+    utilMouse.x = 0;
+    utilMouse.y = 0;
+    glfwSetCursorPosCallback(__utilWindow__, __utilMouseFunc__);
+    __utilShowHideCursor__(__utilCursorVisible__);
     
 #if GLFW_VERSION_MINOR >= 2
     glfwSetJoystickCallback(__utilJoyConnectFunc__);

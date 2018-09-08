@@ -25,6 +25,8 @@ void   cleanUp(void * ptr);
 
 boolean gPaused;
 boolean gPausePressed;
+boolean gShowCursor;
+boolean gMPressed;
 
 /****************************************************************************
  * 
@@ -57,15 +59,18 @@ void * init() {
     struct Player * player = initPlayer();
 
     if (player) {
+        gPaused = FALSE;
+        gPausePressed = FALSE;
+        gShowCursor = FALSE;
+        gMPressed = FALSE;
+
         utilSetWinDims(WIN_WIDTH, WIN_HEIGHT);
         utilSetWinTitle(WIN_TITLE);
         utilSetFramerate(WIN_FRAMERATE);
         utilSetBGColor(WIN_BG_COLOR);
         utilSetTickFunc(tick);
         utilSetUserData(player);
-
-        gPaused = FALSE;
-        gPausePressed = FALSE;
+        utilSetCursorVisible(gShowCursor);
     }
 
     return player;
@@ -99,6 +104,14 @@ void input(void * ptr) {
 
     if (gPaused) {
         return;
+    }
+
+    if (utilIsKeyDown(GLFW_KEY_M) && !gMPressed) {
+        gShowCursor = !gShowCursor;
+        utilSetCursorVisible(gShowCursor);
+        gMPressed = TRUE;
+    } else if (!utilIsKeyDown(GLFW_KEY_M)) {
+        gMPressed = FALSE;
     }
 
     // defaults (in case not moving)
@@ -161,6 +174,8 @@ void update(void * ptr) {
 #define GLYPH_MARGIN_X 0
 #define GLYPH_MARGIN_Y 1
 #define GLYPH_SCALING  6
+#define CURSOR_WIDTH   20
+#define CURSOR_HEIGHT  20
 void render(void * ptr) {
     struct Player * player = (struct Player *) ptr;
 
@@ -171,6 +186,7 @@ void render(void * ptr) {
     utilSetColor(0xff0000);
     utilFillPoint(player->position);
 
+    // write some text
     struct Point2f textCursor = {1, 400};
     utilSetGlyphCursorPt(&textCursor);
     utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING);
@@ -178,12 +194,25 @@ void render(void * ptr) {
     const char text[] = "The quick brown fox jumps\nover the lazy dog";
     utilDrawText(text);
 
+    // if paused, then write "PAUSED"
     if (gPaused) {
         utilAdvanceGlyphCursorY(1);
         utilSetColor(0xff0000);
         const char text2[] = "PAUSED";
         utilDrawText(text2);
     }
+    
+    // draw a cursor (crosshairs)
+    struct Point2f crossHairs[2][2] = {
+        {{utilMouse.x + 0, utilMouse.y - CURSOR_HEIGHT},
+         {utilMouse.x + 0, utilMouse.y + CURSOR_HEIGHT}},
+        {{utilMouse.x - CURSOR_WIDTH, utilMouse.y + 0},
+         {utilMouse.x + CURSOR_WIDTH, utilMouse.y + 0}},
+    };
+
+    utilSetColor(0x00aaff);
+    utilStrokeLine(crossHairs[0]);
+    utilStrokeLine(crossHairs[1]);
 }
 
 /****************************************************************************

@@ -70,6 +70,16 @@ void utilClearScreen(void) {
 /****************************************************************************
  * 
  ****************************************************************************/
+void utilStrokeLine(struct Point2f endpoints[2]) {
+    glBegin(GL_LINES); {
+        glVertex2f(endpoints[0].x, endpoints[0].y);
+        glVertex2f(endpoints[1].x, endpoints[1].y);
+    } glEnd();
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
 void __utilIterateVertices__(const struct Path2f * path) {
     for (uint p = 0; p < path->length; p++) {
         struct Point2f * pt  = path->vertices + p;

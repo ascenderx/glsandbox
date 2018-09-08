@@ -33,7 +33,7 @@ struct Player {
 #define WIN_WIDTH     600
 #define WIN_HEIGHT    600
 #define WIN_TITLE     "GLSandbox #1"
-#define WIN_FRAMERATE 30
+#define WIN_FRAMERATE 60
 #define WIN_BG_COLOR  0x000000
 
 /****************************************************************************

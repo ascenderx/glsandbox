@@ -11,7 +11,7 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-#include "player.h"
+#include "one-player.h"
 
 /****************************************************************************
  * 
@@ -23,10 +23,13 @@ void   render(void * ptr);
 void   tick(void * ptr);
 void   cleanUp(void * ptr);
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
 boolean gPaused;
-boolean gPausePressed;
+boolean gPPressed;
 boolean gShowCursor;
-boolean gMPressed;
+boolean gClicked;
 
 /****************************************************************************
  * 
@@ -60,9 +63,9 @@ void * init() {
 
     if (player) {
         gPaused = FALSE;
-        gPausePressed = FALSE;
+        gPPressed = FALSE;
         gShowCursor = FALSE;
-        gMPressed = FALSE;
+        gClicked = FALSE;
 
         utilSetWinDims(WIN_WIDTH, WIN_HEIGHT);
         utilSetWinTitle(WIN_TITLE);
@@ -95,23 +98,19 @@ void input(void * ptr) {
         }
     }
 
-    if (utilIsKeyDown(GLFW_KEY_P) && !gPausePressed) {
+    if (utilKeys[GLFW_KEY_P] && !gPPressed) {
         gPaused = !gPaused;
-        gPausePressed = TRUE;
+        gPPressed = TRUE;
     } else if (!utilIsKeyDown(GLFW_KEY_P)) {
-        gPausePressed = FALSE;
+        gPPressed = FALSE;
     }
 
-    if (gPaused) {
-        return;
-    }
-
-    if (utilIsKeyDown(GLFW_KEY_M) && !gMPressed) {
+    if (utilMouseButtons[GLFW_MOUSE_BUTTON_RIGHT] && !gClicked) {
         gShowCursor = !gShowCursor;
         utilSetCursorVisible(gShowCursor);
-        gMPressed = TRUE;
-    } else if (!utilIsKeyDown(GLFW_KEY_M)) {
-        gMPressed = FALSE;
+        gClicked = TRUE;
+    } else if (!utilMouseButtons[GLFW_MOUSE_BUTTON_RIGHT]) {
+        gClicked = FALSE;
     }
 
     // defaults (in case not moving)
@@ -119,43 +118,45 @@ void input(void * ptr) {
     float dy = 0.0;
     float da = 0.0;
 
-    if (utilJoysticks[JOYSTICK]) {
-        float axisX = utilGetAxisX(JOYSTICK, JOY_AXIS_L);
-        float axisY = utilGetAxisY(JOYSTICK, JOY_AXIS_L);
-        float axisA = utilGetAxisX(JOYSTICK, JOY_AXIS_R);
+    if (!gPaused) {
+        if (utilJoysticks[JOYSTICK]) {
+            float axisX = utilGetAxisX(JOYSTICK, JOY_AXIS_L);
+            float axisY = utilGetAxisY(JOYSTICK, JOY_AXIS_L);
+            float axisA = utilGetAxisX(JOYSTICK, JOY_AXIS_R);
 
-        // move left/right (left x-axis)
-        if (axisX < -JOY_DEAD_ZONE_L || axisX > JOY_DEAD_ZONE_L) {
-            dx = WASD_SPEED * axisX;
-        }
-        // move up/down (left y-axis)
-        if (axisY < -JOY_DEAD_ZONE_L || axisY > JOY_DEAD_ZONE_L) {
-            dy = WASD_SPEED * axisY;
-        }
-        // rotate (right x-axis)
-        if (axisA < -JOY_DEAD_ZONE_R || axisA > JOY_DEAD_ZONE_R) {
-            da = ROTATE_SPEED * axisA;
-        }
-    } else {
-        if (utilIsKeyDown(GLFW_KEY_LEFT)) {
-            dx = -WASD_SPEED;
-        } else if (utilIsKeyDown(GLFW_KEY_RIGHT)) {
-            dx = +WASD_SPEED;
-        }
+            // move left/right (left x-axis)
+            if (axisX < -JOY_DEAD_ZONE_L || axisX > JOY_DEAD_ZONE_L) {
+                dx = WASD_SPEED * axisX;
+            }
+            // move up/down (left y-axis)
+            if (axisY < -JOY_DEAD_ZONE_L || axisY > JOY_DEAD_ZONE_L) {
+                dy = WASD_SPEED * axisY;
+            }
+            // rotate (right x-axis)
+            if (axisA < -JOY_DEAD_ZONE_R || axisA > JOY_DEAD_ZONE_R) {
+                da = ROTATE_SPEED * axisA;
+            }
+        } else {
+            if (utilKeys[GLFW_KEY_LEFT]) {
+                dx = -WASD_SPEED;
+            } else if (utilKeys[GLFW_KEY_RIGHT]) {
+                dx = +WASD_SPEED;
+            }
 
-        if (utilIsKeyDown(GLFW_KEY_UP)) {
-            dy = -WASD_SPEED;
-        } else if (utilIsKeyDown(GLFW_KEY_DOWN)) {
-            dy = +WASD_SPEED;
-        }
+            if (utilKeys[GLFW_KEY_UP]) {
+                dy = -WASD_SPEED;
+            } else if (utilKeys[GLFW_KEY_DOWN]) {
+                dy = +WASD_SPEED;
+            }
 
-        if (utilIsKeyDown(GLFW_KEY_A)) {
-            da = -ROTATE_SPEED;
-        } else if (utilIsKeyDown(GLFW_KEY_D)) {
-            da = +ROTATE_SPEED;
+            if (utilKeys[GLFW_KEY_A]) {
+                da = -ROTATE_SPEED;
+            } else if (utilKeys[GLFW_KEY_D]) {
+                da = +ROTATE_SPEED;
+            }
         }
     }
-
+    
     player->velocity->dx = dx;
     player->velocity->dy = dy;
     player->degreesToRotateImage = da;

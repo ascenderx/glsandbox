@@ -20,9 +20,9 @@ void __utilKeyFunc__(GLFWwindow * window, int key, int scancode, int action, int
     }
 
     if (action == GLFW_PRESS) {
-        __utilKeys__[ukey]++;
+        utilKeys[ukey]++;
     } else if (action == GLFW_RELEASE) {
-        __utilKeys__[ukey] = 0;
+        utilKeys[ukey] = 0;
     }
 }
 
@@ -34,8 +34,8 @@ boolean utilIsKeyDown(uint key) {
         return FALSE;
     }
 
-    uint state = __utilKeys__[key];
-    return (state == GLFW_PRESS);
+    uint state = utilKeys[key];
+    return (state >= 1);
 }
 
 /****************************************************************************
@@ -64,6 +64,17 @@ void __utilShowHideCursor__(boolean visible) {
 void utilSetCursorVisible(boolean visible) {
     __utilCursorVisible__ = visible;
     __utilShowHideCursor__(visible);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilMouseButtonFunc__(GLFWwindow * window, int button, int action, int mods) {
+    if (action == GLFW_PRESS) {
+        utilMouseButtons[button]++;
+    } else if (action == GLFW_RELEASE) {
+        utilMouseButtons[button] = 0;
+    }
 }
 
 /****************************************************************************
@@ -122,7 +133,7 @@ void utilInitInputHandlers() {
     }
 
     for (uint k = 0; k < __UTIL_MAX_KEYS__; k++) {
-        __utilKeys__[k] = 0;
+        utilKeys[k] = 0;
     }
 
     for (uint j = 0; j < GLFW_JOYSTICK_LAST; j++) {
@@ -137,6 +148,12 @@ void utilInitInputHandlers() {
     utilMouse.y = 0;
     glfwSetCursorPosCallback(__utilWindow__, __utilMouseFunc__);
     __utilShowHideCursor__(__utilCursorVisible__);
+    
+    for (uint b = 0; b < GLFW_MOUSE_BUTTON_LAST; b++) {
+        utilMouseButtons[b] = 0;
+    }
+    
+    glfwSetMouseButtonCallback(__utilWindow__, __utilMouseButtonFunc__);
     
 #if GLFW_VERSION_MINOR >= 2
     glfwSetJoystickCallback(__utilJoyConnectFunc__);

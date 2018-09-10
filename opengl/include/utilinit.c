@@ -115,11 +115,13 @@ boolean utilMainLoop(void) {
 
         glfwSwapBuffers(__utilWindow__);
         glfwPollEvents();
+        utilUpdateInputHandlers();
         
         usleep(1000000 / __utilFramerate__);
     }
 
     glfwTerminate();
+    utilReleaseInputHandlers();
 
     return TRUE;
 }

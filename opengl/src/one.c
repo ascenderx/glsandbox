@@ -62,10 +62,10 @@ void * init() {
     struct Player * player = initPlayer();
 
     if (player) {
-        gPaused = FALSE;
-        gPPressed = FALSE;
+        gPaused     = FALSE;
+        gPPressed   = FALSE;
         gShowCursor = FALSE;
-        gClicked = FALSE;
+        gClicked    = FALSE;
 
         utilSetWinDims(WIN_WIDTH, WIN_HEIGHT);
         utilSetWinTitle(WIN_TITLE);
@@ -82,26 +82,29 @@ void * init() {
 /****************************************************************************
  * 
  ****************************************************************************/
-#define WASD_SPEED      10.0
-#define ROTATE_SPEED    5.0
-#define JOYSTICK        GLFW_JOYSTICK_1
-#define JOY_AXIS_L      0
-#define JOY_AXIS_R      1
-#define JOY_DEAD_ZONE_L 0.10
-#define JOY_DEAD_ZONE_R 0.10
+#define WASD_SPEED    10.0f
+#define ROTATE_SPEED  5.0f
+#define JOYSTICK      GLFW_JOYSTICK_1
+#define JOY_AXIS_L    0
+#define JOY_AXIS_R    1
+#define JOY_DEAD_ZONE 0.10f
+#define BT_PAUSE      9
 void input(void * ptr) {
     struct Player * player = (struct Player *) ptr;
     
-    if (utilIsKeyDown(GLFW_KEY_LEFT_CONTROL)) {
-        if (utilIsKeyDown(GLFW_KEY_W) || utilIsKeyDown(GLFW_KEY_Q)) {
+    if (utilKeys[GLFW_KEY_LEFT_CONTROL]) {
+        if (utilKeys[GLFW_KEY_W] || utilKeys[GLFW_KEY_Q]) {
             utilEnd();
+            return;
         }
     }
 
-    if (utilKeys[GLFW_KEY_P] && !gPPressed) {
+    struct Joystick * joystick = &utilJoysticks[JOYSTICK];
+    boolean joyStartPressed = joystick->available && joystick->buttons[BT_PAUSE];
+    if ((utilKeys[GLFW_KEY_P] || joyStartPressed) && !gPPressed) {
         gPaused = !gPaused;
         gPPressed = TRUE;
-    } else if (!utilIsKeyDown(GLFW_KEY_P)) {
+    } else if (!utilKeys[GLFW_KEY_P] && !joyStartPressed) {
         gPPressed = FALSE;
     }
 
@@ -119,23 +122,22 @@ void input(void * ptr) {
     float da = 0.0;
 
     if (!gPaused) {
-        if (utilJoysticks[JOYSTICK]) {
+        if (joystick->available) {
+            utilSetDeadZoneX(JOYSTICK, JOY_AXIS_L, JOY_DEAD_ZONE);
+            utilSetDeadZoneY(JOYSTICK, JOY_AXIS_L, JOY_DEAD_ZONE);
+            utilSetDeadZoneX(JOYSTICK, JOY_AXIS_R, JOY_DEAD_ZONE);
+            utilSetDeadZoneY(JOYSTICK, JOY_AXIS_R, JOY_DEAD_ZONE);
+
             float axisX = utilGetAxisX(JOYSTICK, JOY_AXIS_L);
             float axisY = utilGetAxisY(JOYSTICK, JOY_AXIS_L);
             float axisA = utilGetAxisX(JOYSTICK, JOY_AXIS_R);
 
             // move left/right (left x-axis)
-            if (axisX < -JOY_DEAD_ZONE_L || axisX > JOY_DEAD_ZONE_L) {
-                dx = WASD_SPEED * axisX;
-            }
+            dx = WASD_SPEED * axisX;
             // move up/down (left y-axis)
-            if (axisY < -JOY_DEAD_ZONE_L || axisY > JOY_DEAD_ZONE_L) {
-                dy = WASD_SPEED * axisY;
-            }
+            dy = WASD_SPEED * axisY;
             // rotate (right x-axis)
-            if (axisA < -JOY_DEAD_ZONE_R || axisA > JOY_DEAD_ZONE_R) {
-                da = ROTATE_SPEED * axisA;
-            }
+            da = ROTATE_SPEED * axisA;
         } else {
             if (utilKeys[GLFW_KEY_LEFT]) {
                 dx = -WASD_SPEED;
@@ -197,10 +199,41 @@ void render(void * ptr) {
 
     // if paused, then write "PAUSED"
     if (gPaused) {
-        utilAdvanceGlyphCursorY(1);
+        utilDrawText("\n");
         utilSetColor(0xff0000);
         const char text2[] = "PAUSED";
         utilDrawText(text2);
+    }
+
+    struct Joystick * joystick = &utilJoysticks[JOYSTICK];
+    if (joystick->available) {
+        utilDrawText("\n");
+        utilSetColor(0x00aaff);
+
+        uint numPrinted = 0;
+        for (uint b = 0; b < joystick->numButtons; b++) {
+            if (!joystick->buttons[b]) {
+                continue;
+            }
+
+            if ((numPrinted + 1) % 10 == 0) {
+                utilDrawText("\n");
+            }
+            char text3[4];
+            if (b < 10) {
+                text3[0] = 'A' + b;
+                text3[1] = ' ';
+                text3[2] = '\0';
+            } else {
+                text3[0] = 'A' + (b % 10);
+                text3[1] = 'A' + (b / 10);
+                text3[2] = ' ';
+                text3[3] = '\0';
+            }
+
+            utilDrawText(text3);
+            numPrinted++;
+        }
     }
     
     // draw a cursor (crosshairs)

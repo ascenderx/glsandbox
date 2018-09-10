@@ -1,6 +1,12 @@
 /****************************************************************************
  * 
  ****************************************************************************/
+#include <stdlib.h> // *alloc, free
+#include <math.h> // *abs*
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
 #include <GLFW/glfw3.h>
 
 /****************************************************************************
@@ -82,9 +88,43 @@ void __utilMouseButtonFunc__(GLFWwindow * window, int button, int action, int mo
  ****************************************************************************/
 void __utilJoyConnectFunc__(int joy, int event) {
     if (event == GLFW_CONNECTED) {
-        utilJoysticks[joy] = TRUE;
+        utilJoysticks[joy].available = TRUE;
+        utilJoysticks[joy].name = (char *) glfwGetJoystickName(joy);
+        
+        int numButtons;
+        const uchar * buttons = glfwGetJoystickButtons(joy, &numButtons);
+        utilJoysticks[joy].numButtons = numButtons;
+        utilJoysticks[joy].buttons = (uchar *) calloc(numButtons, sizeof(uchar));
+        for (uint b = 0; b < numButtons; b++) {
+            utilJoysticks[joy].buttons[b] = buttons[b];
+        }
+
+        int numAxes;
+        const float * axes = glfwGetJoystickAxes(joy, &numAxes);
+        utilJoysticks[joy].numAxes = numAxes;
+        utilJoysticks[joy].axes = (float *) calloc(numAxes, sizeof(float));
+        utilJoysticks[joy].__deadZones__ = (float *) calloc(numAxes, sizeof(float));
+        for (uint a = 0; a < numAxes; a++) {
+            utilJoysticks[joy].axes[a] = axes[a];
+            utilJoysticks[joy].__deadZones__[a] = 0.0f;
+        }
     } else {
-        utilJoysticks[joy] = FALSE;
+        utilJoysticks[joy].available = FALSE;
+        utilJoysticks[joy].name = "";
+        utilJoysticks[joy].numButtons = 0;
+
+        if (utilJoysticks[joy].buttons) {
+            free(utilJoysticks[joy].buttons);
+            utilJoysticks[joy].buttons = NULL;
+        }
+        if (utilJoysticks[joy].axes) {
+            free(utilJoysticks[joy].axes);
+            utilJoysticks[joy].axes = NULL;
+        }
+        if (utilJoysticks[joy].__deadZones__) {
+            free(utilJoysticks[joy].__deadZones__);
+            utilJoysticks[joy].__deadZones__ = NULL;
+        }
     }
 }
 
@@ -93,21 +133,23 @@ void __utilJoyConnectFunc__(int joy, int event) {
  ****************************************************************************/
 float __utilGetAxis__(uint joy, uint stick, boolean xory) {
     if (!glfwJoystickPresent(joy)) {
-        return 0.0;
-    }
-
-    int numAxes;
-    const float * axes = glfwGetJoystickAxes(joy, &numAxes);
-    if (!numAxes || !axes) {
-        return 0.0;
+        __utilJoyConnectFunc__(joy, GLFW_DISCONNECTED);
+        return 0.0f;
     }
 
     uint axis = stick * 2 + xory;
-    if (axis >= numAxes) {
-        return 0.0;
+    if (axis >= utilJoysticks[joy].numAxes) {
+        return 0.0f;
     }
 
-    return axes[axis];
+    float deadZone = utilJoysticks[joy].__deadZones__[axis];
+    float axisAmt = utilJoysticks[joy].axes[axis];
+
+    if (axisAmt < -deadZone || axisAmt > +deadZone) {
+        return axisAmt;
+    } else {
+        return 0.0f;
+    }
 }
 
 /****************************************************************************
@@ -127,7 +169,38 @@ float utilGetAxisY(uint joy, uint stick) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilInitInputHandlers() {
+void __utilSetDeadZone__(uint joy, uint stick, boolean xory, float deadZone) {
+    if (!glfwJoystickPresent(joy)) {
+        __utilJoyConnectFunc__(joy, GLFW_DISCONNECTED);
+        return;
+    }
+
+    uint axis = stick * 2 + xory;
+    if (axis >= utilJoysticks[joy].numAxes) {
+        return;
+    }
+
+    utilJoysticks[joy].__deadZones__[axis] = fabsf(deadZone);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetDeadZoneX(uint joy, uint stick, float deadZone) {
+    __utilSetDeadZone__(joy, stick, UTIL_AXIS_X, deadZone);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetDeadZoneY(uint joy, uint stick, float deadZone) {
+    __utilSetDeadZone__(joy, stick, UTIL_AXIS_Y, deadZone);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilInitInputHandlers(void) {
     if (!__utilWindow__) {
         return;
     }
@@ -138,6 +211,9 @@ void utilInitInputHandlers() {
 
     for (uint j = 0; j < GLFW_JOYSTICK_LAST; j++) {
         if (glfwJoystickPresent(j)) {
+            utilJoysticks[j].buttons = NULL;
+            utilJoysticks[j].axes = NULL;
+            utilJoysticks[j].__deadZones__ = NULL;
             __utilJoyConnectFunc__(j, GLFW_CONNECTED);
         }
     }
@@ -154,8 +230,46 @@ void utilInitInputHandlers() {
     }
     
     glfwSetMouseButtonCallback(__utilWindow__, __utilMouseButtonFunc__);
-    
+
 #if GLFW_VERSION_MINOR >= 2
     glfwSetJoystickCallback(__utilJoyConnectFunc__);
 #endif // GLFW_VERSION_MINOR
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilUpdateInputHandlers(void) {
+    for (uint j = 0; j < GLFW_JOYSTICK_LAST; j++) {
+        if (!glfwJoystickPresent(j)) {
+            continue;
+        }
+
+#if GLFW_VERSION_MINOR < 2
+        if (!utilJoysticks[j].available) {
+            __utilJoyConnectFunc__(j, GLFW_CONNECTED);
+        }
+#endif // GLFW_VERSION_MINOR
+
+        int numAxes;
+        const float * axes = glfwGetJoystickAxes(j, &numAxes);
+        for (uint a = 0; a < numAxes; a++) {
+            utilJoysticks[j].axes[a] = axes[a];
+        }
+
+        int numButtons;
+        const uchar * buttons = glfwGetJoystickButtons(j, &numButtons);
+        for (uint b = 0; b < numButtons; b++) {
+            utilJoysticks[j].buttons[b] = buttons[b];
+        }
+    }
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilReleaseInputHandlers(void) {
+    for (uint j = 0; j < GLFW_JOYSTICK_LAST; j++) {
+        __utilJoyConnectFunc__(j, GLFW_DISCONNECTED);
+    }
 }

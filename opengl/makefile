@@ -40,7 +40,7 @@ $(OBJ)/%.hoo: $(SRC)/%.$(CPPEXT) $(SRC)/%.$(HPPEXT) $(UHEADERS)
 dirs:
 	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
 	if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
-	if [ ! -d "$(LIB)" ]; then mkdir $(LIB); fi
+	if [ ! -d "$(LIBDIR)" ]; then mkdir -p $(LIBDIR); fi
 
 cleanbin:
 	rm -f $(BIN)/*
@@ -65,13 +65,15 @@ wipe:
 # LIBRARY DEFINITIONS
 ##############################################################################
 
-# test for correct OpenGL flag
+# test for correct OpenGL flag and library folder
 # is it macOS?
 ifeq ($(shell uname -s), Darwin)
     LIBGL = -framework OpenGL
+	LIBDIR = $(LIB)/clang
 # otherwise, it's Linux, Unix, etc.
 else
     LIBGL = -lGL
+	LIBDIR = $(LIB)/gcc
 endif
 
 # library rules
@@ -80,7 +82,7 @@ ARCHOPTS = -ruv
 LIBRER   = ranlib
 LIBNAME  = utils
 LIBRARY  = lib$(LIBNAME)
-INCLIB   = -L$(LIB) -l$(LIBNAME)
+INCLIB   = -L$(LIBDIR) -l$(LIBNAME)
 INCLUDES = -I$(LIBSRC)
 
 # compilation / linking flags
@@ -114,5 +116,5 @@ one: $(OBJ)/one.o $(OBJECTS1) $(LIBRARY)
 	$(CC) -o $(BIN)/$@ $< $(OBJECTS1) $(LFLAGS) $(INCLIB) $(LFLAGS)
 
 $(LIBRARY): $(UOBJECTS) $(UHEADERS)
-	$(ARCHIVER) $(ARCHOPTS) $(LIB)/$(LIBRARY).a $(UOBJECTS)
-	$(LIBRER) $(LIB)/$(LIBRARY).a
+	$(ARCHIVER) $(ARCHOPTS) $(LIBDIR)/$(LIBRARY).a $(UOBJECTS)
+	$(LIBRER) $(LIBDIR)/$(LIBRARY).a

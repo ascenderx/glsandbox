@@ -185,30 +185,25 @@ void render(void * ptr) {
     struct Player * player = (struct Player *) ptr;
 
     utilClearScreen();
-    drawPlayer(player);
-
-    // draw a point on the player's center
-    utilSetColor(0xff0000);
-    utilFillPoint(player->position);
 
     // write some text
     struct Point2f textCursor = {1, 400};
     utilSetGlyphCursorPt(&textCursor);
-    utilSetColor(0xffaa00);
-    utilDrawText("The quick brown fox jumps\nover the lazy dog\n");
+    utilSetGlyphColorInt(0xffaa00);
+    utilDrawText("The quick brown fox jumps\bed\nover the lazy dog\n");
     utilDrawText("0123456789");
 
     // if paused, then write "PAUSED"
     if (gPaused) {
         utilDrawText("\n");
-        utilSetColor(0xff0000);
+        utilSetGlyphColorInt(0xff0000);
         utilDrawText("PAUSED");
     }
 
     struct Joystick * joystick = &utilJoysticks[JOYSTICK];
     if (joystick->available) {
         utilDrawText("\n");
-        utilSetColor(0x00aaff);
+        utilSetGlyphColorInt(0x00aaff);
 
         uint numPrinted = 0;
         for (uint b = 0; b < joystick->numButtons; b++) {
@@ -235,6 +230,11 @@ void render(void * ptr) {
             numPrinted++;
         }
     }
+
+    drawPlayer(player);
+    // draw a point on the player's center
+    utilSetStrokeColorInt(0xff0000);
+    utilFillPoint(player->position);
     
     // draw a cursor (crosshairs)
     struct Point2f crossHairs[2][2] = {
@@ -243,8 +243,7 @@ void render(void * ptr) {
         {{utilMouse.x - CURSOR_WIDTH, utilMouse.y + 0},
          {utilMouse.x + CURSOR_WIDTH, utilMouse.y + 0}},
     };
-
-    utilSetColor(0x00aaff);
+    utilSetStrokeColorInt(0x00aaff);
     utilStrokeLine(crossHairs[0]);
     utilStrokeLine(crossHairs[1]);
 }

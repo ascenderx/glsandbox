@@ -50,10 +50,17 @@ struct ColorRGB utilParseColor(uint color) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetColor(uint color) {
+void utilSetStrokeColorInt(uint color) {
     struct ColorRGB rgb = utilParseColor(color);
 
     glColor3f(rgb.r, rgb.g, rgb.b);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetStrokeColorRGB(struct ColorRGB * rgb) {
+    glColor3f(rgb->r, rgb->g, rgb->b);
 }
 
 /****************************************************************************

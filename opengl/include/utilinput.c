@@ -244,7 +244,6 @@ void utilUpdateInputHandlers(void) {
 #if GLFW_VERSION_MINOR >= 2
     for (uint j = 0; j < GLFW_JOYSTICK_LAST; j++) {
         if (!glfwJoystickPresent(j)) {
-            printf("%d NOT\n", j);
             continue;
         }
 

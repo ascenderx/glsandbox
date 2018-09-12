@@ -12,6 +12,7 @@ void utilInit2DGlyphs(void) {
     // set defaults for glyphs
     utilSetGlyphCursorXY(0, 0);
     utilSetGlyphDims(1, 1, 1, 1);
+    utilSetGlyphColorInt(0xffffff);
 }
 
 /****************************************************************************
@@ -22,6 +23,26 @@ void utilSetGlyphDims(uint marginX, uint marginY, uint scaling, uint tabWidth) {
     __utilGlyphMarginY__  = marginY;
     __utilGlyphScaling__  = scaling;
     __utilGlyphTabWidth__ = tabWidth;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetGlyphColorInt(uint color) {
+    struct ColorRGB rgb = utilParseColor(color);
+
+    __utilGlyphColor__.r = rgb.r;
+    __utilGlyphColor__.g = rgb.g;
+    __utilGlyphColor__.b = rgb.b;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetGlyphColorRGB(struct ColorRGB * rgb) {
+    __utilGlyphColor__.r = rgb->r;
+    __utilGlyphColor__.g = rgb->g;
+    __utilGlyphColor__.b = rgb->b;
 }
 
 /****************************************************************************
@@ -432,21 +453,45 @@ void utilSetGlyphCursorPt(struct Point2f * pt) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilAdvanceGlyphCursorX(int numChars) {
-    uint w = __UTIL_GLYPH_WIDTH__ * __utilGlyphScaling__;
-    uint m = __utilGlyphMarginX__ - 1;
+void __utilAdvanceGlyphCursorX__(int numChars) {
+    int w = __UTIL_GLYPH_WIDTH__ * __utilGlyphScaling__;
+    int m = __utilGlyphMarginX__ - 1;
     __utilGlyphCursorCurrent__.x += (w + m) * numChars;
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilAdvanceGlyphCursorY(int numLines) {
+void __utilAdvanceGlyphCursorY__(int numLines) {
     __utilGlyphCursorCurrent__.x = __utilGlyphCursorStart__.x;
     
-    uint h = __UTIL_GLYPH_HEIGHT__ * __utilGlyphScaling__;
-    uint m = __utilGlyphMarginY__ - 1;
+    int h = __UTIL_GLYPH_HEIGHT__ * __utilGlyphScaling__;
+    int m = __utilGlyphMarginY__ - 1;
     __utilGlyphCursorCurrent__.y += (h + m) * numLines;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void __utilEraseGlyphs__(uint numGlyphs) {
+    __utilAdvanceGlyphCursorX__(-numGlyphs);
+    uint w  = __UTIL_GLYPH_WIDTH__  * __utilGlyphScaling__;
+    uint h  = __UTIL_GLYPH_HEIGHT__ * __utilGlyphScaling__;
+    uint m  = __utilGlyphMarginX__ - 1;
+    uint x1 = __utilGlyphCursorCurrent__.x;
+    uint y1 = __utilGlyphCursorCurrent__.y;
+    uint x2 = x1 + (w + m) * numGlyphs;
+    uint y2 = y1 + h * numGlyphs;
+
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glBegin(GL_POLYGON); {
+        glVertex2i(x1, y1);
+        glVertex2i(x1, y2);
+        glVertex2i(x2, y2);
+        glVertex2i(x2, y1);
+    } glEnd();
+    struct ColorRGB * rgb = &__utilGlyphColor__;
+    glColor3f(rgb->r, rgb->g, rgb->b);
 }
 
 /****************************************************************************
@@ -458,9 +503,11 @@ void __utilDrawGlyph__(const uint ** glyph, uint numLines) {
     }
 
     uint numVertices = numLines * 2;
-    float x = __utilGlyphCursorCurrent__.x;
-    float y = __utilGlyphCursorCurrent__.y;
-        
+    uint x = (uint) __utilGlyphCursorCurrent__.x;
+    uint y = (uint) __utilGlyphCursorCurrent__.y;
+    
+    struct ColorRGB * rgb = &__utilGlyphColor__;
+    glColor3f(rgb->r, rgb->g, rgb->b);
     glBegin(GL_LINES); {
         for (uint v = 0; v < numVertices; v += 2) {
             uint * vertex1 = (uint *) &glyph[v];     // (uint *) glyph + (v * 2)
@@ -476,7 +523,7 @@ void __utilDrawGlyph__(const uint ** glyph, uint numLines) {
         }
     } glEnd();
     
-    utilAdvanceGlyphCursorX(1);
+    __utilAdvanceGlyphCursorX__(1);
 }
 
 /****************************************************************************
@@ -656,18 +703,19 @@ void utilDrawText(const char * text) {
                 break;
             
             case '\b':
+                __utilEraseGlyphs__(1);
                 break;
             
             case '\t':
-                utilAdvanceGlyphCursorX(__utilGlyphTabWidth__);
+                __utilAdvanceGlyphCursorX__(__utilGlyphTabWidth__);
                 break;
             
             case '\n':
-                utilAdvanceGlyphCursorY(1);
+                __utilAdvanceGlyphCursorY__(1);
                 continue;
             
             case ' ':
-                utilAdvanceGlyphCursorX(1);
+                __utilAdvanceGlyphCursorX__(1);
                 break;
             
             // case '!':

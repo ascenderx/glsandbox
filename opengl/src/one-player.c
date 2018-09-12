@@ -65,7 +65,7 @@ void updatePlayer(struct Player * player) {
  * 
  ****************************************************************************/
 void drawPlayer(struct Player * player) {
-    utilSetColor(player->color);
+    utilSetStrokeColorInt(player->color);
     utilStrokePolygon(player->image);
 }
 

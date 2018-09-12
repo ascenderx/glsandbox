@@ -95,7 +95,7 @@ void __utilJoyConnectFunc__(int joy, int event) {
         const uchar * buttons = glfwGetJoystickButtons(joy, &numButtons);
         utilJoysticks[joy].numButtons = numButtons;
         utilJoysticks[joy].buttons = (uchar *) calloc(numButtons, sizeof(uchar));
-        for (uint b = 0; b < numButtons; b++) {
+        for (uint b = 0; b < (uint) numButtons; b++) {
             utilJoysticks[joy].buttons[b] = buttons[b];
         }
 
@@ -104,7 +104,7 @@ void __utilJoyConnectFunc__(int joy, int event) {
         utilJoysticks[joy].numAxes = numAxes;
         utilJoysticks[joy].axes = (float *) calloc(numAxes, sizeof(float));
         utilJoysticks[joy].__deadZones__ = (float *) calloc(numAxes, sizeof(float));
-        for (uint a = 0; a < numAxes; a++) {
+        for (uint a = 0; a < (uint) numAxes; a++) {
             utilJoysticks[joy].axes[a] = axes[a];
             utilJoysticks[joy].__deadZones__[a] = 0.0f;
         }
@@ -253,13 +253,13 @@ void utilUpdateInputHandlers(void) {
 
         int numAxes;
         const float * axes = glfwGetJoystickAxes(j, &numAxes);
-        for (uint a = 0; a < numAxes; a++) {
+        for (uint a = 0; a < (uint) numAxes; a++) {
             utilJoysticks[j].axes[a] = axes[a];
         }
 
         int numButtons;
         const uchar * buttons = glfwGetJoystickButtons(j, &numButtons);
-        for (uint b = 0; b < numButtons; b++) {
+        for (uint b = 0; b < (uint) numButtons; b++) {
             utilJoysticks[j].buttons[b] = buttons[b];
         }
     }

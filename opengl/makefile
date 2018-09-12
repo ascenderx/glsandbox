@@ -6,12 +6,16 @@
 BIN      = bin
 OBJ      = obj
 SRC      = src
+LIB      = lib
 INC      = include
 CEXT     = c
 HEXT     = h
 CPPEXT   = cc # or c++, cpp, C, cxx, etc.
 HPPEXT   = hh # or h++, hpp, H, hxx, h, etc.
-INCLUDES = -I$(INC) 
+INCLUDES = -I$(INC)
+ARCHIVER = ar
+ARCHOPTS = -ruv
+LIBRER   = ranlib
 
 # User objects
 $(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
@@ -23,7 +27,7 @@ $(OBJ)/%.ho: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
 
 # Included / builtin objects with headers
 $(OBJ)/%.hio: $(INC)/%.$(CEXT) $(INC)/%.$(HEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(PICFLAGS)
 
 # User objects (C++)
 $(OBJ)/%.oo: $(SRC)/%.$(CPPEXT) $(UHEADERS)
@@ -40,14 +44,27 @@ $(OBJ)/%.hoo: $(SRC)/%.$(CPPEXT) $(SRC)/%.$(HPPEXT) $(UHEADERS)
 dirs:
 	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
 	if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
+	if [ ! -d "$(LIB)" ]; then mkdir $(LIB); fi
 
-clean:
+cleanobj:
+	rm -f $(OBJ)/*
+
+cleanbin:
 	rm -f $(BIN)/*
 	rm -f $(OBJ)/*
 
-rmdirs:
+cleanlib:
+	rm -f $(LIB)/*
+
+cleanall:
+	make cleanobj
+	make cleanbin
+	make cleanlib
+
+wipe:
 	rm -r -f $(BIN)
 	rm -r -f $(OBJ)
+	rm -r -f $(LIB)
 
 ##############################################################################
 # LIBRARY DEFINITIONS
@@ -63,12 +80,15 @@ else
 endif
 
 # compilation / linking flags
-LIBGLU  = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
-LIBMATH = -lm
-LFLAGS  = $(LIBGL) $(LIBGLU) $(LIBMATH)
-CSTD    = -std=gnu11
-WARNS   = -Wall
-CFLAGS  = $(WARNS) $(CSTD)
+LIBGLU   = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
+LIBMATH  = -lm
+LFLAGS   = $(LIBGL) $(LIBGLU) $(LIBMATH)
+CSTD     = -std=gnu11
+WARNS    = -Wall -Wextra -Wno-unused-parameter
+OPTIMIZE = -O2
+CFLAGS   = $(WARNS) $(CSTD) $(OPTIMIZE)
+PICFLAGS = -fPIC
+LIBRARY  = libutils
 
 ##############################################################################
 # INCLUDE FILES
@@ -87,5 +107,9 @@ UHEADERS = $(INC)/utiltypes.h
 ##############################################################################
 
 OBJECTS1 = $(OBJ)/one-player.ho
-one: $(OBJ)/one.o $(UOBJECTS) $(UHEADERS) $(OBJECTS1)
-	$(CC) -o $(BIN)/$@ $< $(UOBJECTS) $(OBJECTS1) $(LFLAGS)
+one: $(OBJ)/one.o $(OBJECTS1) $(LIBRARY)
+	$(CC) -o $(BIN)/$@ $< $(OBJECTS1) $(LFLAGS) $(LIB)/$(LIBRARY).a
+
+$(LIBRARY): $(UOBJECTS) $(UHEADERS)
+	$(ARCHIVER) $(ARCHOPTS) $(LIB)/$(LIBRARY).a $(UOBJECTS)
+	$(LIBRER) $(LIB)/$(LIBRARY).a

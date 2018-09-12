@@ -59,9 +59,9 @@ rmobj:
 	rm -rf $(OBJ)
 
 wipe:
-	rm -rf $(BIN)
+	rm -rf $(BINDIR)
 	rm -rf $(OBJ)
-	rm -rf $(LIB)
+	rm -rf $(LIBDIR)
 
 ##############################################################################
 # LIBRARY DEFINITIONS

@@ -13,13 +13,19 @@
 uint __utilGlyphMarginX__;
 uint __utilGlyphMarginY__;
 uint __utilGlyphScaling__;
+uint __utilGlyphTabWidth__;
 struct Point2f __utilGlyphCursorCurrent__;
 struct Point2f __utilGlyphCursorStart__;
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetGlyphDims(uint marginX, uint marginY, uint scaling);
+void utilInit2DGlyphs(void);
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetGlyphDims(uint marginX, uint marginY, uint scaling, uint tabWidth);
 
 /****************************************************************************
  * 

@@ -29,10 +29,6 @@ void utilInitRenderer(uint width, uint height, uint color) {
     // args: left, right, bottom, top, near, far
 	glOrtho(0, width, height, 0, 0, 1);
 
-    // set defaults for glyphs
-    utilSetGlyphCursorXY(0, 0);
-    utilSetGlyphDims(1, 1, 1);
-
     // set clear color
     struct ColorRGB rgb = utilParseColor(color);
     glClearColor(rgb.r, rgb.g, rgb.b, 0);

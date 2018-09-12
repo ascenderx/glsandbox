@@ -15,6 +15,7 @@
 #include "utiltypes.h"
 #include "utilinput.h"
 #include "utildraw.h"
+#include "utiltext.h"
 
 /****************************************************************************
  * 
@@ -29,6 +30,7 @@ boolean utilInitEngine() {
         utilSetFramerate(60);
         utilSetBGColor(0x000000);
         utilSetTickFunc(NULL);
+        utilInit2DGlyphs();
         __utilInitialized__ = TRUE;
     }
 

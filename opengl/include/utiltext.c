@@ -8,10 +8,20 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetGlyphDims(uint marginX, uint marginY, uint scaling) {
-    __utilGlyphMarginX__ = marginX;
-    __utilGlyphMarginY__ = marginY;
-    __utilGlyphScaling__ = scaling;
+void utilInit2DGlyphs(void) {
+    // set defaults for glyphs
+    utilSetGlyphCursorXY(0, 0);
+    utilSetGlyphDims(1, 1, 1, 1);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetGlyphDims(uint marginX, uint marginY, uint scaling, uint tabWidth) {
+    __utilGlyphMarginX__  = marginX;
+    __utilGlyphMarginY__  = marginY;
+    __utilGlyphScaling__  = scaling;
+    __utilGlyphTabWidth__ = tabWidth;
 }
 
 /****************************************************************************
@@ -218,6 +228,189 @@ const uint __UTIL_GLYPH_Z__[][2] = {
     // diag
     {0, 2}, {2, 0},
 };
+const uint __UTIL_GLYPH_0__[][2] = {
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 2}, {2, 2},
+    // diag
+    {0, 2}, {2, 0},
+};
+const uint __UTIL_GLYPH_1__[][2] = {
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 2}, {2, 2},
+    // diag
+    {0, 1}, {1, 0},
+};
+const uint __UTIL_GLYPH_2__[][2] = {
+    // vert
+    {0, 1}, {0, 2},
+    {2, 0}, {2, 1},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+    {0, 2}, {2, 2},
+};
+const uint __UTIL_GLYPH_3__[][2] = {
+    // vert
+    {2, 1}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {1, 1}, {2, 1},
+    {0, 2}, {2, 2},
+    // diag
+    {1, 1}, {2, 0},
+};
+const uint __UTIL_GLYPH_4__[][2] = {
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 1}, {2, 1},
+    // diag
+    {0, 1}, {1, 0},
+};
+const uint __UTIL_GLYPH_5__[][2] = {
+    // vert
+    {0, 0}, {0, 1},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+    {0, 2}, {1, 2},
+    // diag
+    {1, 2}, {2, 1},
+};
+const uint __UTIL_GLYPH_6__[][2] = {
+    // vert
+    {0, 0}, {0, 2},
+    {2, 1}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+    {0, 2}, {2, 2},
+};
+const uint __UTIL_GLYPH_7__[][2] = {
+    // horiz
+    {0, 0}, {2, 0},
+    // diag
+    {1, 2}, {2, 0},
+};
+const uint __UTIL_GLYPH_8__[][2] = {
+    // vert
+    {0, 0}, {0, 2},
+    {2, 0}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+    {0, 2}, {2, 2},
+};
+const uint __UTIL_GLYPH_9__[][2] = {
+    // vert
+    {0, 0}, {0, 1},
+    {2, 0}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+};
+const uint __UTIL_GLYPH_TILDE__[][2] = {
+
+};
+const uint __UTIL_GLYPH_GRAVE__[][2] = {
+
+};
+const uint __UTIL_GLYPH_EMARK__[][2] = {
+
+};
+const uint __UTIL_GLYPH_AT__[][2] = {
+
+};
+const uint __UTIL_GLYPH_POUND__[][2] = {
+
+};
+const uint __UTIL_GLYPH_DOLLAR__[][2] = {
+
+};
+const uint __UTIL_GLYPH_PERCENT__[][2] = {
+
+};
+const uint __UTIL_GLYPH_CARET__[][2] = {
+
+};
+const uint __UTIL_GLYPH_AND__[][2] = {
+
+};
+const uint __UTIL_GLYPH_ASTER__[][2] = {
+
+};
+const uint __UTIL_GLYPH_PAREN_OPEN__[][2] = {
+
+};
+const uint __UTIL_GLYPH_PAREN_CLOSE__[][2] = {
+
+};
+const uint __UTIL_GLYPH_BRACE_OPEN__[][2] = {
+
+};
+const uint __UTIL_GLYPH_BRACE_CLOSE__[][2] = {
+
+};
+const uint __UTIL_GLYPH_ANGLE_OPEN__[][2] = {
+
+};
+const uint __UTIL_GLYPH_ANGLE_CLOSE__[][2] = {
+
+};
+const uint __UTIL_GLYPH_CURLY_OPEN__[][2] = {
+
+};
+const uint __UTIL_GLYPH_CURLY_CLOSE__[][2] = {
+
+};
+const uint __UTIL_GLYPH_VBAR__[][2] = {
+
+};
+const uint __UTIL_GLYPH_HYPEN__[][2] = {
+
+};
+const uint __UTIL_GLYPH_USCORE__[][2] = {
+
+};
+const uint __UTIL_GLYPH_PLUS__[][2] = {
+
+};
+const uint __UTIL_GLYPH_EQUALS__[][2] = {
+
+};
+const uint __UTIL_GLYPH_FSLASH__[][2] = {
+
+};
+const uint __UTIL_GLYPH_BSLASH__[][2] = {
+
+};
+const uint __UTIL_GLYPH_QOPEN__[][2] = {
+
+};
+const uint __UTIL_GLYPH_QCLOSE__[][2] = {
+
+};
+const uint __UTIL_GLYPH_QMARK__[][2] = {
+
+};
+const uint __UTIL_GLYPH_PERIOD__[][2] = {
+
+};
+const uint __UTIL_GLYPH_COLON__[][2] = {
+
+};
+const uint __UTIL_GLYPH_SCOLON__[][2] = {
+
+};
+const uint __UTIL_GLYPH_COMMA__[][2] = {
+
+};
 
 /****************************************************************************
  * 
@@ -421,6 +614,53 @@ void utilDrawText(const char * text) {
             case 'z':
                 __utilDrawGlyph__((const uint **) __UTIL_GLYPH_Z__, 4);
                 break;
+
+            case '0':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_0__, 5);
+                break;
+            
+            case '1':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_1__, 3);
+                break;
+            
+            case '2':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_2__, 5);
+                break;
+            
+            case '3':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_3__, 5);
+                break;
+            
+            case '4':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_4__, 3);
+                break;
+            
+            case '5':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_5__, 5);
+                break;
+            
+            case '6':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_6__, 5);
+                break;
+            
+            case '7':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_7__, 2);
+                break;
+            
+            case '8':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_8__, 5);
+                break;
+            
+            case '9':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_9__, 4);
+                break;
+            
+            case '\b':
+                break;
+            
+            case '\t':
+                utilAdvanceGlyphCursorX(__utilGlyphTabWidth__);
+                break;
             
             case '\n':
                 utilAdvanceGlyphCursorY(1);
@@ -429,6 +669,134 @@ void utilDrawText(const char * text) {
             case ' ':
                 utilAdvanceGlyphCursorX(1);
                 break;
+            
+            // case '!':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '"':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '#':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '$':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '%':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '&':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '\'':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '(':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case ')':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '*':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '+':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case ',':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '-':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '.':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '/':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case ':':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case ';':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '<':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '=':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '>':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '?':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '@':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '[':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '\\':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case ']':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '^':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '_':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '`':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '{':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '|':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '}':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
+            
+            // case '~':
+            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
+            //     break;
             
             default:
                 continue;

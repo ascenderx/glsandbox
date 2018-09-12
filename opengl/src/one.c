@@ -52,6 +52,10 @@ int main(int argc, char ** argv) {
 /****************************************************************************
  * 
  ****************************************************************************/
+#define GLYPH_MARGIN_X  0
+#define GLYPH_MARGIN_Y  1
+#define GLYPH_SCALING   6
+#define GLYPH_TAB_WIDTH 4
 void * init() {
     if (!utilInitEngine()) {
         utilDebug("Error initializing engine", ANSI_YELLOW);
@@ -74,6 +78,7 @@ void * init() {
         utilSetTickFunc(tick);
         utilSetUserData(player);
         utilSetCursorVisible(gShowCursor);
+        utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING, GLYPH_TAB_WIDTH);
     }
 
     return player;
@@ -174,9 +179,6 @@ void update(void * ptr) {
 /****************************************************************************
  * 
  ****************************************************************************/
-#define GLYPH_MARGIN_X 0
-#define GLYPH_MARGIN_Y 1
-#define GLYPH_SCALING  6
 #define CURSOR_WIDTH   20
 #define CURSOR_HEIGHT  20
 void render(void * ptr) {
@@ -192,17 +194,15 @@ void render(void * ptr) {
     // write some text
     struct Point2f textCursor = {1, 400};
     utilSetGlyphCursorPt(&textCursor);
-    utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING);
     utilSetColor(0xffaa00);
-    const char text[] = "The quick brown fox jumps\nover the lazy dog";
-    utilDrawText(text);
+    utilDrawText("The quick brown fox jumps\nover the lazy dog\n");
+    utilDrawText("0123456789");
 
     // if paused, then write "PAUSED"
     if (gPaused) {
         utilDrawText("\n");
         utilSetColor(0xff0000);
-        const char text2[] = "PAUSED";
-        utilDrawText(text2);
+        utilDrawText("PAUSED");
     }
 
     struct Joystick * joystick = &utilJoysticks[JOYSTICK];

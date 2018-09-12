@@ -206,29 +206,13 @@ void render(void * ptr) {
         utilDrawText("\n");
         utilSetGlyphColorInt(0x00aaff);
 
-        uint numPrinted = 0;
         for (uint b = 0; b < joystick->numButtons; b++) {
             if (!joystick->buttons[b]) {
                 continue;
             }
 
-            if ((numPrinted + 1) % 10 == 0) {
-                utilDrawText("\n");
-            }
-            char text3[4];
-            if (b < 10) {
-                text3[0] = 'A' + b;
-                text3[1] = ' ';
-                text3[2] = '\0';
-            } else {
-                text3[0] = 'A' + (b % 10);
-                text3[1] = 'A' + (b / 10);
-                text3[2] = ' ';
-                text3[3] = '\0';
-            }
-
-            utilDrawText(text3);
-            numPrinted++;
+            utilDrawInteger(b);
+            utilDrawCharacter(' ');
         }
     }
 

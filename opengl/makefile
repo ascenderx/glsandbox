@@ -7,15 +7,20 @@ BIN      = bin
 OBJ      = obj
 SRC      = src
 LIB      = lib
-INC      = include
+LIBSRC   = include
 CEXT     = c
 HEXT     = h
 CPPEXT   = cc # or c++, cpp, C, cxx, etc.
 HPPEXT   = hh # or h++, hpp, H, hxx, h, etc.
-INCLUDES = -I$(INC)
+
+# library rules
 ARCHIVER = ar
 ARCHOPTS = -ruv
 LIBRER   = ranlib
+LIBNAME  = utils
+LIBRARY  = lib$(LIBNAME)
+INCLIB   = -L$(LIB) -l$(LIBNAME)
+INCLUDES = -I$(LIBSRC)
 
 # User objects
 $(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
@@ -26,7 +31,7 @@ $(OBJ)/%.ho: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(INCLUDES)
 
 # Included / builtin objects with headers
-$(OBJ)/%.hio: $(INC)/%.$(CEXT) $(INC)/%.$(HEXT) $(UHEADERS)
+$(OBJ)/%.hio: $(LIBSRC)/%.$(CEXT) $(LIBSRC)/%.$(HEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(PICFLAGS)
 
 # User objects (C++)
@@ -46,9 +51,6 @@ dirs:
 	if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
 	if [ ! -d "$(LIB)" ]; then mkdir $(LIB); fi
 
-cleanobj:
-	rm -f $(OBJ)/*
-
 cleanbin:
 	rm -f $(BIN)/*
 	rm -f $(OBJ)/*
@@ -60,6 +62,9 @@ cleanall:
 	make cleanobj
 	make cleanbin
 	make cleanlib
+
+rmobj:
+	rm -f $(OBJ)
 
 wipe:
 	rm -r -f $(BIN)
@@ -88,7 +93,6 @@ WARNS    = -Wall -Wextra -Wno-unused-parameter
 OPTIMIZE = -O2
 CFLAGS   = $(WARNS) $(CSTD) $(OPTIMIZE)
 PICFLAGS = -fPIC
-LIBRARY  = libutils
 
 ##############################################################################
 # INCLUDE FILES
@@ -100,15 +104,15 @@ UOBJECTS = \
 	$(OBJ)/utildraw.hio  \
 	$(OBJ)/utildebug.hio \
 	$(OBJ)/utiltext.hio
-UHEADERS = $(INC)/utiltypes.h
+UHEADERS = $(LIBSRC)/utiltypes.h
 
 ##############################################################################
 # BINARY RULES
 ##############################################################################
 
 OBJECTS1 = $(OBJ)/one-player.ho
-one: $(OBJ)/one.o $(OBJECTS1) $(LIBRARY)
-	$(CC) -o $(BIN)/$@ $< $(OBJECTS1) $(LFLAGS) $(LIB)/$(LIBRARY).a
+one: $(OBJ)/one.o $(OBJECTS1)
+	$(CC) -o $(BIN)/$@ $< $(OBJECTS1) $(LFLAGS) $(INCLIB)
 
 $(LIBRARY): $(UOBJECTS) $(UHEADERS)
 	$(ARCHIVER) $(ARCHOPTS) $(LIB)/$(LIBRARY).a $(UOBJECTS)

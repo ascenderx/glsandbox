@@ -43,6 +43,7 @@ dirs:
 	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
 	if [ ! -d "$(BINDIR)" ]; then mkdir -p $(BINDIR); fi
 	if [ ! -d "$(LIBDIR)" ]; then mkdir -p $(LIBDIR); fi
+	if [ ! -d "$(LIBHEADD)" ]; then mkdir -p $(LIBHEADD); fi
 
 cleanbin:
 	rm -f $(BINDIR)/*
@@ -50,6 +51,7 @@ cleanbin:
 
 cleanlib:
 	rm -f $(LIBDIR)/*
+	rm -f $(LIBHEADD)/*.h
 
 cleanall:
 	make cleanbin
@@ -88,7 +90,8 @@ ARCHOPTS = -ruv
 LIBRER   = ranlib
 LIBNAME  = utils
 LIBRARY  = lib$(LIBNAME)
-LIBHEAD  = -I$(LIBDIR)
+LIBHEADD = $(LIB)/headers
+LIBHEAD  = -I$(LIBHEADD)
 INCLIB   = -L$(LIBDIR) -l$(LIBNAME)
 
 # compilation / linking flags
@@ -124,4 +127,4 @@ one: $(OBJ)/one.o $(OBJECTS1)
 $(LIBRARY): $(UOBJECTS) $(UHEADERS)
 	$(ARCHIVER) $(ARCHOPTS) $(LIBDIR)/$(LIBRARY).a $(UOBJECTS)
 	$(LIBRER) $(LIBDIR)/$(LIBRARY).a
-	cp $(LIBSRC)/*.h $(LIBDIR)/
+	cp $(LIBSRC)/*.h $(LIBHEADD)/

@@ -59,7 +59,6 @@ cleanlib:
 	rm -f $(LIB)/*
 
 cleanall:
-	make cleanobj
 	make cleanbin
 	make cleanlib
 
@@ -111,7 +110,7 @@ UHEADERS = $(LIBSRC)/utiltypes.h
 ##############################################################################
 
 OBJECTS1 = $(OBJ)/one-player.ho
-one: $(OBJ)/one.o $(OBJECTS1)
+one: $(OBJ)/one.o $(OBJECTS1) $(LIBRARY)
 	$(CC) -o $(BIN)/$@ $< $(OBJECTS1) $(LFLAGS) $(INCLIB)
 
 $(LIBRARY): $(UOBJECTS) $(UHEADERS)

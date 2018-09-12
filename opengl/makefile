@@ -111,7 +111,7 @@ UHEADERS = $(LIBSRC)/utiltypes.h
 
 OBJECTS1 = $(OBJ)/one-player.ho
 one: $(OBJ)/one.o $(OBJECTS1) $(LIBRARY)
-	$(CC) -o $(BIN)/$@ $< $(OBJECTS1) $(LFLAGS) $(INCLIB)
+	$(CC) -o $(BIN)/$@ $< $(OBJECTS1) $(LFLAGS) $(INCLIB) $(LFLAGS)
 
 $(LIBRARY): $(UOBJECTS) $(UHEADERS)
 	$(ARCHIVER) $(ARCHOPTS) $(LIB)/$(LIBRARY).a $(UOBJECTS)

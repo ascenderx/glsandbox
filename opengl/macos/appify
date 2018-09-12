@@ -18,7 +18,7 @@ exit; fi
 
 APPNAME=${2:-$(basename "$1" ".sh")}
 BIN="bin"
-DIR="$BIN/$APPNAME.app/Contents/MacOS"
+DIR="macos/$APPNAME.app/Contents/MacOS"
 
 if [ -a "$APPNAME.app" ]; then
 	echo "$PWD/$BIN/$APPNAME.app already exists :("
@@ -26,7 +26,7 @@ if [ -a "$APPNAME.app" ]; then
 fi
 
 mkdir -p "$DIR"
-cp "$BIN/$1" "$DIR/$APPNAME"
+cp "$BIN/macos/$1" "$DIR/$APPNAME"
 chmod +x "$DIR/$APPNAME"
 
-echo "$PWD/$BIN/$APPNAME.app"
+echo "$PWD/$DIR/$APPNAME.app"

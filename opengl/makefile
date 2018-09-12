@@ -13,15 +13,6 @@ HEXT     = h
 CPPEXT   = cc # or c++, cpp, C, cxx, etc.
 HPPEXT   = hh # or h++, hpp, H, hxx, h, etc.
 
-# library rules
-ARCHIVER = ar
-ARCHOPTS = -ruv
-LIBRER   = ranlib
-LIBNAME  = utils
-LIBRARY  = lib$(LIBNAME)
-INCLIB   = -L$(LIB) -l$(LIBNAME)
-INCLUDES = -I$(LIBSRC)
-
 # User objects
 $(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(INCLUDES)
@@ -82,6 +73,15 @@ ifeq ($(shell uname -s), Darwin)
 else
     LIBGL = -lGL
 endif
+
+# library rules
+ARCHIVER = ar
+ARCHOPTS = -ruv
+LIBRER   = ranlib
+LIBNAME  = utils
+LIBRARY  = lib$(LIBNAME)
+INCLIB   = -L$(LIB) -l$(LIBNAME)
+INCLUDES = -I$(LIBSRC)
 
 # compilation / linking flags
 LIBGLU   = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.

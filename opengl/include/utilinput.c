@@ -236,20 +236,21 @@ void utilInitInputHandlers(void) {
 #endif // GLFW_VERSION_MINOR
 }
 
+#include <stdio.h>
 /****************************************************************************
  * 
  ****************************************************************************/
 void utilUpdateInputHandlers(void) {
+#if GLFW_VERSION_MINOR >= 2
     for (uint j = 0; j < GLFW_JOYSTICK_LAST; j++) {
         if (!glfwJoystickPresent(j)) {
+            printf("%d NOT\n", j);
             continue;
         }
 
-#if GLFW_VERSION_MINOR < 2
         if (!utilJoysticks[j].available) {
             __utilJoyConnectFunc__(j, GLFW_CONNECTED);
         }
-#endif // GLFW_VERSION_MINOR
 
         int numAxes;
         const float * axes = glfwGetJoystickAxes(j, &numAxes);
@@ -263,6 +264,7 @@ void utilUpdateInputHandlers(void) {
             utilJoysticks[j].buttons[b] = buttons[b];
         }
     }
+#endif // GLFW_VERSION_MINOR
 }
 
 /****************************************************************************

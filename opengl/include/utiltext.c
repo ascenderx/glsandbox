@@ -337,100 +337,216 @@ const uint __UTIL_GLYPH_9__[][2] = {
     {0, 1}, {2, 1},
 };
 const uint __UTIL_GLYPH_TILDE__[][2] = {
-
+    // vert
+    {1, 0}, {1, 1},
+    // diag
+    {0, 1}, {1, 0},
+    {1, 1}, {2, 0},
 };
 const uint __UTIL_GLYPH_GRAVE__[][2] = {
-
+    // diag
+    {1, 0}, {2, 1},
 };
 const uint __UTIL_GLYPH_EMARK__[][2] = {
-
+    // vert
+    {1, 0}, {1, 1},
+    // dot
+    {1, 2}, {1, 2},
 };
 const uint __UTIL_GLYPH_AT__[][2] = {
-
+    // vert
+    {0, 1}, {0, 2},
+    {1, 1}, {1, 2},
+    {2, 0}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {1, 1},
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_POUND__[][2] = {
-
+    // vert
+    {0, 0}, {0, 2},
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
 };
 const uint __UTIL_GLYPH_DOLLAR__[][2] = {
-
+    // vert
+    {0, 0}, {0, 1},
+    {1, 0}, {1, 2},
+    {2, 1}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 1}, {2, 1},
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_PERCENT__[][2] = {
-
+    // vert
+    {0, 0}, {0, 1},
+    {2, 1}, {2, 2},
+    // horiz
+    {0, 0}, {1, 0},
+    {1, 2}, {2, 2},
+    // diag
+    {0, 1}, {1, 0},
+    {0, 2}, {2, 0},
+    {1, 2}, {2, 1},
 };
 const uint __UTIL_GLYPH_CARET__[][2] = {
-
+    // diag
+    {0, 1}, {1, 0},
+    {1, 0}, {2, 1},
 };
 const uint __UTIL_GLYPH_AND__[][2] = {
-
+    // vert
+    {2, 1}, {2, 2},
+    // horiz
+    {0, 0}, {2, 0},
+    {0, 2}, {2, 2},
+    // diag
+    {0, 0}, {1, 2},
+    {0, 2}, {2, 0},
 };
 const uint __UTIL_GLYPH_ASTER__[][2] = {
-
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 1}, {2, 1},
+    // diag
+    {0, 0}, {2, 2},
+    {0, 2}, {2, 0},
 };
 const uint __UTIL_GLYPH_PAREN_OPEN__[][2] = {
-
+    // vert
+    {1, 0}, {1, 1},
+    // horiz
+    {1, 0}, {2, 0},
+    // diag
+    {1, 1}, {2, 2},
 };
 const uint __UTIL_GLYPH_PAREN_CLOSE__[][2] = {
-
+    // vert
+    {2, 1}, {2, 2},
+    // horiz
+    {1, 2}, {2, 2},
+    // diag
+    {1, 0}, {2, 1},
 };
-const uint __UTIL_GLYPH_BRACE_OPEN__[][2] = {
-
+const uint __UTIL_GLYPH_BRACK_OPEN__[][2] = {
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {1, 0}, {2, 0},
+    {1, 2}, {2, 2},
 };
-const uint __UTIL_GLYPH_BRACE_CLOSE__[][2] = {
-
+const uint __UTIL_GLYPH_BRACK_CLOSE__[][2] = {
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 0}, {1, 0},
+    {0, 2}, {1, 2},
 };
 const uint __UTIL_GLYPH_ANGLE_OPEN__[][2] = {
-
+    // diag
+    {1, 1}, {2, 0},
+    {1, 1}, {2, 2},
 };
 const uint __UTIL_GLYPH_ANGLE_CLOSE__[][2] = {
-
+    // diag
+    {0, 0}, {1, 1},
+    {0, 2}, {1, 1},
 };
 const uint __UTIL_GLYPH_CURLY_OPEN__[][2] = {
-
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 1}, {1, 1},
+    {1, 0}, {2, 0},
+    {1, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_CURLY_CLOSE__[][2] = {
-
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 0}, {1, 0},
+    {1, 1}, {2, 1},
+    {0, 2}, {1, 2},
 };
 const uint __UTIL_GLYPH_VBAR__[][2] = {
-
+    // vert
+    {1, 0}, {1, 2},
 };
-const uint __UTIL_GLYPH_HYPEN__[][2] = {
-
+const uint __UTIL_GLYPH_HYPHEN__[][2] = {
+    // horiz
+    {0, 1}, {2, 1},
 };
 const uint __UTIL_GLYPH_USCORE__[][2] = {
-
+    // horiz
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_PLUS__[][2] = {
-
+    // vert
+    {1, 0}, {1, 2},
+    // horiz
+    {0, 1}, {2, 1},
 };
 const uint __UTIL_GLYPH_EQUALS__[][2] = {
-
+    // horiz
+    {0, 1}, {2, 1},
+    {0, 2}, {2, 2},
 };
 const uint __UTIL_GLYPH_FSLASH__[][2] = {
-
+    // diag
+    {0, 2}, {2, 0},
 };
 const uint __UTIL_GLYPH_BSLASH__[][2] = {
-
+    // diag
+    {0, 0}, {2, 2},
 };
-const uint __UTIL_GLYPH_QOPEN__[][2] = {
-
+const uint __UTIL_GLYPH_DQUOTE_OPEN__[][2] = {
+    // vert
+    {1, 0}, {1, 1},
+    {2, 0}, {2, 1},
 };
-const uint __UTIL_GLYPH_QCLOSE__[][2] = {
-
+const uint __UTIL_GLYPH_DQUOTE_CLOSE__[][2] = {
+    // vert
+    {0, 0}, {0, 1},
+    {1, 0}, {1, 1}, 
+};
+const uint __UTIL_GLYPH_SQUOTE__[][2] = {
+    // vert
+    {1, 0}, {1, 1},
 };
 const uint __UTIL_GLYPH_QMARK__[][2] = {
-
+    // vert
+    {2, 0}, {2, 1},
+    // horiz
+    {0, 0}, {2, 0},
+    {1, 1}, {2, 1},
+    // dot
+    {1, 2}, {1, 2},
 };
 const uint __UTIL_GLYPH_PERIOD__[][2] = {
-
+    // dot
+    {1, 2}, {1, 2},
 };
 const uint __UTIL_GLYPH_COLON__[][2] = {
-
+    // dot
+    {1, 1}, {1, 1},
+    {1, 2}, {1, 2},
 };
 const uint __UTIL_GLYPH_SCOLON__[][2] = {
-
+    // horiz
+    {0, 2}, {1, 2},
+    // dot
+    {1, 1}, {1, 1},
 };
 const uint __UTIL_GLYPH_COMMA__[][2] = {
-
+    // vert
+    {1, 1}, {1, 2},
+    // horiz
+    {0, 2}, {1, 2},
 };
 
 /****************************************************************************
@@ -497,6 +613,7 @@ void __utilEraseGlyphs__(uint numGlyphs) {
 /****************************************************************************
  * 
  ****************************************************************************/
+#define __MAX_GLYPH_DOTS__ 9
 void __utilDrawGlyph__(const uint ** glyph, uint numLines) {
     if (!glyph || numLines == 0) {
         return;
@@ -505,24 +622,40 @@ void __utilDrawGlyph__(const uint ** glyph, uint numLines) {
     uint numVertices = numLines * 2;
     uint x = (uint) __utilGlyphCursorCurrent__.x;
     uint y = (uint) __utilGlyphCursorCurrent__.y;
-    
+
     struct ColorRGB * rgb = &__utilGlyphColor__;
     glColor3f(rgb->r, rgb->g, rgb->b);
     glBegin(GL_LINES); {
         for (uint v = 0; v < numVertices; v += 2) {
-            uint * vertex1 = (uint *) &glyph[v];     // (uint *) glyph + (v * 2)
-            uint * vertex2 = (uint *) &glyph[v + 1]; // (uint *) glyph + (v * 2) + 2
+            uint * v1 = (uint *) &glyph[v];     // (uint *) glyph + (v * 2)
+            uint * v2 = (uint *) &glyph[v + 1]; // (uint *) glyph + (v * 2) + 2
+            // it's a dot
+            if (v1[X] == v2[X] && v1[Y] == v2[Y]) {
+                glEnd();
+                glBegin(GL_POLYGON); {
+                    uint v1x = v1[X] * __utilGlyphScaling__ - 1;
+                    uint v1y = v1[Y] * __utilGlyphScaling__ - 1;
+                    uint v2x = v1x + 3;
+                    uint v2y = v1y + 3;
+                    glVertex2i(v1x + x, v1y + y);
+                    glVertex2i(v1x + x, v2y + y);
+                    glVertex2i(v2x + x, v2y + y);
+                    glVertex2i(v2x + x, v1y + y);
+                } glEnd();
+                glBegin(GL_LINES);
+            // it's a line
+            } else {
+                uint v1x = v1[X] * __utilGlyphScaling__;
+                uint v1y = v1[Y] * __utilGlyphScaling__;
+                uint v2x = v2[X] * __utilGlyphScaling__;
+                uint v2y = v2[Y] * __utilGlyphScaling__;
 
-            uint v1x = vertex1[X] * __utilGlyphScaling__;
-            uint v1y = vertex1[Y] * __utilGlyphScaling__;
-            uint v2x = vertex2[X] * __utilGlyphScaling__;
-            uint v2y = vertex2[Y] * __utilGlyphScaling__;
-
-            glVertex2i(v1x + x, v1y + y);
-            glVertex2i(v2x + x, v2y + y);
+                glVertex2i(v1x + x, v1y + y);
+                glVertex2i(v2x + x, v2y + y);
+            }
         }
     } glEnd();
-    
+
     __utilAdvanceGlyphCursorX__(1);
 }
 
@@ -530,6 +663,7 @@ void __utilDrawGlyph__(const uint ** glyph, uint numLines) {
  * 
  ****************************************************************************/
 void utilDrawText(const char * text) {
+    uint numDoubleQuotes = 0;
     for (const char * c = text; *c; c++) {
         switch (*c) {
             case 'A':
@@ -718,133 +852,137 @@ void utilDrawText(const char * text) {
                 __utilAdvanceGlyphCursorX__(1);
                 break;
             
-            // case '!':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '!':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_EMARK__, 2);
+                break;
             
-            // case '"':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '"':
+                if (++numDoubleQuotes % 2 == 1) {
+                    __utilDrawGlyph__((const uint **) __UTIL_GLYPH_DQUOTE_OPEN__, 2);
+                } else {
+                    __utilDrawGlyph__((const uint **) __UTIL_GLYPH_DQUOTE_CLOSE__, 2);
+                }
+                break;
             
-            // case '#':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '#':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_POUND__, 4);
+                break;
             
-            // case '$':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '$':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_DOLLAR__, 6);
+                break;
             
-            // case '%':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '%':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_PERCENT__, 7);
+                break;
             
-            // case '&':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '&':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_AND__, 5);
+                break;
             
-            // case '\'':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '\'':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_SQUOTE__, 1);
+                break;
             
-            // case '(':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '(':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_PAREN_OPEN__, 3);
+                break;
             
-            // case ')':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case ')':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_PAREN_CLOSE__, 3);
+                break;
             
-            // case '*':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '*':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_ASTER__, 4);
+                break;
             
-            // case '+':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '+':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_PLUS__, 2);
+                break;
             
-            // case ',':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case ',':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_COMMA__, 2);
+                break;
             
-            // case '-':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '-':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_HYPHEN__, 1);
+                break;
             
-            // case '.':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '.':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_PERIOD__, 1);
+                break;
             
-            // case '/':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '/':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_FSLASH__, 1);
+                break;
             
-            // case ':':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case ':':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_COLON__, 2);
+                break;
             
-            // case ';':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case ';':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_SCOLON__, 2);
+                break;
             
-            // case '<':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '<':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_ANGLE_OPEN__, 2);
+                break;
             
-            // case '=':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '=':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_EQUALS__, 2);
+                break;
             
-            // case '>':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '>':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_ANGLE_CLOSE__, 2);
+                break;
             
-            // case '?':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '?':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_QMARK__, 4);
+                break;
             
-            // case '@':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '@':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_AT__, 6);
+                break;
             
-            // case '[':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '[':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_BRACK_OPEN__, 3);
+                break;
             
-            // case '\\':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '\\':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_BSLASH__, 1);
+                break;
             
-            // case ']':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case ']':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_BRACK_CLOSE__, 3);
+                break;
             
-            // case '^':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '^':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_CARET__, 2);
+                break;
             
-            // case '_':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '_':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_USCORE__, 1);
+                break;
             
-            // case '`':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '`':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_GRAVE__, 1);
+                break;
             
-            // case '{':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '{':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_CURLY_OPEN__, 4);
+                break;
             
-            // case '|':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '|':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_VBAR__, 1);
+                break;
             
-            // case '}':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '}':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_CURLY_CLOSE__, 4);
+                break;
             
-            // case '~':
-            //     __utilDrawGlyph__((const uint **) __UTIL_GLYPH___, );
-            //     break;
+            case '~':
+                __utilDrawGlyph__((const uint **) __UTIL_GLYPH_TILDE__, 3);
+                break;
             
             default:
                 continue;

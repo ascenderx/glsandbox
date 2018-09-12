@@ -191,7 +191,8 @@ void render(void * ptr) {
     utilSetGlyphCursorPt(&textCursor);
     utilSetGlyphColorInt(0xffaa00);
     utilDrawText("The quick brown fox jumps\bed\nover the lazy dog\n");
-    utilDrawText("0123456789");
+    utilDrawText("0123456789\n");
+    utilDrawText("`~!@#$%^&*()[]{}<>\n-=_+\\|/,.:;\n'\"yeet?\"");
 
     // if paused, then write "PAUSED"
     if (gPaused) {

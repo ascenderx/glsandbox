@@ -1,6 +1,0 @@
-#!/bin/bash
-
-make dirs  && \
-make clean && \
-make $1    && \
-bin/$1

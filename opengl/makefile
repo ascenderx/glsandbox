@@ -67,13 +67,13 @@ rmobj:
 # is it macOS?
 ifeq ($(shell uname -s), Darwin)
     LIBGL = -framework OpenGL
- 	 PLAT = macos
+ 	PLAT = macos
 # otherwise, it's Linux, Unix, etc.
 else
     LIBGL = -lGL
     ifeq ($(shell uname -s), Linux)
-	     PLAT = linux
-	 endif
+	    PLAT = linux
+	endif
 endif
 
 # library rules

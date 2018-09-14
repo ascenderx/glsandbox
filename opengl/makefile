@@ -8,7 +8,7 @@ BINDIR   = $(BIN)/$(PLAT)
 OBJ      = obj
 SRC      = src
 LIB      = lib/utils
-LIBSRC   = include/utils
+LIBSRC   = include
 CEXT     = c
 HEXT     = h
 CPPEXT   = cc # or c++, cpp, C, cxx, etc.
@@ -16,23 +16,23 @@ HPPEXT   = hh # or h++, hpp, H, hxx, h, etc.
 
 # User objects
 $(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIBHEAD)
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(LIBSRC)
 
 # User objects with user headers
 $(OBJ)/%.ho: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(LIBHEAD)
+	$(CC) -c -o $@ $< $(CFLAGS) -I$(LIBSRC)
 
 # Included / builtin objects with headers
 $(OBJ)/%.hio: $(LIBSRC)/%.$(CEXT) $(LIBSRC)/%.$(HEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(PICFLAGS) -I$(GLFWHEAD)
+	$(CC) -c -o $@ $< $(CFLAGS) $(PICFLAGS) -I$(LIBSRC)
 
 # User objects (C++)
 $(OBJ)/%.oo: $(SRC)/%.$(CPPEXT) $(UHEADERS)
-	$(C++) -c -o $@ $< $(CFLAGS) $(LIBHEAD)
+	$(C++) -c -o $@ $< $(CFLAGS) -I$(LIBSRC)
 
 # User objects with user headers (C++)
 $(OBJ)/%.hoo: $(SRC)/%.$(CPPEXT) $(SRC)/%.$(HPPEXT) $(UHEADERS)
-	$(C++) -c -o $@ $< $(CFLAGS) $(LIBHEAD)
+	$(C++) -c -o $@ $< $(CFLAGS) -I$(LIBSRC)
 
 ##############################################################################
 # DIRECTORY RULES
@@ -67,17 +67,16 @@ rmobj:
 # is it macOS?
 ifeq ($(shell uname -s), Darwin)
     LIBGL = -framework OpenGL
-	PLAT = macos
+ 	 PLAT = macos
 # otherwise, it's Linux, Unix, etc.
 else
     LIBGL = -lGL
-	ifeq ($(shell uname -s), Linux)
-		PLAT = linux
-	endif
+    ifeq ($(shell uname -s), Linux)
+	     PLAT = linux
+	 endif
 endif
 
 # library rules
-GLFWHEAD = include/GLFW
 ARCHIVER = ar
 ARCHOPTS = -ruv
 LIBRER   = ranlib

@@ -1,12 +1,12 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-#include <utiltypes.h>
-#include <utilinit.h>
-#include <utildraw.h>
-#include <utilinput.h>
-#include <utildebug.h>
-#include <utiltext.h>
+#include <utils/utiltypes.h>
+#include <utils/utilinit.h>
+#include <utils/utildraw.h>
+#include <utils/utilinput.h>
+#include <utils/utildebug.h>
+#include <utils/utiltext.h>
 
 /****************************************************************************
  * 

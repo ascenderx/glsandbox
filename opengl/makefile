@@ -8,7 +8,7 @@ BINDIR   = $(BIN)/$(PLAT)
 OBJ      = obj
 SRC      = src
 LIB      = lib/utils
-LIBSRC   = include
+LIBSRC   = include/utils
 CEXT     = c
 HEXT     = h
 CPPEXT   = cc # or c++, cpp, C, cxx, etc.
@@ -24,7 +24,7 @@ $(OBJ)/%.ho: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
 
 # Included / builtin objects with headers
 $(OBJ)/%.hio: $(LIBSRC)/%.$(CEXT) $(LIBSRC)/%.$(HEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(PICFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS) $(PICFLAGS) -I$(GLFWHEAD)
 
 # User objects (C++)
 $(OBJ)/%.oo: $(SRC)/%.$(CPPEXT) $(UHEADERS)
@@ -77,6 +77,7 @@ else
 endif
 
 # library rules
+GLFWHEAD = include/GLFW
 ARCHIVER = ar
 ARCHOPTS = -ruv
 LIBRER   = ranlib

@@ -3,9 +3,6 @@
 ##############################################################################
 
 # directories
-PLAT     =
-ARCHDIR  = arch
-LIBDIR   = $(LIB)/$(ARCHDIR)
 BIN      = bin
 BINDIR   = $(BIN)/$(PLAT)
 OBJ      = obj
@@ -69,8 +66,8 @@ rmobj:
 # test for correct OpenGL flag and library folder
 # is it macOS?
 ifeq ($(shell uname -s), Darwin)
-    LIBGL = -framework OpenGL
-	PLAT = macos
+    LIBGL  = -framework OpenGL
+	PLAT   = macos
 # otherwise, it's Linux, Unix, etc.
 else
     LIBGL = -lGL
@@ -88,6 +85,7 @@ LIBRARY  = lib$(LIBNAME)
 LIBHEADD = $(LIB)/headers
 LIBHEAD  = -I$(LIBHEADD)
 INCLIB   = -L$(LIBDIR) -l$(LIBNAME)
+LIBDIR   = $(LIB)/$(PLAT)
 
 # compilation / linking flags
 LIBGLU   = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.

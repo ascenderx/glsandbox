@@ -18,8 +18,7 @@ exit; fi
 
 APPNAME=${2:-$(basename "$1" ".sh")}
 BIN="bin"
-DIR="macos/$APPNAME.app/Contents/MacOS"
-
+DIR="$BIN/macos/$APPNAME.app/Contents/MacOS"
 if [ -a "$APPNAME.app" ]; then
 	echo "$PWD/$BIN/$APPNAME.app already exists :("
 	exit 1

@@ -7,7 +7,7 @@ BIN      = bin
 BINDIR   = $(BIN)/$(PLAT)
 OBJ      = obj
 SRC      = src
-LIB      = lib
+LIB      = lib/utils
 LIBSRC   = include
 CEXT     = c
 HEXT     = h
@@ -66,8 +66,8 @@ rmobj:
 # test for correct OpenGL flag and library folder
 # is it macOS?
 ifeq ($(shell uname -s), Darwin)
-    LIBGL  = -framework OpenGL
-	PLAT   = macos
+    LIBGL = -framework OpenGL
+	PLAT = macos
 # otherwise, it's Linux, Unix, etc.
 else
     LIBGL = -lGL
@@ -84,18 +84,23 @@ LIBNAME  = utils
 LIBRARY  = lib$(LIBNAME)
 LIBHEADD = $(LIB)/headers
 LIBHEAD  = -I$(LIBHEADD)
-INCLIB   = -L$(LIBDIR) -l$(LIBNAME)
+LIBUTILS = -L$(LIBDIR) -l$(LIBNAME)
 LIBDIR   = $(LIB)/$(PLAT)
 
 # compilation / linking flags
-LIBGLU   = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
-LIBMATH  = -lm
-LFLAGS   = $(LIBGL) $(LIBGLU) $(LIBMATH)
-CSTD     = -std=gnu11
-WARNS    = -Wall -Wextra -Wno-unused-parameter
-OPTIMIZE = -O2
-CFLAGS   = $(WARNS) $(CSTD) $(OPTIMIZE)
-PICFLAGS = -fPIC
+#LIBGLU    = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
+#LFLAGS   = $(LIBGL) $(LIBGLU) $(LIBMATH)
+LIBMATH   = -lm
+PKGCFGDIR = env PKG_CONFIG_PATH=./lib/glfw/$(PLAT)
+PKGCFGCFL = `pkg-config --cflags glfw3`
+PKGCFGLIB = `pkg-config --static --libs glfw3`
+LIBGLFW   = $(PKGCFGCFL) $(PKGCFGLIB)
+LFLAGS    = $(LIBGL) $(LIBMATH) $(LIBUTILS) $(LIBGLFW)
+CSTD      = -std=gnu11
+WARNS     = -Wall -Wextra -Wno-unused-parameter
+OPTIMIZE  = -O2
+CFLAGS    = $(WARNS) $(CSTD) $(OPTIMIZE)
+PICFLAGS  = -fPIC
 
 ##############################################################################
 # INCLUDE FILES
@@ -113,9 +118,9 @@ UHEADERS = $(LIBSRC)/utiltypes.h
 # BINARY RULES
 ##############################################################################
 
-OBJECTS1 = $(OBJ)/one-player.ho
-one: $(OBJ)/one.o $(OBJECTS1)
-	$(CC) -o $(BINDIR)/$@ $< $(OBJECTS1) $(INCLIB) $(LFLAGS)
+OBJECTS1 = $(OBJ)/one.o $(OBJ)/one-player.ho
+one: $(OBJECTS1)
+	$(PKGCFGDIR) $(CC) -o $(BINDIR)/$@ $? $(LFLAGS)
 
 $(LIBRARY): $(UOBJECTS) $(UHEADERS)
 	$(ARCHIVER) $(ARCHOPTS) $(LIBDIR)/$(LIBRARY).a $(UOBJECTS)

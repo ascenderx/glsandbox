@@ -9,7 +9,7 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-struct ColorRGB {
+struct UtilColorRGB {
     float r;
     float g;
     float b;
@@ -23,7 +23,7 @@ void utilInitRenderer(uint width, uint height, uint color);
 /****************************************************************************
  * 
  ****************************************************************************/
-struct ColorRGB utilParseColor(uint color);
+struct UtilColorRGB utilParseColor(uint color);
 
 /****************************************************************************
  * 
@@ -33,7 +33,7 @@ void utilSetStrokeColorInt(uint color);
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetStrokeColorRGB(struct ColorRGB * color);
+void utilSetStrokeColorRGB(struct UtilColorRGB * color);
 
 /****************************************************************************
  * 
@@ -43,41 +43,32 @@ void utilClearScreen(void);
 /****************************************************************************
  * 
  ****************************************************************************/
-struct Path2f {
-   uint length;
-   struct Point2f * center;
-   struct Point2f * vertices;
-};
+void utilStrokeLine(struct UtilPoint2f endpoints[2]);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilStrokeLine(struct Point2f endpoints[2]);
+void __utilIterateVertices__(const struct UtilPath2f * path);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void __utilIterateVertices__(const struct Path2f * path);
+void utilStrokePolyline(const struct UtilPath2f * path);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilStrokePolyline(const struct Path2f * path);
+void utilStrokePolygon(const struct UtilPath2f * path);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilStrokePolygon(const struct Path2f * path);
+void utilFillPolygon(const struct UtilPath2f * path);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilFillPolygon(const struct Path2f * path);
-
-/****************************************************************************
- * 
- ****************************************************************************/
-void utilFillPoint(const struct Point2f * point);
+void utilFillPoint(const struct UtilPoint2f * point);
 
 /****************************************************************************
  * 
@@ -97,16 +88,16 @@ float __utilRadToDeg__(float radians);
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilRotatePoint(struct Point2f * point, float degrees);
+void utilRotatePoint(struct UtilPoint2f * point, float degrees);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilTranslatePolygon(struct Path2f * polygon, float dx, float dy);
+void utilTranslatePolygon(struct UtilPath2f * polygon, float dx, float dy);
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilRotatePolygonAboutCenter(struct Path2f * polygon, float degrees);
+void utilRotatePolygonAboutCenter(struct UtilPath2f * polygon, float degrees);
 
 #endif // UTIL_DRAW_H

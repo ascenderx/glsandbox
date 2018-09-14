@@ -29,15 +29,15 @@ void utilInitRenderer(uint width, uint height, uint color) {
 	glOrtho(0, width, height, 0, 0, 1);
 
     // set clear color
-    struct ColorRGB rgb = utilParseColor(color);
+    struct UtilColorRGB rgb = utilParseColor(color);
     glClearColor(rgb.r, rgb.g, rgb.b, 0);
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-struct ColorRGB utilParseColor(uint color) {
-    struct ColorRGB rgb;
+struct UtilColorRGB utilParseColor(uint color) {
+    struct UtilColorRGB rgb;
 
     rgb.r = ((color >> 16) & 0xff) / 255.0;
     rgb.g = ((color >>  8) & 0xff) / 255.0;
@@ -50,7 +50,7 @@ struct ColorRGB utilParseColor(uint color) {
  * 
  ****************************************************************************/
 void utilSetStrokeColorInt(uint color) {
-    struct ColorRGB rgb = utilParseColor(color);
+    struct UtilColorRGB rgb = utilParseColor(color);
 
     glColor3f(rgb.r, rgb.g, rgb.b);
 }
@@ -58,7 +58,7 @@ void utilSetStrokeColorInt(uint color) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetStrokeColorRGB(struct ColorRGB * rgb) {
+void utilSetStrokeColorRGB(struct UtilColorRGB * rgb) {
     glColor3f(rgb->r, rgb->g, rgb->b);
 }
 
@@ -72,7 +72,7 @@ void utilClearScreen(void) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilStrokeLine(struct Point2f endpoints[2]) {
+void utilStrokeLine(struct UtilPoint2f endpoints[2]) {
     glBegin(GL_LINES); {
         glVertex2f(endpoints[0].x, endpoints[0].y);
         glVertex2f(endpoints[1].x, endpoints[1].y);
@@ -82,10 +82,10 @@ void utilStrokeLine(struct Point2f endpoints[2]) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void __utilIterateVertices__(const struct Path2f * path) {
+void __utilIterateVertices__(const struct UtilPath2f * path) {
     for (uint p = 0; p < path->length; p++) {
-        struct Point2f * pt  = path->vertices + p;
-        struct Point2f * ctr = path->center;
+        struct UtilPoint2f * pt  = path->vertices + p;
+        struct UtilPoint2f * ctr = path->center;
         glVertex2f(pt->x + ctr->x, pt->y + ctr->y);
     }
 }
@@ -93,7 +93,7 @@ void __utilIterateVertices__(const struct Path2f * path) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilStrokePolyline(const struct Path2f * path) {
+void utilStrokePolyline(const struct UtilPath2f * path) {
     glBegin(GL_LINE_STRIP); {
         __utilIterateVertices__(path);
     } glEnd();
@@ -102,7 +102,7 @@ void utilStrokePolyline(const struct Path2f * path) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilStrokePolygon(const struct Path2f * path) {
+void utilStrokePolygon(const struct UtilPath2f * path) {
     glBegin(GL_LINE_LOOP); {
         __utilIterateVertices__(path);
     } glEnd();
@@ -111,7 +111,7 @@ void utilStrokePolygon(const struct Path2f * path) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilFillPolygon(const struct Path2f * path) {
+void utilFillPolygon(const struct UtilPath2f * path) {
     glBegin(GL_POLYGON); {
         __utilIterateVertices__(path);
     } glEnd();
@@ -121,7 +121,7 @@ void utilFillPolygon(const struct Path2f * path) {
  * 
  ****************************************************************************/
 #define POINT_RADIUS 2
-void utilFillPoint(const struct Point2f * point) {
+void utilFillPoint(const struct UtilPoint2f * point) {
     float x1 = point->x - POINT_RADIUS;
     float y1 = point->y - POINT_RADIUS;
     float x2 = point->x + POINT_RADIUS;
@@ -153,7 +153,7 @@ float __utilRadToDeg__(float radians) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilRotatePoint(struct Point2f * point, float degrees) {
+void utilRotatePoint(struct UtilPoint2f * point, float degrees) {
     float xp = point->x;
     float yp = point->y;
 
@@ -168,7 +168,7 @@ void utilRotatePoint(struct Point2f * point, float degrees) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilTranslatePolygon(struct Path2f * polygon, float dx, float dy) {
+void utilTranslatePolygon(struct UtilPath2f * polygon, float dx, float dy) {
     polygon->center->x += dx;
     polygon->center->y += dy;
 }
@@ -176,7 +176,7 @@ void utilTranslatePolygon(struct Path2f * polygon, float dx, float dy) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilRotatePolygonAboutCenter(struct Path2f * polygon, float degrees) {
+void utilRotatePolygonAboutCenter(struct UtilPath2f * polygon, float degrees) {
     for (uint p = 0; p < polygon->length; p++) {
         utilRotatePoint(polygon->vertices + p, degrees);
     }

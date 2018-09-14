@@ -83,7 +83,7 @@ void utilSetTickFunc(void (func(void *))) {
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilMainLoop(void) {
+boolean utilCreateWindow() {
     __utilWindow__ = glfwCreateWindow(
         __utilWinWidth__,
         __utilWinHeight__,
@@ -94,8 +94,15 @@ boolean utilMainLoop(void) {
     if (!__utilWindow__) {
         glfwTerminate();
         return FALSE;
+    } else {
+        return TRUE;
     }
+}
 
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilMainLoop(void) {
     glfwMakeContextCurrent(__utilWindow__);
 
     // initialize local utilities
@@ -124,8 +131,6 @@ boolean utilMainLoop(void) {
 
     glfwTerminate();
     utilReleaseInputHandlers();
-
-    return TRUE;
 }
 
 /****************************************************************************

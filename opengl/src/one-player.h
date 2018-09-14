@@ -9,7 +9,7 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-struct Velocity2f {
+struct Velocity {
     float dx;
     float dy;
 };
@@ -18,13 +18,15 @@ struct Velocity2f {
  * 
  ****************************************************************************/
 struct Player {
-    struct Path2f * image;
-    struct Point2f * position;
-    struct Velocity2f * velocity;
-    float rotation;
-    float direction;
-    float degreesToRotateImage;
-    uint color;
+    struct  UtilPath2f * image;
+    struct  UtilPoint2f * position;
+    struct  Velocity * velocity;
+    float   rotation;
+    float   direction;
+    float   degreesToRotateImage;
+    boolean paused;
+    boolean showCursor;
+    uint    color;
 };
 
 /****************************************************************************

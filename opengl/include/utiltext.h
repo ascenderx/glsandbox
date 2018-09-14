@@ -14,9 +14,9 @@ uint __utilGlyphMarginX__;
 uint __utilGlyphMarginY__;
 uint __utilGlyphScaling__;
 uint __utilGlyphTabWidth__;
-struct Point2f __utilGlyphCursorCurrent__;
-struct Point2f __utilGlyphCursorStart__;
-struct ColorRGB __utilGlyphColor__;
+struct UtilPoint2f __utilGlyphCursorCurrent__;
+struct UtilPoint2f __utilGlyphCursorStart__;
+struct UtilColorRGB __utilGlyphColor__;
 
 /****************************************************************************
  * 
@@ -26,7 +26,17 @@ void utilInit2DGlyphs(void);
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetGlyphDims(uint marginX, uint marginY, uint scaling, uint tabWidth);
+void utilSetGlyphMargins(uint marginX, uint marginY);
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetGlyphScaling(uint scaling);
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetGlyphTabWidth(uint tabWidth);
 
 /****************************************************************************
  * 
@@ -36,7 +46,7 @@ void utilSetGlyphColorInt(uint color);
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetGlyphColorRGB(struct ColorRGB * rgb);
+void utilSetGlyphColorRGB(struct UtilColorRGB * rgb);
 
 /****************************************************************************
  * 
@@ -46,7 +56,7 @@ void utilSetGlyphCursorXY(float x, float y);
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetGlyphCursorPt(struct Point2f * pt);
+void utilSetGlyphCursorPt(struct UtilPoint2f * pt);
 
 /****************************************************************************
  * 
@@ -70,7 +80,7 @@ void __utilEraseGlyphs__(uint numGlyphs);
 #define Y 1
 #define __UTIL_GLYPH_WIDTH__  3
 #define __UTIL_GLYPH_HEIGHT__ 3
-#define __MAX_GLYPH_DOTS__ 9
+#define __MAX_GLYPH_DOTS__    9
 void __utilDrawGlyph__(const uint ** glyph, uint numVertices);
 
 /****************************************************************************

@@ -9,7 +9,7 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-typedef const char * AnsiColor;
+typedef const char * UtilAnsiColor;
 #define ANSI_RED     "\x1b[1;31m"
 #define ANSI_GREEN   "\x1b[1;32m"
 #define ANSI_YELLOW  "\x1b[1;33m"
@@ -23,6 +23,6 @@ typedef const char * AnsiColor;
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilDebug(const char * message, AnsiColor color);
+void utilDebug(const char * message, UtilAnsiColor color);
 
 #endif // UTIL_DEBUG_H

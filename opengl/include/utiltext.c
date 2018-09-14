@@ -1,7 +1,7 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-#include <math.h> // log*
+#include <math.h>  // log*
 #include <stdio.h> // *print*
 
 /****************************************************************************
@@ -17,17 +17,31 @@
 void utilInit2DGlyphs(void) {
     // set defaults for glyphs
     utilSetGlyphCursorXY(0, 0);
-    utilSetGlyphDims(1, 1, 1, 1);
+    utilSetGlyphMargins(1, 1);
+    utilSetGlyphScaling(1);
+    utilSetGlyphTabWidth(1);
     utilSetGlyphColorInt(0xffffff);
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetGlyphDims(uint marginX, uint marginY, uint scaling, uint tabWidth) {
+void utilSetGlyphMargins(uint marginX, uint marginY) {
     __utilGlyphMarginX__  = marginX;
     __utilGlyphMarginY__  = marginY;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetGlyphScaling(uint scaling) {
     __utilGlyphScaling__  = scaling;
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilSetGlyphTabWidth(uint tabWidth) {
     __utilGlyphTabWidth__ = tabWidth;
 }
 
@@ -35,7 +49,7 @@ void utilSetGlyphDims(uint marginX, uint marginY, uint scaling, uint tabWidth) {
  * 
  ****************************************************************************/
 void utilSetGlyphColorInt(uint color) {
-    struct ColorRGB rgb = utilParseColor(color);
+    struct UtilColorRGB rgb = utilParseColor(color);
 
     __utilGlyphColor__.r = rgb.r;
     __utilGlyphColor__.g = rgb.g;
@@ -45,7 +59,7 @@ void utilSetGlyphColorInt(uint color) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetGlyphColorRGB(struct ColorRGB * rgb) {
+void utilSetGlyphColorRGB(struct UtilColorRGB * rgb) {
     __utilGlyphColor__.r = rgb->r;
     __utilGlyphColor__.g = rgb->g;
     __utilGlyphColor__.b = rgb->b;
@@ -568,7 +582,7 @@ void utilSetGlyphCursorXY(float x, float y) {
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilSetGlyphCursorPt(struct Point2f * pt) {
+void utilSetGlyphCursorPt(struct UtilPoint2f * pt) {
     utilSetGlyphCursorXY(pt->x, pt->y);
 }
 
@@ -612,7 +626,7 @@ void __utilEraseGlyphs__(uint numGlyphs) {
         glVertex2i(x2, y2);
         glVertex2i(x2, y1);
     } glEnd();
-    struct ColorRGB * rgb = &__utilGlyphColor__;
+    struct UtilColorRGB * rgb = &__utilGlyphColor__;
     glColor3f(rgb->r, rgb->g, rgb->b);
 }
 
@@ -628,7 +642,7 @@ void __utilDrawGlyph__(const uint ** glyph, uint numLines) {
     uint x = (uint) __utilGlyphCursorCurrent__.x;
     uint y = (uint) __utilGlyphCursorCurrent__.y;
 
-    struct ColorRGB * rgb = &__utilGlyphColor__;
+    struct UtilColorRGB * rgb = &__utilGlyphColor__;
     glColor3f(rgb->r, rgb->g, rgb->b);
     glBegin(GL_LINES); {
         for (uint v = 0; v < numVertices; v += 2) {

@@ -6,7 +6,7 @@
 /****************************************************************************
  * 
  ****************************************************************************/
-void utilDebug(const char * message, AnsiColor color) {
+void utilDebug(const char * message, UtilAnsiColor color) {
     if (!color) {
         color = ANSI_DEFAULT;
     }

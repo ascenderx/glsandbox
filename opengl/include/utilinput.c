@@ -2,7 +2,7 @@
  * 
  ****************************************************************************/
 #include <stdlib.h> // *alloc, free
-#include <math.h> // *abs*
+#include <math.h>   // *abs*
 
 /****************************************************************************
  * 
@@ -26,22 +26,43 @@ void __utilKeyFunc__(GLFWwindow * window, int key, int scancode, int action, int
     }
 
     if (action == GLFW_PRESS) {
-        utilKeys[ukey]++;
+        utilKeyboard.keys[ukey]++;
     } else if (action == GLFW_RELEASE) {
-        utilKeys[ukey] = 0;
+        utilKeyboard.keys[ukey] = 0;
     }
 }
 
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean utilIsKeyDown(uint key) {
+void utilDebounceKey(uint key) {
+    if (key >= __UTIL_MAX_KEYS__) {
+        return;
+    }
+
+    utilKeyboard.__keysDebounce__[key] = (boolean) utilKeyboard.keys[key];
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+uint utilGetKey(uint key) {
     if (key >= __UTIL_MAX_KEYS__) {
         return FALSE;
     }
 
-    uint state = utilKeys[key];
-    return (state >= 1);
+    return utilKeyboard.keys[key];
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilIsKey(uint key) {
+    if (key >= __UTIL_MAX_KEYS__) {
+        return FALSE;
+    }
+
+    return utilKeyboard.keys[key] && !utilKeyboard.__keysDebounce__[key];
 }
 
 /****************************************************************************
@@ -77,10 +98,108 @@ void utilSetCursorVisible(boolean visible) {
  ****************************************************************************/
 void __utilMouseButtonFunc__(GLFWwindow * window, int button, int action, int mods) {
     if (action == GLFW_PRESS) {
-        utilMouseButtons[button]++;
+        utilMouse.buttons[button] = 1;
+    } else if (action == GLFW_REPEAT) {
+        utilMouse.buttons[button]++;
     } else if (action == GLFW_RELEASE) {
-        utilMouseButtons[button] = 0;
+        utilMouse.buttons[button] = 0;
     }
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilDebounceMouseButton(uint button) {
+    if (button >= GLFW_MOUSE_BUTTON_LAST) {
+        return;
+    }
+
+    utilMouse.__buttonsDebounce__[button] = (boolean) utilMouse.buttons[button];
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilDebounceMouseLeft(void) {
+    utilDebounceMouseButton(GLFW_MOUSE_BUTTON_LEFT);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilDebounceMouseRight(void) {
+    utilDebounceMouseButton(GLFW_MOUSE_BUTTON_RIGHT);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+void utilDebounceMouseMiddle(void) {
+    utilDebounceMouseButton(GLFW_MOUSE_BUTTON_MIDDLE);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+uint utilGetMouseButton(uint button) {
+    if (button >= GLFW_MOUSE_BUTTON_LAST) {
+        return 0;
+    } else {
+        return utilMouse.buttons[button];
+    }
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilGetMouseLeft(void) {
+    return utilGetMouseButton(GLFW_MOUSE_BUTTON_LEFT);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilGetMouseRight(void) {
+    return utilGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilGetMouseMiddle(void) {
+    return utilGetMouseButton(GLFW_MOUSE_BUTTON_MIDDLE);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilIsMouseButton(uint button) {
+    if (button >= GLFW_MOUSE_BUTTON_LAST) {
+        return FALSE;
+    } else {
+        return utilMouse.buttons[button] && !utilMouse.__buttonsDebounce__[button];
+    }
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilIsMouseLeft(void) {
+    return utilIsMouseButton(GLFW_MOUSE_BUTTON_LEFT);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilIsMouseRight(void) {
+    return utilIsMouseButton(GLFW_MOUSE_BUTTON_RIGHT);
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilIsMouseMiddle(void) {
+    return utilIsMouseButton(GLFW_MOUSE_BUTTON_MIDDLE);
 }
 
 /****************************************************************************
@@ -95,8 +214,10 @@ void __utilJoyConnectFunc__(int joy, int event) {
         const uchar * buttons = glfwGetJoystickButtons(joy, &numButtons);
         utilJoysticks[joy].numButtons = numButtons;
         utilJoysticks[joy].buttons = (uchar *) calloc(numButtons, sizeof(uchar));
+        utilJoysticks[joy].__buttonsDebounce__ = (boolean *) calloc(numButtons, sizeof(boolean));
         for (uint b = 0; b < (uint) numButtons; b++) {
             utilJoysticks[joy].buttons[b] = buttons[b];
+            utilJoysticks[joy].__buttonsDebounce__[b] = FALSE;
         }
 
         int numAxes;
@@ -116,6 +237,10 @@ void __utilJoyConnectFunc__(int joy, int event) {
         if (utilJoysticks[joy].buttons) {
             free(utilJoysticks[joy].buttons);
             utilJoysticks[joy].buttons = NULL;
+        }
+        if (utilJoysticks[joy].__buttonsDebounce__) {
+            free(utilJoysticks[joy].__buttonsDebounce__);
+            utilJoysticks[joy].__buttonsDebounce__ = NULL;
         }
         if (utilJoysticks[joy].axes) {
             free(utilJoysticks[joy].axes);
@@ -200,36 +325,72 @@ void utilSetDeadZoneY(uint joy, uint stick, float deadZone) {
 /****************************************************************************
  * 
  ****************************************************************************/
+void utilDebounceJoyButton(uint joy, uint button) {
+    if (!utilJoysticks[joy].available || button >= utilJoysticks[joy].numButtons) {
+        return;
+    }
+
+    utilJoysticks[joy].__buttonsDebounce__[button] = (boolean) utilJoysticks[joy].buttons[button];
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+uchar utilGetJoyButton(uint joy, uint button) {
+    if (!utilJoysticks[joy].available || button >= utilJoysticks[joy].numButtons) {
+        return FALSE;
+    }
+
+    return utilJoysticks[joy].buttons[button];
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+boolean utilIsJoyButton(uint joy, uint button) {
+    if (!utilJoysticks[joy].available || button >= utilJoysticks[joy].numButtons) {
+        return FALSE;
+    }
+
+    return utilJoysticks[joy].buttons[button] && !utilJoysticks[joy].__buttonsDebounce__[button];
+}
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
 void utilInitInputHandlers(void) {
     if (!__utilWindow__) {
         return;
     }
 
+    // init keyboard
     for (uint k = 0; k < __UTIL_MAX_KEYS__; k++) {
-        utilKeys[k] = 0;
+        utilKeyboard.keys[k] = 0;
+        utilKeyboard.__keysDebounce__[k] = FALSE;
     }
+    glfwSetKeyCallback(__utilWindow__, __utilKeyFunc__);
 
+    // init mouse
+    utilMouse.x = 0;
+    utilMouse.y = 0;
+    glfwSetCursorPosCallback(__utilWindow__, __utilMouseFunc__);
+    __utilShowHideCursor__(__utilCursorVisible__);
+    for (uint b = 0; b < GLFW_MOUSE_BUTTON_LAST; b++) {
+        utilMouse.buttons[b] = 0;
+        utilMouse.__buttonsDebounce__[b] = FALSE;
+    }
+    glfwSetMouseButtonCallback(__utilWindow__, __utilMouseButtonFunc__);
+
+    // init joysticks
     for (uint j = 0; j < GLFW_JOYSTICK_LAST; j++) {
         if (glfwJoystickPresent(j)) {
             utilJoysticks[j].buttons = NULL;
+            utilJoysticks[j].__buttonsDebounce__ = NULL;
             utilJoysticks[j].axes = NULL;
             utilJoysticks[j].__deadZones__ = NULL;
             __utilJoyConnectFunc__(j, GLFW_CONNECTED);
         }
     }
-
-    glfwSetKeyCallback(__utilWindow__, __utilKeyFunc__);
-
-    utilMouse.x = 0;
-    utilMouse.y = 0;
-    glfwSetCursorPosCallback(__utilWindow__, __utilMouseFunc__);
-    __utilShowHideCursor__(__utilCursorVisible__);
-    
-    for (uint b = 0; b < GLFW_MOUSE_BUTTON_LAST; b++) {
-        utilMouseButtons[b] = 0;
-    }
-    
-    glfwSetMouseButtonCallback(__utilWindow__, __utilMouseButtonFunc__);
 
 #if GLFW_VERSION_MINOR >= 2
     glfwSetJoystickCallback(__utilJoyConnectFunc__);

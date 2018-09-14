@@ -4,6 +4,8 @@
 
 # directories
 PLAT     =
+ARCHDIR  = arch
+LIBDIR   = $(LIB)/$(ARCHDIR)
 BIN      = bin
 BINDIR   = $(BIN)/$(PLAT)
 OBJ      = obj
@@ -50,7 +52,7 @@ cleanbin:
 	rm -f $(OBJ)/*
 
 cleanlib:
-	rm -f $(LIBDIR)/*
+	rm -f $(LIBDIR)/*.a
 	rm -f $(LIBHEADD)/*.h
 
 cleanall:
@@ -68,12 +70,10 @@ rmobj:
 # is it macOS?
 ifeq ($(shell uname -s), Darwin)
     LIBGL = -framework OpenGL
-	LIBDIR = $(LIB)/clang
 	PLAT = macos
 # otherwise, it's Linux, Unix, etc.
 else
     LIBGL = -lGL
-	LIBDIR = $(LIB)/gcc
 	ifeq ($(shell uname -s), Linux)
 		PLAT = linux
 	endif

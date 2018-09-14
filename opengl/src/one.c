@@ -26,14 +26,6 @@ void   cleanUp(void * ptr);
 /****************************************************************************
  * 
  ****************************************************************************/
-boolean gPaused;
-boolean gPPressed;
-boolean gShowCursor;
-boolean gClicked;
-
-/****************************************************************************
- * 
- ****************************************************************************/
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 int main(int argc, char ** argv) {
@@ -44,9 +36,14 @@ int main(int argc, char ** argv) {
         return EXIT_FAILURE;
     }
 
-    boolean success = utilMainLoop();
+    boolean success = utilCreateWindow();
+    if (!success) {
+        return EXIT_FAILURE;
+    }
+
+    utilMainLoop();
     cleanUp(player);
-    return (success) ? EXIT_SUCCESS : EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 /****************************************************************************
@@ -66,24 +63,22 @@ void * init() {
     struct Player * player = initPlayer();
 
     if (player) {
-        gPaused     = FALSE;
-        gPPressed   = FALSE;
-        gShowCursor = FALSE;
-        gClicked    = FALSE;
-
         utilSetWinDims(WIN_WIDTH, WIN_HEIGHT);
         utilSetWinTitle(WIN_TITLE);
         utilSetFramerate(WIN_FRAMERATE);
         utilSetBGColor(WIN_BG_COLOR);
         utilSetTickFunc(tick);
         utilSetUserData(player);
-        utilSetCursorVisible(gShowCursor);
-        utilSetGlyphDims(GLYPH_MARGIN_X, GLYPH_MARGIN_Y, GLYPH_SCALING, GLYPH_TAB_WIDTH);
+        utilSetCursorVisible(player->showCursor);
+        utilSetGlyphMargins(GLYPH_MARGIN_X, GLYPH_MARGIN_Y);
+        utilSetGlyphScaling(GLYPH_SCALING);
+        utilSetGlyphTabWidth(GLYPH_TAB_WIDTH);
     }
 
     return player;
 }
 
+#include <stdio.h>
 /****************************************************************************
  * 
  ****************************************************************************/
@@ -97,37 +92,38 @@ void * init() {
 void input(void * ptr) {
     struct Player * player = (struct Player *) ptr;
     
-    if (utilKeys[GLFW_KEY_LEFT_CONTROL]) {
-        if (utilKeys[GLFW_KEY_W] || utilKeys[GLFW_KEY_Q]) {
+    boolean cmdPressed = (
+        utilGetKey(GLFW_KEY_LEFT_CONTROL)  ||
+        utilGetKey(GLFW_KEY_RIGHT_CONTROL) ||
+        utilGetKey(GLFW_KEY_LEFT_SUPER)    ||
+        utilGetKey(GLFW_KEY_RIGHT_SUPER)
+    );
+    if (cmdPressed) {
+        if (utilGetKey(GLFW_KEY_W) || utilGetKey(GLFW_KEY_Q)) {
             utilEnd();
             return;
         }
     }
 
-    struct Joystick * joystick = &utilJoysticks[JOYSTICK];
-    boolean joyStartPressed = joystick->available && joystick->buttons[BT_PAUSE];
-    if ((utilKeys[GLFW_KEY_P] || joyStartPressed) && !gPPressed) {
-        gPaused = !gPaused;
-        gPPressed = TRUE;
-    } else if (!utilKeys[GLFW_KEY_P] && !joyStartPressed) {
-        gPPressed = FALSE;
+    if (utilIsKey(GLFW_KEY_P) || utilIsJoyButton(JOYSTICK, BT_PAUSE)) {
+        player->paused = !player->paused;
     }
+    utilDebounceKey(GLFW_KEY_P);
+    utilDebounceJoyButton(JOYSTICK, BT_PAUSE);
 
-    if (utilMouseButtons[GLFW_MOUSE_BUTTON_RIGHT] && !gClicked) {
-        gShowCursor = !gShowCursor;
-        utilSetCursorVisible(gShowCursor);
-        gClicked = TRUE;
-    } else if (!utilMouseButtons[GLFW_MOUSE_BUTTON_RIGHT]) {
-        gClicked = FALSE;
+    if (utilIsMouseRight()) {
+        player->showCursor = !player->showCursor;
+        utilSetCursorVisible(player->showCursor);
     }
+    utilDebounceMouseRight();
 
     // defaults (in case not moving)
     float dx = 0.0;
     float dy = 0.0;
     float da = 0.0;
 
-    if (!gPaused) {
-        if (joystick->available) {
+    if (!player->paused) {
+        if (utilJoysticks[JOYSTICK].available) {
             utilSetDeadZoneX(JOYSTICK, JOY_AXIS_L, JOY_DEAD_ZONE);
             utilSetDeadZoneY(JOYSTICK, JOY_AXIS_L, JOY_DEAD_ZONE);
             utilSetDeadZoneX(JOYSTICK, JOY_AXIS_R, JOY_DEAD_ZONE);
@@ -144,21 +140,21 @@ void input(void * ptr) {
             // rotate (right x-axis)
             da = ROTATE_SPEED * axisA;
         } else {
-            if (utilKeys[GLFW_KEY_LEFT]) {
+            if (utilGetKey(GLFW_KEY_LEFT)) {
                 dx = -WASD_SPEED;
-            } else if (utilKeys[GLFW_KEY_RIGHT]) {
+            } else if (utilGetKey(GLFW_KEY_RIGHT)) {
                 dx = +WASD_SPEED;
             }
 
-            if (utilKeys[GLFW_KEY_UP]) {
+            if (utilGetKey(GLFW_KEY_UP)) {
                 dy = -WASD_SPEED;
-            } else if (utilKeys[GLFW_KEY_DOWN]) {
+            } else if (utilGetKey(GLFW_KEY_DOWN)) {
                 dy = +WASD_SPEED;
             }
 
-            if (utilKeys[GLFW_KEY_A]) {
+            if (utilGetKey(GLFW_KEY_A)) {
                 da = -ROTATE_SPEED;
-            } else if (utilKeys[GLFW_KEY_D]) {
+            } else if (utilGetKey(GLFW_KEY_D)) {
                 da = +ROTATE_SPEED;
             }
         }
@@ -187,7 +183,7 @@ void render(void * ptr) {
     utilClearScreen();
 
     // write some text
-    struct Point2f textCursor = {1, 400};
+    struct UtilPoint2f textCursor = {1, 400};
     utilSetGlyphCursorPt(&textCursor);
     utilSetGlyphColorInt(0xffaa00);
     utilDrawText("The quick brown fox jumps\bed\nover the lazy dog\n");
@@ -195,13 +191,13 @@ void render(void * ptr) {
     utilDrawText("`~!@#$%^&*()[]{}<>\n-=_+\\|/,.:;\n'\"yeet?\"");
 
     // if paused, then write "PAUSED"
-    if (gPaused) {
+    if (player->paused) {
         utilDrawText("\n");
         utilSetGlyphColorInt(0xff0000);
         utilDrawText("PAUSED");
     }
 
-    struct Joystick * joystick = &utilJoysticks[JOYSTICK];
+    struct UtilJoystick * joystick = &utilJoysticks[JOYSTICK];
     if (joystick->available) {
         utilDrawText("\n");
         utilSetGlyphColorInt(0x00aaff);
@@ -222,7 +218,7 @@ void render(void * ptr) {
     utilFillPoint(player->position);
     
     // draw a cursor (crosshairs)
-    struct Point2f crossHairs[2][2] = {
+    struct UtilPoint2f crossHairs[2][2] = {
         {{utilMouse.x + 0, utilMouse.y - CURSOR_HEIGHT},
          {utilMouse.x + 0, utilMouse.y + CURSOR_HEIGHT}},
         {{utilMouse.x - CURSOR_WIDTH, utilMouse.y + 0},

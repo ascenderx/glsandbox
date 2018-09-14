@@ -24,7 +24,7 @@ typedef unsigned char uchar;
  * 
  ****************************************************************************/
 #ifndef bool
-typedef char boolean;
+typedef uchar boolean;
 #define FALSE 0
 #define TRUE  1
 #else
@@ -36,9 +36,18 @@ typedef bool boolean;
 /****************************************************************************
  * 
  ****************************************************************************/
-struct Point2f {
+struct UtilPoint2f {
    float x;
    float y;
+};
+
+/****************************************************************************
+ * 
+ ****************************************************************************/
+struct UtilPath2f {
+   uint length;
+   struct UtilPoint2f * center;
+   struct UtilPoint2f * vertices;
 };
 
 #endif // UTIL_TYPES_H

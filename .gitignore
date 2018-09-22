@@ -1,6 +1,6 @@
 # Compliation output subdirectories
-**/obj
-**/obj/*
+**/*obj
+**/*obj/*
 
 # VSCode configuration settings
 **/.vscode

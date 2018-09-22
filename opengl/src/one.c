@@ -38,6 +38,7 @@ int main(int argc, char ** argv) {
 
     boolean success = utilCreateWindow();
     if (!success) {
+        utilDebug("Error creating window", ANSI_RED);
         return EXIT_FAILURE;
     }
 

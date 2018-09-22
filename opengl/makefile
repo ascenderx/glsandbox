@@ -1,128 +1,133 @@
 ##############################################################################
-# COMPILATION RULES
+# OS/CC CONDITIONAL RULES
 ##############################################################################
-
-# directories
-BIN      = bin
-BINDIR   = $(BIN)/$(PLAT)
-OBJ      = obj
-SRC      = src
-LIB      = lib/utils
-LIBSRC   = include
-CEXT     = c
-HEXT     = h
-CPPEXT   = cc # or c++, cpp, C, cxx, etc.
-HPPEXT   = hh # or h++, hpp, H, hxx, h, etc.
-
-# User objects
-$(OBJ)/%.o: $(SRC)/%.$(CEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS) -I$(LIBSRC)
-
-# User objects with user headers
-$(OBJ)/%.ho: $(SRC)/%.$(CEXT) $(SRC)/%.$(HEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS) -I$(LIBSRC)
-
-# Included / builtin objects with headers
-$(OBJ)/%.hio: $(LIBSRC)/%.$(CEXT) $(LIBSRC)/%.$(HEXT) $(UHEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(PICFLAGS) -I$(LIBSRC)
-
-# User objects (C++)
-$(OBJ)/%.oo: $(SRC)/%.$(CPPEXT) $(UHEADERS)
-	$(C++) -c -o $@ $< $(CFLAGS) -I$(LIBSRC)
-
-# User objects with user headers (C++)
-$(OBJ)/%.hoo: $(SRC)/%.$(CPPEXT) $(SRC)/%.$(HPPEXT) $(UHEADERS)
-	$(C++) -c -o $@ $< $(CFLAGS) -I$(LIBSRC)
-
-##############################################################################
-# DIRECTORY RULES
-##############################################################################
-
-dirs:
-	if [ ! -d "$(OBJ)" ]; then mkdir $(OBJ); fi
-	if [ ! -d "$(BINDIR)" ]; then mkdir -p $(BINDIR); fi
-	if [ ! -d "$(LIBDIR)" ]; then mkdir -p $(LIBDIR); fi
-	if [ ! -d "$(LIBHEADD)" ]; then mkdir -p $(LIBHEADD); fi
-
-cleanbin:
-	rm -f $(BINDIR)/*
-	rm -f $(OBJ)/*
-
-cleanlib:
-	rm -f $(LIBDIR)/*.a
-	rm -f $(LIBHEADD)/*.h
-
-cleanall:
-	make cleanbin
-	make cleanlib
-
-rmobj:
-	rm -rf $(OBJ)
-
-##############################################################################
-# LIBRARY DEFINITIONS
-##############################################################################
-
-# test for correct OpenGL flag and library folder
-# is it macOS?
+# test OS for OpenGL and $(PLATFORM)
 ifeq ($(shell uname -s), Darwin)
-    LIBGL = -framework OpenGL
- 	PLAT = macos
+    LIB_GL = -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+ 	PLATFORM = macos
 # otherwise, it's Linux, Unix, etc.
+# TODO: add more target platforms
 else
-    LIBGL = -lGL
-    ifeq ($(shell uname -s), Linux)
-	    PLAT = linux
-	endif
+    LIB_GL = -lGL
+	PLATFORM = linux
 endif
 
-# library rules
-ARCHIVER = ar
-ARCHOPTS = -ruv
-LIBRER   = ranlib
-LIBNAME  = utils
-LIBRARY  = lib$(LIBNAME)
-LIBHEADD = $(LIB)/headers
-LIBHEAD  = -I$(LIBHEADD)
-LIBUTILS = -L$(LIBDIR) -l$(LIBNAME)
-LIBDIR   = $(LIB)/$(PLAT)
-
-# compilation / linking flags
-#LIBGLU    = -lglfw # alternatively, -lglu, -lglut, -lglew, -lglfw, etc.
-#LFLAGS   = $(LIBGL) $(LIBGLU) $(LIBMATH)
-LIBMATH   = -lm
-PKGCFGDIR = env PKG_CONFIG_PATH=./lib/glfw/$(PLAT)
-PKGCFGCFL = `pkg-config --cflags glfw3`
-PKGCFGLIB = `pkg-config --static --libs glfw3`
-LIBGLFW   = $(PKGCFGCFL) $(PKGCFGLIB)
-LFLAGS    = $(LIBGL) $(LIBMATH) $(LIBUTILS) $(LIBGLFW)
-CSTD      = -std=gnu11
-WARNS     = -Wall -Wextra -Wno-unused-parameter
-OPTIMIZE  = -O2
-CFLAGS    = $(WARNS) $(CSTD) $(OPTIMIZE)
-PICFLAGS  = -fPIC
+# test compiler for c++
+ifeq ($(CC), clang)
+	CPP = clang++
+else
+	CPP = g++
+endif
 
 ##############################################################################
-# INCLUDE FILES
+# LIBRARY VARIABLES
 ##############################################################################
+# directories
+LIB_OBJ_ROOT = libobj
+LIB_SRC_ROOT = libsrc
+LIB_ROOT = lib
+LIB_NAME = utils
+LIBRARY = lib$(LIB_NAME)
+LIB_DIR = $(LIB_ROOT)/$(LIB_NAME)/$(PLATFORM)
+LIB_HEAD_DIR = $(LIB_ROOT)/$(LIB_NAME)
+LIB_SRC_DIR = $(LIB_SRC_ROOT)/$(LIB_NAME)
 
-UOBJECTS = \
-	$(OBJ)/utilinit.hio  \
-	$(OBJ)/utilinput.hio \
-	$(OBJ)/utildraw.hio  \
-	$(OBJ)/utildebug.hio \
-	$(OBJ)/utiltext.hio
-UHEADERS = $(LIBSRC)/utiltypes.h
+# compiler
+LIB_CFLAGS = -fPIC -std=gnu11
+
+# targets and includes
+LIB_OBJS = \
+	$(LIB_OBJ_ROOT)/utilinit.o \
+	$(LIB_OBJ_ROOT)/utilinput.o \
+	$(LIB_OBJ_ROOT)/utildraw.o \
+	$(LIB_OBJ_ROOT)/utildebug.o \
+	$(LIB_OBJ_ROOT)/utiltext.o
+LIB_INCS = $(LIB_SRC_DIR)/utiltypes.h
 
 ##############################################################################
-# BINARY RULES
+# LIBRARY DIRECTORY RULES
 ##############################################################################
+cleanlib:
+	rm -f $(LIB_DIR)/*.a
+	rm -f $(LIB_OBJ_ROOT)/*.o
+	rm -f $(LIB_HEAD_DIR)/*.h
 
-OBJECTS1 = $(OBJ)/one.o $(OBJ)/one-player.ho
+libdirs:
+	if [ ! -d "$(LIB_DIR)" ]; then mkdir -p $(LIB_DIR); fi
+	if [ ! -d "$(LIB_OBJ_ROOT)" ]; then mkdir -p $(LIB_OBJ_ROOT); fi
+	if [ ! -d "$(LIB_HEAD_DIR)" ]; then mkdir -p $(LIB_HEAD_DIR); fi
+
+##############################################################################
+# LIBRARY RULES
+##############################################################################
+$(LIBRARY): $(LIB_OBJS)
+	ar -ruv $(LIB_DIR)/$(LIBRARY).a $(LIB_OBJS)
+	ranlib $(LIB_DIR)/$(LIBRARY).a
+	cp $(LIB_SRC_DIR)/*.h $(LIB_HEAD_DIR)/
+
+$(LIB_OBJ_ROOT)/%.o: $(LIB_SRC_DIR)/%.c $(LIB_SRC_DIR)/%.h $(LIB_INCS)
+	$(CC) -c -o $@ $< $(LIB_CFLAGS) -I$(LIB_SRC_DIR)
+
+##############################################################################
+# USER OBJECT VARIABLES
+##############################################################################
+# directories
+OBJ_ROOT = obj
+BIN_ROOT = bin
+BIN_DIR  = bin/$(PLATFORM)
+SRC_ROOT = src
+
+# compiler
+STD_C = -std=gnu11
+STD_CPP = -std=gnu++11
+WARNS = -Wall -Wextra -Wno-unused-parameter
+OPTIMIZE = -O2
+CFLAGS_C = $(WARNS) $(STD_C) $(OPTIMIZE)
+CFLAGS_CPP = $(WARNS) $(STD_CPP) $(OPTIMIZE)
+
+# linker
+LIB_MATH = -lm
+PKG_CFG_DIR = env PKG_CONFIG_PATH=./lib/GLFW/$(PLATFORM)
+PKG_CFG_CFLAGS = `pkg-config --cflags glfw3`
+PKG_CFG_LIB = `pkg-config --static --libs glfw3`
+LIB_GLFW = $(PKG_CFG_CFLAGS) $(PKG_CFG_LIB)
+LIB_UTILS = $(LIB_DIR)/$(LIBRARY).a
+LFLAGS_C = $(LIB_GL) $(LIB_MATH) $(LIB_UTILS) $(LIB_GLFW)
+LFLAGS_CPP = $(LFLAGS_C)
+
+# extensions
+CPP_EXT = cpp # cc, c++, cpp, C, cxx, etc.
+HPP_EXT = hpp # hh, h++, hpp, H, hxx, etc.
+
+##############################################################################
+# USER OBJECT DIRECTORY RULES
+##############################################################################
+cleanuser:
+	rm -f $(OBJ_ROOT)/*.*o
+	rm -f $(BIN_DIR)/*
+
+userdirs:
+	if [ ! -d "$(OBJ_ROOT)" ]; then mkdir -p $(OBJ_ROOT); fi
+	if [ ! -d "$(BIN_DIR)" ]; then mkdir -p $(BIN_DIR); fi
+
+##############################################################################
+# USER OBJECT RULES
+##############################################################################
+$(OBJ_ROOT)/%.ho: $(SRC_ROOT)/%.c $(SRC_ROOT)/%.h
+	$(CC) -c -o $@ $< $(CFLAGS_C) -I$(LIB_ROOT)
+
+$(OBJ_ROOT)/%.o: $(SRC_ROOT)/%.c
+	$(CC) -c -o $@ $< $(CFLAGS_C) -I$(LIB_ROOT)
+
+$(OBJ_ROOT)/%.hoo: $(SRC_ROOT)/%.$(CPP_EXT) $(SRC_ROOT)/%.$(HPP_EXT)
+	$(CPP) -c -o $@ $< $(CFLAGS_CPP) -I$(LIB_ROOT)
+
+$(OBJ_ROOT)/%.oo: $(SRC_ROOT)/%.$(CPP_EXT)
+	$(CPP) -c -o $@ $< $(CFLAGS_CPP) -I$(LIB_ROOT)
+
+##############################################################################
+# CUSTOM TARGETS
+##############################################################################
+OBJECTS1 = $(OBJ_ROOT)/one.o $(OBJ_ROOT)/one-player.ho
 one: $(OBJECTS1)
-	$(PKGCFGDIR) $(CC) -o $(BINDIR)/$@ $? $(LFLAGS)
-
-$(LIBRARY): $(UOBJECTS) $(UHEADERS)
-	$(ARCHIVER) $(ARCHOPTS) $(LIBDIR)/$(LIBRARY).a $(UOBJECTS)
-	$(LIBRER) $(LIBDIR)/$(LIBRARY).a
-	cp $(LIBSRC)/*.h $(LIBHEADD)/
+	$(PKG_CFG_DIR) $(CC) -o $(BIN_DIR)/$@ $? $(LFLAGS_C)

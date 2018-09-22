@@ -90,7 +90,7 @@ CFLAGS_CPP = $(WARNS) $(STD_CPP) $(OPTIMIZE)
 
 # linker
 LIB_MATH = -lm
-PKG_CFG_DIR = env PKG_CONFIG_PATH=./lib/GLFW/$(PLATFORM)
+# PKG_CFG_DIR = env PKG_CONFIG_PATH=./lib/GLFW/$(PLATFORM)
 PKG_CFG_CFLAGS = `pkg-config --cflags glfw3`
 PKG_CFG_LIB = `pkg-config --static --libs glfw3`
 LIB_GLFW = $(PKG_CFG_CFLAGS) $(PKG_CFG_LIB)

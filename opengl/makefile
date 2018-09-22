@@ -47,9 +47,12 @@ LIB_INCS = $(LIB_SRC_DIR)/utiltypes.h
 ##############################################################################
 # LIBRARY DIRECTORY RULES
 ##############################################################################
+cleanlibobj:
+	rm -f $(LIB_OBJ_ROOT)/*.o
+
 cleanlib:
 	rm -f $(LIB_DIR)/*.a
-	rm -f $(LIB_OBJ_ROOT)/*.o
+	cleanlibobj
 	rm -f $(LIB_HEAD_DIR)/*.h
 
 libdirs:
@@ -102,9 +105,12 @@ HPP_EXT = hpp # hh, h++, hpp, H, hxx, etc.
 ##############################################################################
 # USER OBJECT DIRECTORY RULES
 ##############################################################################
-cleanuser:
+cleanuserobj:
 	rm -f $(OBJ_ROOT)/*.*o
-	rm -f $(BIN_DIR)/*
+
+cleanuser:
+	cleanuserobj
+	rm -rf $(BIN_DIR)/*
 
 userdirs:
 	if [ ! -d "$(OBJ_ROOT)" ]; then mkdir -p $(OBJ_ROOT); fi
@@ -131,3 +137,4 @@ $(OBJ_ROOT)/%.oo: $(SRC_ROOT)/%.$(CPP_EXT)
 OBJECTS1 = $(OBJ_ROOT)/one.o $(OBJ_ROOT)/one-player.ho
 one: $(OBJECTS1)
 	$(PKG_CFG_DIR) $(CC) -o $(BIN_DIR)/$@ $? $(LFLAGS_C)
+	macos/appify one One

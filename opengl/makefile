@@ -52,7 +52,7 @@ cleanlibobj:
 
 cleanlib:
 	rm -f $(LIB_DIR)/*.a
-	cleanlibobj
+	make cleanlibobj
 	rm -f $(LIB_HEAD_DIR)/*.h
 
 libdirs:

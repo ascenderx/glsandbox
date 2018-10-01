@@ -19,10 +19,25 @@ let game = {
 
 function init(util) {
     util.setCanvasDimensions(game.width, game.height);
+    util.initInputHandlers();
 }
 
 function input(util) {
+    if (util.isPaused()) {
+        return;
+    }
     
+    if (util.isKeyDown('ArrowRight')) {
+        player.coords.x += 5;
+    } else if (util.isKeyDown('ArrowLeft')) {
+        player.coords.x -= 5;
+    }
+    
+    if (util.isKeyDown('ArrowDown')) {
+        player.coords.y += 5;
+    } else if (util.isKeyDown('ArrowUp')) {
+        player.coords.y -= 5;
+    }
 }
 
 function wrap(entity) {
@@ -40,25 +55,26 @@ function wrap(entity) {
 }
 
 function update(util) {
-    player.coords.x += 2;
-    
     wrap(player);
 }
 
 function render(util) {
-    if (!game.paused) {
-        util.drawBackground();
-        
-        util.setForegroundColor(player.color);
-        let cursor = player.coords;
-        util.setDrawCursor(cursor.x, cursor.y);
-        util.strokePolygonPts(player.vertices);
-        //util.strokePolygonXY(0, -10, -10, 10, 10, 10);
-        
-        util.setForegroundColor('#ff0');
-        util.setDrawCursor(cursor.x, cursor.y);
-        util.drawPoint();
+    if (util.isPaused()) {
+        return;
     }
+
+    util.drawBackground();
+    
+    util.getContext().lineWidth = 3;
+    
+    util.setForegroundColor(player.color);
+    let cursor = player.coords;
+    util.setDrawCursor(cursor.x, cursor.y);
+    util.strokePolygonPts(player.vertices);
+    
+    util.setForegroundColor('#ff0');
+    util.setDrawCursor(cursor.x, cursor.y);
+    util.drawPoint();
 }
 
 function tick(util) {
@@ -74,6 +90,8 @@ function main() {
     util.setTickFunc(tick);
     util.setTickInterval(30);
     util.run();
+    
+    window.util = util;
 }
 
 window.addEventListener('load', main);

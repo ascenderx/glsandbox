@@ -1,5 +1,6 @@
 Utilities.prototype.__interval__ = 0;
 Utilities.prototype.__tickFunc__ = null;
+Utilities.prototype.__paused__ = false;
 
 Utilities.prototype.setTickFunc = function(func) {
     this.__tickFunc__ = func;
@@ -13,6 +14,22 @@ Utilities.prototype.setTickInterval = function(interval) {
     this.__interval__ = interval;
 };
 
+Utilities.prototype.isPaused = function() {
+    return this.__paused__;
+};
+
+Utilities.prototype.pause = function() {
+    this.__paused__ = true;
+};
+
+Utilities.prototype.resume = function() {
+    this.__paused__ = false;
+};
+
+Utilities.prototype.togglePause = function() {
+    this.__paused__ = !this.__paused__;
+};
+
 Utilities.prototype.run = function() {
     if (!this.__tickFunc__) {
         return;
@@ -20,6 +37,8 @@ Utilities.prototype.run = function() {
     
     let util = this;
     this.__window__.setInterval(function() {
-        util.__tickFunc__(util);
+        if (!util.__paused__) {
+            util.__tickFunc__(util);
+        }
     }, this.__interval__);
 };

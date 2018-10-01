@@ -27,6 +27,15 @@ Utilities.prototype.setCanvasDimensions = function(width, height) {
     this.__canvas__.height = height;
 };
 
+Utilities.prototype.fitCanvasToWindow = function() {
+    this.__canvas__.width = this.__window__.innerWidth;
+    this.__canvas__.height = this.__window__.innerHeight;
+};
+
+Utilities.prototype.bindCanvasSizeToWindow = function() {
+    this.__window__.addEventListener('resize', fitCanvasToWindow.bind(this));
+};
+
 Utilities.prototype.setBackgroundColor = function(color) {
     this.__bgColor__ = color;
 };

@@ -20,6 +20,7 @@ let game = {
 function init(util) {
     util.setCanvasDimensions(game.width, game.height);
     util.initInputHandlers();
+    util.hideWindowCursor();
 }
 
 function input(util) {

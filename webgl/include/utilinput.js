@@ -90,6 +90,14 @@ Utilities.prototype.initInputHandlers = function() {
     this.__window__.addEventListener('gamepaddisconnected', this.__gamepadDisconnectedCallback__.bind(this));
 };
 
+Utilities.prototype.hideWindowCursor = function() {
+    this.__canvas__.style.cursor = 'none';
+};
+
+Utilities.prototype.showWindowCursor = function() {
+    this.__canvas__.style.cursor = 'initial';
+};
+
 Utilities.prototype.isKeyDown = function(key) {
     if (!(key in this.__keys__)) {
         return false;

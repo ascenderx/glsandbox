@@ -10,11 +10,11 @@ Utilities.prototype.getContext = function() {
     return this.__context__;
 };
 
-Utilities.prototype.getBGColor = function() {
+Utilities.prototype.getBackgroundColor = function() {
     return this.__bgColor__;
 };
 
-Utilities.prototype.getFGColor = function() {
+Utilities.prototype.getForegroungColor = function() {
     return this.__fgColor__;
 };
 
@@ -69,49 +69,108 @@ Utilities.prototype.fillRect = function(width, height) {
     );
 };
 
-Utilities.prototype.strokePolyXY = function(/* arguments */) {
-    this.__context__.strokeStyle = this.__fgColor__;
-    this.__context.__beginPath();
-    this.__context.moveTo(this.__drawCursor__.x, this.__drawCursor__.y);
-    for (let a = 0; a < arguments.length; a += 2) {
-        let x = arguments[a];
-        let y = arguments[a + 1] || x;
-        this.__context__.lineTo(x, y);
-    }
-    this.__context__.stroke();
-};
-
-Utilities.prototype.strokePolyPts = function(points) {
-    this.__context__.strokeStyle = this.__fgColor__;
-    this.__context.__beginPath();
-    this.__context.moveTo(this.__drawCursor__.x, this.__drawCursor__.y);
-    for (let p = 0; p < points.length; p++) {
-        let pt = points[p];
-        this.__context__.lineTo(pt.x, pt.y);
-    }
-    this.__context__.stroke();
-};
-
-Utilities.prototype.fillPolyXY = function(/* arguments */) {
+Utilities.prototype.drawPoint = function() {
     this.__context__.fillStyle = this.__fgColor__;
-    this.__context.__beginPath();
-    this.__context.moveTo(this.__drawCursor__.x, this.__drawCursor__.y);
-    for (let a = 0; a < arguments.length; a += 2) {
-        let x = arguments[a];
-        let y = arguments[a + 1] || x;
+    this.__context__.fillRect(
+        this.__drawCursor__.x - 1,
+        this.__drawCursor__.y - 1,
+        2,
+        2
+    );
+};
+
+Utilities.prototype.strokePolylineXY = function(/* arguments */) {
+    this.__context__.strokeStyle = this.__fgColor__;
+    this.__context__.beginPath();
+    let x0 = this.__drawCursor__.x + arguments[0];
+    let y0 = this.__drawCursor__.y + arguments[1];
+    this.__context__.moveTo(x0, y0);
+    for (let a = 2; a < arguments.length; a += 2) {
+        let x = this.__drawCursor__.x + arguments[a];
+        let y = this.__drawCursor__.y + arguments[a + 1];
         this.__context__.lineTo(x, y);
     }
+    this.__context__.stroke();
+};
+
+Utilities.prototype.strokePolylinePts = function(points) {
+    this.__context__.strokeStyle = this.__fgColor__;
+    this.__context__.beginPath();
+    let pt0 = points[0];
+    let x0 = this.__drawCursor__.x + pt0[0];
+    let y0 = this.__drawCursor__.y + pt0[1];
+    this.__context__.moveTo(x0, y0);
+    for (let p = 1; p < points.length; p++) {
+        let pt = points[p];
+        let x = this.__drawCursor__.x + pt[0];
+        let y = this.__drawCursor__.y + pt[1];
+        this.__context__.lineTo(x, y);
+    }
+    this.__context__.stroke();
+};
+
+
+Utilities.prototype.strokePolygonXY = function(/* arguments */) {
+    this.__context__.strokeStyle = this.__fgColor__;
+    this.__context__.beginPath();
+    let x0 = this.__drawCursor__.x + arguments[0];
+    let y0 = this.__drawCursor__.y + arguments[1];
+    this.__context__.moveTo(x0, y0);
+    for (let a = 2; a < arguments.length; a += 2) {
+        let x = this.__drawCursor__.x + arguments[a];
+        let y = this.__drawCursor__.y + arguments[a + 1];
+        this.__context__.lineTo(x, y);
+    }
+    this.__context__.closePath();
+    this.__context__.stroke();
+};
+
+Utilities.prototype.strokePolygonPts = function(points) {
+    this.__context__.strokeStyle = this.__fgColor__;
+    this.__context__.beginPath();
+    let pt0 = points[0];
+    let x0 = this.__drawCursor__.x + pt0[0];
+    let y0 = this.__drawCursor__.y + pt0[1];
+    this.__context__.moveTo(x0, y0);
+    for (let p = 1; p < points.length; p++) {
+        let pt = points[p];
+        let x = this.__drawCursor__.x + pt[0];
+        let y = this.__drawCursor__.y + pt[1];
+        this.__context__.lineTo(x, y);
+    }
+    this.__context__.closePath();
+    this.__context__.stroke();
+};
+
+Utilities.prototype.fillPolygonXY = function(/* arguments */) {
+    this.__context__.fillStyle = this.__fgColor__;
+    this.__context__.beginPath();
+    let x0 = this.__drawCursor__.x + arguments[0];
+    let y0 = this.__drawCursor__.y + arguments[1];
+    this.__context__.moveTo(x);
+    for (let a = 2; a < arguments.length; a += 2) {
+        let x = this.__drawCursor__.x + arguments[a];
+        let y = this.__drawCursor__.y + arguments[a + 1];
+        this.__context__.lineTo(x, y);
+    }
+    this.__context__.closePath();
     this.__context__.fill();
 };
 
-Utilities.prototype.fillPolyPts = function(points) {
+Utilities.prototype.fillPolygonPts = function(points) {
     this.__context__.fillStyle = this.__fgColor__;
-    this.__context.__beginPath();
-    this.__context.moveTo(this.__drawCursor__.x, this.__drawCursor__.y);
-    for (let p = 0; p < points.length; p++) {
+    this.__context__.beginPath();
+    let pt0 = points[0];
+    let x0 = this.__drawCursor__.x + pt0[0];
+    let y0 = this.__drawCursor__.y + pt0[1];
+    this.__context__.moveTo(x0, y0);
+    for (let p = 1; p < points.length; p++) {
         let pt = points[p];
-        this.__context__.lineTo(pt.x, pt.y);
+        let x = this.__drawCursor__.x + pt[0];
+        let y = this.__drawCursor__.y + pt[1];
+        this.__context__.lineTo(x, y)
     }
+    this.__context__.closePath();
     this.__context__.fill();
 };
 

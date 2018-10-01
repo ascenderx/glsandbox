@@ -18,5 +18,8 @@ Utilities.prototype.run = function() {
         return;
     }
     
-    this.window.setInterval(this.__tickFunc__, this.__interval__);
+    let util = this;
+    this.__window__.setInterval(function() {
+        util.__tickFunc__(util);
+    }, this.__interval__);
 };

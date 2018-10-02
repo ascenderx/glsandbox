@@ -37,8 +37,6 @@ Utilities.prototype.run = function() {
     
     let util = this;
     this.__window__.setInterval(function() {
-        if (!util.__paused__) {
-            util.__tickFunc__(util);
-        }
+        util.__tickFunc__(util);
     }, this.__interval__);
 };

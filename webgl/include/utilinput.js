@@ -1,33 +1,61 @@
+const MOUSE_LEFT = 0;
+const MOUSE_MIDDLE = 1;
+const MOUSE_RIGHT = 2;
+
 Utilities.prototype.__mouse__ = {
     x: null,
     y: null,
-    buttons: 0,
+    xWin: null,
+    yWin: null,
+    xAbs: null,
+    yAbs: null,
+    buttons: [false, false, false],
 };
 
 Utilities.prototype.__keys__ = {};
 
+Utilities.prototype.__mouseAdjustPos__ = function(event) {
+    this.__mouse__.x = event.clientX - this.__mouse__.offsetX;
+    this.__mouse__.y = event.clientY - this.__mouse__.offsetY;
+    this.__mouse__.xWin = event.clientX;
+    this.__mouse__.yWin = event.clientY;
+    this.__mouse__.xAbs = event.screenX;
+    this.__mouse__.yAbs = event.screenY;
+};
+
 Utilities.prototype.__mouseMoveCallback__ = function(event) {
-    
+    this.__mouseAdjustPos__(event);
 };
 
 Utilities.prototype.__mouseOverCallback__ = function(event) {
-    
+    this.__mouseAdjustPos__(event);
 };
 
 Utilities.prototype.__mouseOutCallback__ = function(event) {
-    
+    this.__mouse__.x = 0;
+    this.__mouse__.y = 0;
 };
 
 Utilities.prototype.__mouseDownCallback__ = function(event) {
-    
+    this.__mouseAdjustPos__(event);
+    let btn = event.button;
+    if (btn < 0 || btn > 2) {
+        return;
+    }
+    this.__mouse__.buttons[btn] = true;
 };
 
 Utilities.prototype.__mouseUpCallback__ = function(event) {
-    
+    this.__mouseAdjustPos__(event);
+    let btn = event.button;
+    if (btn < 0 || btn > 2) {
+        return;
+    }
+    this.__mouse__.buttons[btn] = false;
 };
 
 Utilities.prototype.__mouseDblClickCallback__ = function(event) {
-    
+    this.__window__.preventDefault();
 };
 
 Utilities.prototype.__keyDownCallback__ = function(event) {
@@ -78,6 +106,8 @@ Utilities.prototype.initInputHandlers = function() {
     this.__window__.addEventListener('mouseover', this.__mouseOverCallback__.bind(this));
     this.__window__.addEventListener('mouseout', this.__mouseOutCallback__.bind(this));
     this.__window__.addEventListener('mousedown', this.__mouseDownCallback__.bind(this));
+    this.__window__.addEventListener('mouseenter', this.__mouseOverCallback__.bind(this));
+    this.__window__.addEventListener('mouseleave', this.__mouseOutCallback__.bind(this));
     this.__window__.addEventListener('mouseup', this.__mouseUpCallback__.bind(this));
     this.__window__.addEventListener('dblclick', this.__mouseDblClickCallback__.bind(this));
     this.__window__.addEventListener('keydown', this.__keyDownCallback__.bind(this));
@@ -88,6 +118,10 @@ Utilities.prototype.initInputHandlers = function() {
     this.__window__.addEventListener('touchmove', this.__touchMoveCallback__.bind(this));
     this.__window__.addEventListener('gamepadconnected', this.__gamepadConnectedCallback__.bind(this));
     this.__window__.addEventListener('gamepaddisconnected', this.__gamepadDisconnectedCallback__.bind(this));
+    
+    let rect = this.__canvas__.getBoundingClientRect();
+    this.__mouse__.offsetX = rect.left;
+    this.__mouse__.offsetY = rect.top;
 };
 
 Utilities.prototype.hideWindowCursor = function() {
@@ -96,6 +130,29 @@ Utilities.prototype.hideWindowCursor = function() {
 
 Utilities.prototype.showWindowCursor = function() {
     this.__canvas__.style.cursor = 'initial';
+};
+
+Utilities.prototype.getMouse = function() {
+    return this.__mouse__;
+};
+
+Utilities.prototype.getMouseX = function() {
+    return this.__mouse__.x;
+};
+
+Utilities.prototype.getMouseY = function() {
+    return this.__mouse__.y;
+};
+
+Utilities.prototype.getMouseButtons = function() {
+    return this.__mouse__.buttons;
+};
+
+Utilities.prototype.isMouseButtonDown = function(code) {
+    if (code < 0 || code > 2) {
+        return false;
+    }
+    return this.__mouse__.buttons[code];
 };
 
 Utilities.prototype.isKeyDown = function(key) {

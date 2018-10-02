@@ -24,6 +24,11 @@ function init(util) {
 }
 
 function input(util) {
+    if (util.isKeyDown('p')) {
+        util.togglePause();
+        util.debounceKey('p');
+    }
+    
     if (util.isPaused()) {
         return;
     }
@@ -60,22 +65,26 @@ function update(util) {
 }
 
 function render(util) {
-    if (util.isPaused()) {
-        return;
-    }
-
     util.drawBackground();
-    
     util.getContext().lineWidth = 3;
     
+    // player
     util.setForegroundColor(player.color);
     let cursor = player.coords;
     util.setDrawCursor(cursor.x, cursor.y);
     util.strokePolygonPts(player.vertices);
-    
+    // player point
     util.setForegroundColor('#ff0');
     util.setDrawCursor(cursor.x, cursor.y);
     util.drawPoint();
+    
+    // cursor
+    let cursorX = util.getMouseX();
+    let cursorY = util.getMouseY();
+    util.setForegroundColor('#0af');
+    util.setDrawCursor(cursorX, cursorY);
+    util.strokePolygonXY(0, -20, 0, 20);
+    util.strokePolygonXY(-20, 0, 20, 0);
 }
 
 function tick(util) {

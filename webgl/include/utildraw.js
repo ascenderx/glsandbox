@@ -236,26 +236,39 @@ Utilities.prototype.fillArc = function(radius, angle0, angle1) {
     this.__makeCircle__(radius, angle0, angle1, 'fill');
 };
 
-Utilities.prototype.rotateXY = function(x0, y0, xc, yc, angle) {
+Utilities.prototype.rotateXYAboutCenter = function(x0, y0, xc, yc, angle) {
     let radians = (angle * Math.PI) / 180.0;
     let cosA = Math.cos(radians);
     let sinA = Math.sin(radians);
     let x1 = x0 * cosA - y0 * sinA;
     let y1 = x0 * sinA + y0 * cosA;
     
-    return {x: x1, y: y1};
+    let ptNew = [x1 + xc, y1 + yc];
+    return ptNew;
 }; 
 
-Utilities.prototype.rotatePt = function(pt, center, angle) {
-    return this.rotateXY(pt.x, pt.y, center.x, center.y, angle);
+Utilities.prototype.rotatePtAboutCenter = function(pt, center, angle) {
+    return this.rotateXYAboutCenter(pt[0], pt[1], center[0], center[1], angle);
 };
 
-Utilities.prototype.rotatePts = function(pts, center, angle) {
+Utilities.prototype.rotatePtsAboutCenter = function(pts, center, angle) {
     let ptsNew = [];
     
     for (let pt of pts) {
-        ptsNew.push(this.rotateXY(pt.x, pt.y, center.x, center.y, angle));
+        ptsNew.push(this.rotateXYAboutCenter(pt[0], pt[1], center[0], center[1], angle));
     }
     
     return ptsNew;
+};
+
+Utilities.prototype.rotateXY = function(x0, y0, angle) {
+    return this.rotateXYAboutCenter(x0, y0, 0, 0, angle);
+};
+
+Utilities.prototype.rotatePt = function(pt, angle) {
+    return this.rotateXYAboutCenter(pt[0], pt[1], 0, 0, angle);
+};
+
+Utilities.prototype.rotatePts = function(pts, angle) {
+    return this.rotatePtsAboutCenter(pts, [0, 0], angle);
 };

@@ -6,6 +6,8 @@ let player = {
     vertices: [
         [0, -10], [-10, 10], [10, 10],
     ],
+    rotation: 0,
+    direction: 0,
     coords: {x: 200, y: 200},
     color: '#f00',
 };
@@ -43,6 +45,14 @@ function input(util) {
         player.coords.y += 5;
     } else if (util.isKeyDown('ArrowUp')) {
         player.coords.y -= 5;
+    }
+    
+    if (util.isKeyDown('a')) {
+        player.rotation -= 5;
+        player.vertices = util.rotatePts(player.vertices, -5);
+    } else if (util.isKeyDown('d')) {
+        player.rotation += 5;
+        player.vertices = util.rotatePts(player.vertices, +5);
     }
 }
 

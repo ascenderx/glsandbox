@@ -58,9 +58,27 @@ Utilities.prototype.clearCanvas = function() {
     this.__context__.clearRect(0, 0, this.__canvas__.width, this.__canvas__.height);
 };
 
-Utilities.prototype.strokeRect = function(width, height) {
-    this.__context__.strokeStyle = this.__fgColor__;
-    this.__context__.strokeRect(
+Utilities.prototype.__makeRect__ = function(width, height, drawMethod) {
+    let style;
+    let func;
+    
+    switch (drawMethod) {
+        case 'stroke':
+            style = 'strokeStyle';
+            func = 'strokeRect';
+            break;
+            
+        case 'fill':
+            style = 'fillStyle';
+            func = 'fillRect';
+            break;
+        
+        default:
+            throw 'Invalid draw method';
+    }
+    
+    this.__context__[style] = this.__fgColor__;
+    this.__context__[func](
         this.__drawCursor__.x,
         this.__drawCursor__.y,
         width,
@@ -68,14 +86,12 @@ Utilities.prototype.strokeRect = function(width, height) {
     );
 };
 
+Utilities.prototype.strokeRect = function(width, height) {
+    this.__makeRect__(width, height, 'stroke');
+};
+
 Utilities.prototype.fillRect = function(width, height) {
-    this.__context__.fillStyle = this.__fgColor__;
-    this.__context__.fillRect(
-        this.__drawCursor__.x,
-        this.__drawCursor__.y,
-        width,
-        height
-    );
+    this.__makeRect__(width, height, 'fill');
 };
 
 Utilities.prototype.drawPoint = function() {
@@ -88,145 +104,158 @@ Utilities.prototype.drawPoint = function() {
     );
 };
 
-Utilities.prototype.strokePolylineXY = function(/* arguments */) {
-    this.__context__.strokeStyle = this.__fgColor__;
+Utilities.prototype.__makePolyXY__ = function(drawMethod, closePath, args) {
+    let style;
+    
+    switch (drawMethod) {
+        case 'stroke':
+            style = 'strokeStyle';
+            break;
+            
+        case 'fill':
+            style = 'fillStyle';
+            break;
+        
+        default:
+            throw 'Invalid draw method';
+    }
+    
+    this.__context__[style] = this.__fgColor__;
     this.__context__.beginPath();
-    let x0 = this.__drawCursor__.x + arguments[0];
-    let y0 = this.__drawCursor__.y + arguments[1];
+    let x0 = this.__drawCursor__.x + args[0];
+    let y0 = this.__drawCursor__.y + args[1];
     this.__context__.moveTo(x0, y0);
-    for (let a = 2; a < arguments.length; a += 2) {
-        let x = this.__drawCursor__.x + arguments[a];
-        let y = this.__drawCursor__.y + arguments[a + 1];
+    for (let a = 2; a < args.length; a += 2) {
+        let x = this.__drawCursor__.x + args[a];
+        let y = this.__drawCursor__.y + args[a + 1];
         this.__context__.lineTo(x, y);
     }
-    this.__context__.stroke();
+    if (closePath) {
+        this.__context__.closePath();
+    }
+    this.__context__[drawMethod]();
+};
+
+Utilities.prototype.__makePolyPts__ = function(drawMethod, closePath, pts) {
+    let style;
+    
+    switch (drawMethod) {
+        case 'stroke':
+            style = 'strokeStyle';
+            break;
+            
+        case 'fill':
+            style = 'fillStyle';
+            break;
+        
+        default:
+            throw 'Invalid draw method';
+    }
+    
+    this.__context__[style] = this.__fgColor__;
+    this.__context__.beginPath();
+    let pt0 = pts[0];
+    let x0 = this.__drawCursor__.x + pt0[0];
+    let y0 = this.__drawCursor__.y + pt0[1];
+    this.__context__.moveTo(x0, y0);
+    for (let pt of pts) {
+        let x = this.__drawCursor__.x + pt[0];
+        let y = this.__drawCursor__.y + pt[1];
+        this.__context__.lineTo(x, y);
+    }
+    if (closePath) {
+        this.__context__.closePath();
+    }
+    this.__context__[drawMethod]();
+};
+
+Utilities.prototype.strokePolylineXY = function(/* arguments */) {
+    this.__makePolyXY__('stroke', false, arguments);
 };
 
 Utilities.prototype.strokePolylinePts = function(points) {
-    this.__context__.strokeStyle = this.__fgColor__;
-    this.__context__.beginPath();
-    let pt0 = points[0];
-    let x0 = this.__drawCursor__.x + pt0[0];
-    let y0 = this.__drawCursor__.y + pt0[1];
-    this.__context__.moveTo(x0, y0);
-    for (let p = 1; p < points.length; p++) {
-        let pt = points[p];
-        let x = this.__drawCursor__.x + pt[0];
-        let y = this.__drawCursor__.y + pt[1];
-        this.__context__.lineTo(x, y);
-    }
-    this.__context__.stroke();
+    this.__makePolyPts__('stroke', false, points);
 };
 
-
 Utilities.prototype.strokePolygonXY = function(/* arguments */) {
-    this.__context__.strokeStyle = this.__fgColor__;
-    this.__context__.beginPath();
-    let x0 = this.__drawCursor__.x + arguments[0];
-    let y0 = this.__drawCursor__.y + arguments[1];
-    this.__context__.moveTo(x0, y0);
-    for (let a = 2; a < arguments.length; a += 2) {
-        let x = this.__drawCursor__.x + arguments[a];
-        let y = this.__drawCursor__.y + arguments[a + 1];
-        this.__context__.lineTo(x, y);
-    }
-    this.__context__.closePath();
-    this.__context__.stroke();
+    this.__makePolyXY__('stroke', true, arguments);
 };
 
 Utilities.prototype.strokePolygonPts = function(points) {
-    this.__context__.strokeStyle = this.__fgColor__;
-    this.__context__.beginPath();
-    let pt0 = points[0];
-    let x0 = this.__drawCursor__.x + pt0[0];
-    let y0 = this.__drawCursor__.y + pt0[1];
-    this.__context__.moveTo(x0, y0);
-    for (let p = 1; p < points.length; p++) {
-        let pt = points[p];
-        let x = this.__drawCursor__.x + pt[0];
-        let y = this.__drawCursor__.y + pt[1];
-        this.__context__.lineTo(x, y);
-    }
-    this.__context__.closePath();
-    this.__context__.stroke();
+    this.__makePolyPts__('stroke', true, points);
 };
 
 Utilities.prototype.fillPolygonXY = function(/* arguments */) {
-    this.__context__.fillStyle = this.__fgColor__;
-    this.__context__.beginPath();
-    let x0 = this.__drawCursor__.x + arguments[0];
-    let y0 = this.__drawCursor__.y + arguments[1];
-    this.__context__.moveTo(x);
-    for (let a = 2; a < arguments.length; a += 2) {
-        let x = this.__drawCursor__.x + arguments[a];
-        let y = this.__drawCursor__.y + arguments[a + 1];
-        this.__context__.lineTo(x, y);
-    }
-    this.__context__.closePath();
-    this.__context__.fill();
+    this.__makePolyXY__('fill', true, arguments);
 };
 
 Utilities.prototype.fillPolygonPts = function(points) {
-    this.__context__.fillStyle = this.__fgColor__;
-    this.__context__.beginPath();
-    let pt0 = points[0];
-    let x0 = this.__drawCursor__.x + pt0[0];
-    let y0 = this.__drawCursor__.y + pt0[1];
-    this.__context__.moveTo(x0, y0);
-    for (let p = 1; p < points.length; p++) {
-        let pt = points[p];
-        let x = this.__drawCursor__.x + pt[0];
-        let y = this.__drawCursor__.y + pt[1];
-        this.__context__.lineTo(x, y)
+    this.__makePolyPts__('fill', true, points);
+};
+
+Utilities.prototype.__makeArc__ = function(radius, angle0, angle1, drawMethod) {
+    let style;
+    
+    switch (drawMethod) {
+        case 'stroke':
+            style = 'strokeStyle';
+            break;
+            
+        case 'fill':
+            style = 'fillStyle';
+            break;
+        
+        default:
+            throw 'Invalid draw method';
     }
-    this.__context__.closePath();
-    this.__context__.fill();
+    
+    this.__context__[style] = this.__fgColor__;
+    this.__context__.arc(
+        this.__drawCursor__.x,
+        this.__drawCursor__.y,
+        radius,
+        angle0,
+        angle1
+    );
+    this.__context__[drawMethod]();
 };
 
 Utilities.prototype.strokeCircle = function(radius) {
-    this.__context__.strokeStyle = this.__fgColor__;
-    this.__context__.arc(
-        this.__drawCursor__.x,
-        this.__drawCursor__.y,
-        radius,
-        0,
-        Math.PI
-    );
-    this.__context__.stroke();
+    this.__makeCircle__(radius, 0, 2 * Math.PI, 'stroke');
 };
 
 Utilities.prototype.fillCircle = function(radius) {
-    this.__context__.fillStyle = this.__fgColor__;
-    this.__context__.arc(
-        this.__drawCursor__.x,
-        this.__drawCursor__.y,
-        radius,
-        0,
-        Math.PI
-    );
-    this.__context__.fill();
+    this.__makeCircle__(radius, 0, 2 * Math.PI, 'fill');
 };
 
 Utilities.prototype.strokeArc = function(radius, angle0, angle1) {
-    this.__context__.strokeStyle = this.__fgColor__;
-    this.__context__.arc(
-        this.__drawCursor__.x,
-        this.__drawCursor__.y,
-        radius,
-        angle0,
-        angle1
-    );
-    this.__context__.stroke();
+    this.__makeCircle__(radius, angle0, angle1, 'stroke');
 };
 
 Utilities.prototype.fillArc = function(radius, angle0, angle1) {
-    this.__context__.fillStyle = this.__fgColor__;
-    this.__context__.arc(
-        this.__drawCursor__.x,
-        this.__drawCursor__.y,
-        radius,
-        angle0,
-        angle1
-    );
-    this.__context__.fill();
+    this.__makeCircle__(radius, angle0, angle1, 'fill');
+};
+
+Utilities.prototype.rotateXY = function(x0, y0, xc, yc, angle) {
+    let radians = (angle * Math.PI) / 180.0;
+    let cosA = Math.cos(radians);
+    let sinA = Math.sin(radians);
+    let x1 = x0 * cosA - y0 * sinA;
+    let y1 = x0 * sinA + y0 * cosA;
+    
+    return {x: x1, y: y1};
+}; 
+
+Utilities.prototype.rotatePt = function(pt, center, angle) {
+    return this.rotateXY(pt.x, pt.y, center.x, center.y, angle);
+};
+
+Utilities.prototype.rotatePts = function(pts, center, angle) {
+    let ptsNew = [];
+    
+    for (let pt of pts) {
+        ptsNew.push(this.rotateXY(pt.x, pt.y, center.x, center.y, angle));
+    }
+    
+    return ptsNew;
 };

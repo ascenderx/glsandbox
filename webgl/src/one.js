@@ -26,9 +26,16 @@ function init(util) {
 }
 
 function input(util) {
-    if (util.isKeyDown('p')) {
+    if (util.isKeyDown('p') || util.isMouseButtonDown(UTIL_MOUSE_RIGHT)) {
         util.togglePause();
         util.debounceKey('p');
+        util.debounceMouseButton(UTIL_MOUSE_RIGHT);
+        
+        if (util.isPaused()) {
+            player.color = '#0af';
+        } else {
+            player.color = '#f00';
+        }
     }
     
     if (util.isPaused()) {
@@ -108,7 +115,7 @@ function main() {
     
     init(util);
     util.setTickFunc(tick);
-    util.setTickInterval(30);
+    util.setTickInterval(20);
     util.run();
     
     window.util = util;

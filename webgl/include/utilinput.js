@@ -1,6 +1,6 @@
-const MOUSE_LEFT = 0;
-const MOUSE_MIDDLE = 1;
-const MOUSE_RIGHT = 2;
+const UTIL_MOUSE_LEFT = 0;
+const UTIL_MOUSE_MIDDLE = 1;
+const UTIL_MOUSE_RIGHT = 2;
 
 Utilities.prototype.__mouse__ = {
     x: null,
@@ -9,7 +9,7 @@ Utilities.prototype.__mouse__ = {
     yWin: null,
     xAbs: null,
     yAbs: null,
-    buttons: [false, false, false],
+    buttons: {},
 };
 
 Utilities.prototype.__keys__ = {};
@@ -42,7 +42,13 @@ Utilities.prototype.__mouseDownCallback__ = function(event) {
     if (btn < 0 || btn > 2) {
         return;
     }
-    this.__mouse__.buttons[btn] = true;
+    if (!(btn in this.__mouse__.buttons)) {
+        this.__mouse__.buttons[btn] = {
+            count: 0,
+            debounced: false,
+        };
+    }
+    this.__mouse__.buttons[btn].count++;
 };
 
 Utilities.prototype.__mouseUpCallback__ = function(event) {
@@ -51,11 +57,19 @@ Utilities.prototype.__mouseUpCallback__ = function(event) {
     if (btn < 0 || btn > 2) {
         return;
     }
-    this.__mouse__.buttons[btn] = false;
+    delete this.__mouse__.buttons[btn];
 };
 
 Utilities.prototype.__mouseDblClickCallback__ = function(event) {
-    this.__window__.preventDefault();
+    event.preventDefault();
+};
+
+Utilities.prototype.__mouseContextMenuCallback__ = function(event) {
+    event.preventDefault();
+    
+    this.__mouseDownCallback__(UTIL_MOUSE_RIGHT);
+    
+    return false;
 };
 
 Utilities.prototype.__keyDownCallback__ = function(event) {
@@ -110,6 +124,7 @@ Utilities.prototype.initInputHandlers = function() {
     this.__window__.addEventListener('mouseleave', this.__mouseOutCallback__.bind(this));
     this.__window__.addEventListener('mouseup', this.__mouseUpCallback__.bind(this));
     this.__window__.addEventListener('dblclick', this.__mouseDblClickCallback__.bind(this));
+    this.__window__.addEventListener('contextmenu', this.__mouseContextMenuCallback__.bind(this));
     this.__window__.addEventListener('keydown', this.__keyDownCallback__.bind(this));
     this.__window__.addEventListener('keyup', this.__keyUpCallback__.bind(this));
     this.__window__.addEventListener('touchstart', this.__touchStartCallback__.bind(this));
@@ -148,11 +163,21 @@ Utilities.prototype.getMouseButtons = function() {
     return this.__mouse__.buttons;
 };
 
-Utilities.prototype.isMouseButtonDown = function(code) {
-    if (code < 0 || code > 2) {
+Utilities.prototype.isMouseButtonDown = function(btn) {
+    if (!(btn in this.__mouse__.buttons)) {
         return false;
     }
-    return this.__mouse__.buttons[code];
+    
+    let btnObj = this.__mouse__.buttons[btn];
+    return !btnObj.debounced;
+};
+
+Utilities.prototype.debounceMouseButton = function(btn) {
+    if (!(btn in this.__mouse__.buttons)) {
+        return;
+    }
+    
+    this.__mouse__.buttons[btn].debounced = true;
 };
 
 Utilities.prototype.isKeyDown = function(key) {

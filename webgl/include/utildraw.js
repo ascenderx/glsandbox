@@ -236,8 +236,16 @@ Utilities.prototype.fillArc = function(radius, angle0, angle1) {
     this.__makeCircle__(radius, angle0, angle1, 'fill');
 };
 
+Utilities.prototype.degToRad = function(degrees) {
+    return (degrees * Math.PI) / 180.0;
+};
+
+Utilities.prototype.radToDeg = function(radians) {
+    return (radians * 180.0) / Math.PI;
+};
+
 Utilities.prototype.rotateXYAboutCenter = function(x0, y0, xc, yc, angle) {
-    let radians = (angle * Math.PI) / 180.0;
+    let radians = this.degToRad(angle);
     let cosA = Math.cos(radians);
     let sinA = Math.sin(radians);
     let x1 = x0 * cosA - y0 * sinA;

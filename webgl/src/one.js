@@ -115,7 +115,7 @@ function main() {
     
     init(util);
     util.setTickFunc(tick);
-    util.setTickInterval(20);
+    util.setTickInterval(10);
     util.run();
     
     window.util = util;

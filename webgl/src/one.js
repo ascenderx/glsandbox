@@ -56,10 +56,10 @@ function input(util) {
     
     if (util.isKeyDown('a')) {
         player.rotation -= 5;
-        player.vertices = util.rotatePts(player.vertices, -5);
+        player.vertices = Utilities.rotatePts(player.vertices, -5);
     } else if (util.isKeyDown('d')) {
         player.rotation += 5;
-        player.vertices = util.rotatePts(player.vertices, +5);
+        player.vertices = Utilities.rotatePts(player.vertices, +5);
     }
 }
 

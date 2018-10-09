@@ -5,7 +5,7 @@ function Engine(win) {
     this.fractalStack = [];
     this.CVS_WIDTH = 600;
     this.CVS_HEIGHT = 600;
-    this.INTERVAL = 10;
+    this.interval = 50;
     this.numSpokes = null;
     this.shrinkRatio = null;
     this.angleDelta = null;
@@ -15,7 +15,7 @@ function Engine(win) {
 
 Engine.prototype.renderFirst = function() {
     this.util.drawBackground();
-    this.util.getContext().lineWidth = 2;
+    this.util.getContext().lineWidth = 1;
 };
 
 Engine.prototype.update = function(util) {
@@ -47,6 +47,9 @@ Engine.prototype.update = function(util) {
     }
     
     this.fractalStack.shift();
+
+    // this.interval *= 0.9;
+    // this.util.setTickInterval(this.interval);
 };
 
 Engine.prototype.render = function(util) {
@@ -82,9 +85,9 @@ Engine.prototype.run = function() {
     this.util.initInputHandlers();
     this.util.showWindowCursor();
     this.util.setTickFunc(this.tick.bind(this));
-    this.util.setTickInterval(this.INTERVAL);
+    this.util.setTickInterval(this.interval);
     
-    this.maxIterations = 8;
+    this.maxIterations = 10;
     this.numSpokes = 3;
     this.shrinkRatio = PHI - 1;
     this.angleDelta = 360.0 / this.numSpokes / 2;

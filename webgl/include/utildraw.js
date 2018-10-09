@@ -30,6 +30,9 @@ Utilities.prototype.setCanvasDimensions = function(width, height) {
 Utilities.prototype.fitCanvasToWindow = function() {
     this.__canvas__.width = this.__window__.innerWidth;
     this.__canvas__.height = this.__window__.innerHeight;
+    this.__canvas__.style.position = "absolute";
+    this.__canvas__.style.left = 0;
+    this.__canvas__.style.top = 0;
 };
 
 Utilities.prototype.bindCanvasSizeToWindow = function() {

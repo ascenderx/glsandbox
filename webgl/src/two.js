@@ -77,9 +77,10 @@ Engine.prototype.tick = function(util) {
 const PHI = (1 + Math.sqrt(5)) / 2.0;
 
 Engine.prototype.run = function() {
-    this.util.setCanvasDimensions(this.CVS_WIDTH, this.CVS_HEIGHT);
+    // this.util.setCanvasDimensions(this.CVS_WIDTH, this.CVS_HEIGHT);
+    this.util.fitCanvasToWindow();
     this.util.initInputHandlers();
-    this.util.hideWindowCursor();
+    this.util.showWindowCursor();
     this.util.setTickFunc(this.tick.bind(this));
     this.util.setTickInterval(this.INTERVAL);
     
@@ -88,13 +89,21 @@ Engine.prototype.run = function() {
     this.shrinkRatio = PHI - 1;
     this.angleDelta = 360.0 / this.numSpokes / 2;
     
+    // let startX = this.CVS_WIDTH / 2;
+    // let startY = this.CVS_HEIGHT / 2;
+    // let startLen = this.CVS_HEIGHT * (17/80);
+    let cvs = this.util.getCanvas();
+    let startX = cvs.width / 2;
+    let startY = cvs.height / 2;
+    let startLen = cvs.height * (17/80);
+
     let da = this.angleDelta * 2;
     for (let i = 0; i < this.numSpokes; i++) {
         this.fractalStack.push({
             iter: 1,
-            x: this.CVS_WIDTH / 2,
-            y: this.CVS_HEIGHT / 2,
-            len: this.CVS_HEIGHT * (17/80),
+            x: startX,
+            y: startY,
+            len: startLen,
             angle: 90 - (i * da),
             hue: 0,
         });
